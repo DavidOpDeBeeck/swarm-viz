@@ -8,25 +8,20 @@
   ]);
 
   app.run(function (LocalStorage) {
-    if (!LocalStorage.exists('displayUptime'))
-      LocalStorage.set('displayUptime', 'true');
-    if (!LocalStorage.exists('displayNetworks'))
-      LocalStorage.set('displayNetworks', 'true');
-    if (!LocalStorage.exists('displayEmptyHosts'))
-      LocalStorage.set('displayEmptyHosts', 'true');
-    if (!LocalStorage.exists('displayExitedContainers'))
-      LocalStorage.set('displayExitedContainers', 'true');
-    if (!LocalStorage.exists('diplaySwarmContainers'))
-      LocalStorage.set('diplaySwarmContainers', 'false');
+    LocalStorage.setIfNotExists('displayUptime', 'true');
+    LocalStorage.setIfNotExists('displayNetworks', 'true');
+    LocalStorage.setIfNotExists('displayEmptyHosts', 'false');
+    LocalStorage.setIfNotExists('displayExitedContainers', 'true');
+    LocalStorage.setIfNotExists('diplaySwarmContainers', 'false');
   });
 
   app.config( function ($routeProvider) {
       $routeProvider.when( '/overview', {
-          templateUrl: 'partials/overview.html',
+          templateUrl: '/partials/overview.html',
           controller: 'overviewCtrl',
           controllerAs: 'overview'
-      }).when( '/network/:id', {
-          templateUrl: 'partials/network-viewer.html',
+      }).when( '/network/:id/viewer', {
+          templateUrl: '/partials/network-viewer.html',
           controller: 'networkViewerCtrl',
           controllerAs: 'viewer'
       }).otherwise({
@@ -34,7 +29,7 @@
       })
   });
 
-  app.factory('socket', function (socketFactory) {
+  app.service('socket', function (socketFactory) {
     var socket = socketFactory();
     socket.forward('containers');
     socket.forward('networks');
@@ -44,10 +39,11 @@
   app.service('LocalStorage', function ($rootScope, $window) {
 
     var localStorage = {
-      set     : set,
-      get     : get,
-      getBool : getBool,
-      exists  : exists
+      set             : set,
+      get             : get,
+      getBool         : getBool,
+      exists          : exists,
+      setIfNotExists  : setIfNotExists
     }
 
     return localStorage;
@@ -71,6 +67,11 @@
       return get(key) !== undefined;
     }
 
+    function setIfNotExists( key , value ) {
+      if (!exists(key))
+        set(key, value);
+    }
+
   });
 
   app.service('DataService', function ($rootScope) {
@@ -78,13 +79,7 @@
     var hosts = {} , networks = {};
 
     $rootScope.$on('socket:containers', function (ev, data) {
-      var temp = data.hosts;
-      for ( var host in temp ) {
-        hosts[host] = {
-          name : host,
-          containers : temp[host]
-        }
-      }
+      hosts = data.hosts;
       $rootScope.$broadcast('DataService.notification.refresh.hosts');
     });
 
@@ -138,7 +133,7 @@
     vm.displayExitedContainers;
     vm.diplaySwarmContainers;
 
-    vm.hosts = DataService.getHosts();
+    vm.hosts;
 
     vm.showHost = showHost;
     vm.showContainer = showContainer;
@@ -178,6 +173,10 @@
         case "displayExitedContainers":
            return vm.displayExitedContainers = parameters.value;
       }
+    });
+
+    $scope.$on('DataService.notification.refresh.hosts', function (ev, data) {
+      vm.hosts = DataService.getHosts();
     });
   });
 
@@ -321,45 +320,7 @@
     }
 
     function view(network) {
-      var nodes = new vis.DataSet();
-      var edges = new vis.DataSet();
-
-      vm.network_data = {
-          nodes: nodes,
-          edges: edges
-      };
-
-       vm.onNodeSelect = function(properties) {
-            var selected = $scope.task_nodes.get(properties.nodes[0]);
-            console.log(selected);
-       };
-
-      var networks = DataService.getNetworks();
-      var containers = networks[network.name].containers;
-      var nodeList = [], edgeList = [];
-
-      containers.forEach(function (c) {
-        nodeList.push({
-          id:  c.endpoint,
-          label: c.name
-        });
-      });
-
-      containers.forEach(function (c1, i) {
-        var next = (i + 1 > containers.length - 1) ? undefined : i + 1;
-        if (next)
-          edgeList.push({ from: c1.endpoint, to: containers[next].endpoint});
-      });
-
-      nodes.add(nodeList);
-      edges.add(edgeList);
-
-      $rootScope.$broadcast('test', {
-        nodes : nodes,
-        edges : edges
-      });
-
-      $location.path('/network/' + network.id);
+      $location.path('/network/' + network.id + '/viewer');
     }
 
     $scope.$on('DataService.notification.refresh.networks', function (ev, data) {
@@ -450,7 +411,6 @@
                 onSelect(properties);
             });
             $scope.$watch('ngModel.nodes', function() {
-              console.log($scope.ngModel.nodes);
                 network = new vis.Network($element[0], $scope.ngModel, $scope.options || {});
                 network.redraw();
             });
