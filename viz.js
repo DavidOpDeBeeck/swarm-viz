@@ -56,23 +56,25 @@ function listNetworks( callback ) {
     all : 1
   }, ( err, networks ) => {
     networks.forEach( nInfo => {
-      res.networks[nInfo.Name] = {
-          id : nInfo.Id,
-          name : nInfo.Name,
-          containers : []
+      let nName = nInfo.Name, nId = nInfo.Id;
+      let nContainers = nInfo.Containers;
+      let container, containers = [];
+
+      for ( let id in nContainers ) {
+        if ( id.indexOf("ep-") == -1 ) {
+          container = nContainers[id];
+          containers.push({
+            name: container.Name,
+            endpoint: container.EndpointID
+          });
+        }
       }
 
-      let container, containers = nInfo.Containers;
-
-      for (let containerId in containers ) {
-        if (containerId.indexOf("ep-") > -1 )
-          return;
-        container = containers[containerId];
-        res.networks[nInfo.Name].containers.push({
-          name: container.Name,
-          endpoint: container.EndpointID
-        });
-      }
+      res.networks[nName] = {
+          id : nId,
+          name : nName,
+          containers : containers
+      };
     });
 
     callback( res );
@@ -92,20 +94,22 @@ function listContainers( callback ) {
     }, ( err, containers ) => {
         if ( containers ) {
             containers.forEach( cInfo => {
-                let names = cInfo.Names;
+                let cNames = cInfo.Names;
 
-                if ( !names.length ) return;
+                if ( !cNames.length )
+                  return;
 
-                let tokens = names[ 0 ].split( '/' );
+                let tokens = cNames[ 0 ].split( '/' );
 
-                if ( tokens.length < 2 ) return;
+                if ( tokens.length < 2 )
+                  return;
 
-                let host = tokens[ 1 ];
-                let name = tokens[ 2 ];
+                let cHost = tokens[ 1 ];
+                let cName = tokens[ 2 ];
 
-                let data = {
+                let container = {
                     id: cInfo.Id,
-                    name: name,
+                    name: cName,
                     image: cInfo.Image.split(":")[0],
                     state: cInfo.State,
                     status: cInfo.Status,
@@ -113,10 +117,13 @@ function listContainers( callback ) {
                     networks: Object.keys(cInfo.NetworkSettings.Networks)
                 };
 
-                if ( !res.hosts[ host ] )
-                    res.hosts[ host ] = [];
+                if ( !res.hosts[ cHost ] )
+                    res.hosts[ cHost ] = {
+                      name : cHost,
+                      containers : []
+                    };
 
-                res.hosts[ host ].push( data );
+                res.hosts[ cHost ].containers.push(container);
             });
 
             callback( res );
