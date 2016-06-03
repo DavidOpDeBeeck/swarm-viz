@@ -114,6 +114,11 @@ aside input[type="checkbox"] {
   padding: 5px 0 5px 0;
 }
 
+#search-results .search-result > .label {
+  font-size: 0.5rem;
+  padding: 3px;
+}
+
 /*-------------------------*/
 
 #overview {

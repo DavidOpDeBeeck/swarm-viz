@@ -15,6 +15,8 @@
       LocalStorage.set('displayEmptyHosts', 'true');
     if (!LocalStorage.exists('displayExitedContainers'))
       LocalStorage.set('displayExitedContainers', 'true');
+    if (!LocalStorage.exists('diplaySwarmContainers'))
+      LocalStorage.set('diplaySwarmContainers', 'false');
   });
 
   app.factory('socket', function (socketFactory) {
@@ -123,26 +125,28 @@
     }
 
     function showHost(host) {
-      return vm.displayEmptyHosts ? true : host.containers.length > 0;
+      return vm.displayEmptyHosts ? true : host.containers.filter(function (c) { return showContainer(c); }).length > 0;
     }
 
     function showContainer(container) {
+      if (!vm.displaySwarmContainers && container.image === 'swarm')
+        return false;
       return vm.displayExitedContainers ? true : container.state !== 'exited';
     }
 
     $scope.$on('LocalStorage.notification.set', function(event, parameters) {
-       switch( parameters.key ) {
-         case "displayUptime":
-            return vm.displayUptime = parameters.value;
-         case "displayNetworks":
-            return vm.displayNetworks = parameters.value;
-         case "diplaySwarmContainers":
-            return vm.diplaySwarmContainers = parameters.value;
-         case "displayEmptyHosts":
-            return vm.displayEmptyHosts = parameters.value;
-         case "displayExitedContainers":
-            return vm.displayExitedContainers = parameters.value;
-       }
+      switch( parameters.key ) {
+        case "displayUptime":
+           return vm.displayUptime = parameters.value;
+        case "displayNetworks":
+           return vm.displayNetworks = parameters.value;
+        case "displaySwarmContainers":
+           return vm.displaySwarmContainers = parameters.value;
+        case "displayEmptyHosts":
+           return vm.displayEmptyHosts = parameters.value;
+        case "displayExitedContainers":
+           return vm.displayExitedContainers = parameters.value;
+      }
     });
   });
 
@@ -238,25 +242,39 @@
     }
 
     function toggleUptime() {
-      LocalStorage.set('displayUptime', Boolean(vm.displayUptime));
+      LocalStorage.set('displayUptime', vm.displayUptime);
     }
 
     function toggleNetworks() {
-      LocalStorage.set('displayNetworks', Boolean(vm.displayNetworks));
+      LocalStorage.set('displayNetworks', vm.displayNetworks);
     }
 
     function toggleEmptyHosts() {
-      LocalStorage.set('displayEmptyHosts', Boolean(vm.displayEmptyHosts));
+      LocalStorage.set('displayEmptyHosts', vm.displayEmptyHosts);
     }
 
     function toggleExitedContainers() {
-      LocalStorage.set('displayExitedContainers', Boolean(vm.displayExitedContainers));
+      LocalStorage.set('displayExitedContainers', vm.displayExitedContainers);
     }
 
     function toggleSwarmContainers() {
-      LocalStorage.set('displaySwarmContainers', Boolean(vm.displaySwarmContainers));
+      LocalStorage.set('displaySwarmContainers', vm.displaySwarmContainers);
     }
 
+  });
+
+  app.filter('orderObjectBy', function() {
+    return function(items, field, reverse) {
+      var filtered = [];
+      angular.forEach(items, function(item) {
+        filtered.push(item);
+      });
+      filtered.sort(function (a, b) {
+        return (a[field] > b[field] ? 1 : -1);
+      });
+      if(reverse) filtered.reverse();
+      return filtered;
+    };
   });
 
 })();

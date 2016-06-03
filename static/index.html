@@ -26,8 +26,7 @@
           <section id="search-results">
             <section class="search-result" ng-repeat="container in search.results">
               <span class="label {{container.state}}">{{ container.state }}</span>
-              <h1>{{ container.name }}</h1>
-              <span class="label network" ng-show="overview.displayNetworks" ng-repeat="network in container.networks">{{ network }}</span>
+              <h1>{{ container.image }}</h1>
               <span class="name">{{ container.name }}</span>
               <p>{{ container.id }}</p>
             </section>
@@ -59,7 +58,7 @@
           </ul>
       </aside>
       <section id="overview" ng-nicescroll ng-controller="overviewCtrl as overview">
-        <section class="host" ng-repeat="host in overview.hosts | orderBy: name" ng-show="overview.showHost(host)">
+        <section class="host" ng-repeat="host in overview.hosts | orderObjectBy: 'name'" ng-show="overview.showHost(host)">
           <h1>{{ host.name }}</h1>
           <div class="containers" ng-nicescroll>
             <section class="container" ng-repeat="container in host.containers | orderBy: ['state','-created']" ng-show="overview.showContainer(container)">

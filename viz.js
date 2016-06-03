@@ -17,9 +17,9 @@ const fs = require( 'fs' );
 
 const port = 3000;
 const refreshTime = 2000;
-var dHost = process.env.SWARM_HOST.match(/tcp:\/\/(.*):.*$/)[1];
-var dPort = process.env.SWARM_HOST.match(/tcp:\/\/.*:(.*)$/)[1];
-var dCertPath = process.env.DOCKER_CERT_PATH;
+const dHost = process.env.SWARM_HOST.match(/tcp:\/\/(.*):.*$/)[1];
+const dPort = process.env.SWARM_HOST.match(/tcp:\/\/.*:(.*)$/)[1];
+const dCertPath = process.env.DOCKER_CERT_PATH;
 
 const dConnection = new docker({
     protocol: 'https',
