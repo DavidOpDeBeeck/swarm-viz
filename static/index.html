@@ -3,11 +3,12 @@
   <head>
     <title>Swarm UI</title>
     <link rel="stylesheet" href="css/reset.css"/>
+    <link rel="stylesheet" href="css/vis.css"/>
     <link rel="stylesheet" href="css/app.css"/>
   </head>
-  <body ng-app="swarm-ui">
+  <body ng-app="swarm-viz">
     <header>
-      <span>Swarm UI</span>
+      <a href="#/overview">Swarm viz</a>
     </header>
     <main>
       <aside ng-nicescroll>
@@ -31,6 +32,14 @@
               <p>{{ container.id }}</p>
             </section>
           </section>
+        </section>
+        <section id="networks-view" ng-controller="networksCtrl as networks">
+          <h2>Network View</h2>
+          <ul>
+            <li ng-repeat="network in networks.networks | orderObjectBy: 'name'">
+              <a ng-click="networks.view(network)">view</a><span>{{ network.name }}</span>
+            </li>
+          </ul>
         </section>
         <section id="settings" ng-controller="settingsCtrl as settings">
           <h2>Settings</h2>
@@ -57,26 +66,14 @@
             </li>
           </ul>
       </aside>
-      <section id="overview" ng-nicescroll ng-controller="overviewCtrl as overview">
-        <section class="host" ng-repeat="host in overview.hosts | orderObjectBy: 'name'" ng-show="overview.showHost(host)">
-          <h1>{{ host.name }}</h1>
-          <div class="containers" ng-nicescroll>
-            <section class="container" ng-repeat="container in host.containers | orderBy: ['state','-created']" ng-show="overview.showContainer(container)">
-              <span class="label {{container.state}}">{{ container.state }}</span>
-              <span class="label" ng-show="overview.displayUptime">{{ container.status }}</span>
-              <h1>{{ container.image }}</h1>
-              <span class="label network" ng-show="overview.displayNetworks" ng-repeat="network in container.networks">{{ network }}</span>
-              <span class="name">{{ container.name }}</span>
-              <p>{{ container.id }}</p>
-            </section>
-          </div>
-        </section>
-      </section>
+      <section id="overview" ng-view ng-nicescroll></section>
     </main>
     <script src="libs/jquery.min.js"></script>
     <script src="libs/jquery.nicescroll.min.js"></script>
+    <script src="libs/vis.js"></script>
     <script src="libs/angular.min.js"></script>
     <script src="libs/angular-nicescroll.js"></script>
+    <script src="libs/angular-route.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="libs/socket.min.js"></script>
     <script src="app.js"></script>

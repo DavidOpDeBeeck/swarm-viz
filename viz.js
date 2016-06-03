@@ -49,12 +49,37 @@ http.listen( port, () => {
 //---------------------------
 
 function listNetworks( callback ) {
+  let res = {
+      networks: {}
+  };
   dConnection.listNetworks({
     all : 1
   }, ( err, networks ) => {
     networks.forEach( nInfo => {
+      res.networks[nInfo.Name] = {
+          id : nInfo.Id,
+          name : nInfo.Name,
+          containers : []
+      }
 
+      let container, containers = nInfo.Containers;
+
+      for (let containerId in containers ) {
+        if (containerId.indexOf("ep-") > -1 )
+          return;
+        container = containers[containerId];
+        res.networks[nInfo.Name].containers.push({
+          name: container.Name,
+          endpoint: container.EndpointID
+        });
+      }
     });
+
+    callback( res );
+
+    setTimeout( function () {
+        listNetworks( callback );
+    }, refreshTime );
   });
 }
 
@@ -98,11 +123,13 @@ function listContainers( callback ) {
         }
         setTimeout( function () {
             listContainers( callback );
-            //listNetworks();
         }, refreshTime );
     } );
 }
-listNetworks();
+
+listNetworks(function ( networks ) {
+    io.emit( 'networks', networks );
+});
 listContainers( function ( containers ) {
     io.emit( 'containers', containers );
-} );
+});

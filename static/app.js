@@ -1,9 +1,10 @@
 (function() {
   "use strict"
 
-  var app = angular.module("swarm-ui", [
+  var app = angular.module("swarm-viz", [
     "btford.socket-io",
-    "angular-nicescroll"
+    "angular-nicescroll",
+    "ngRoute"
   ]);
 
   app.run(function (LocalStorage) {
@@ -19,9 +20,24 @@
       LocalStorage.set('diplaySwarmContainers', 'false');
   });
 
+  app.config( function ($routeProvider) {
+      $routeProvider.when( '/overview', {
+          templateUrl: 'partials/overview.html',
+          controller: 'overviewCtrl',
+          controllerAs: 'overview'
+      }).when( '/network/:id', {
+          templateUrl: 'partials/network-viewer.html',
+          controller: 'networkViewerCtrl',
+          controllerAs: 'viewer'
+      }).otherwise({
+          redirectTo: '/overview'
+      })
+  });
+
   app.factory('socket', function (socketFactory) {
     var socket = socketFactory();
     socket.forward('containers');
+    socket.forward('networks');
     return socket;
   });
 
@@ -59,7 +75,7 @@
 
   app.service('DataService', function ($rootScope) {
 
-    var hosts = {};
+    var hosts = {} , networks = {};
 
     $rootScope.$on('socket:containers', function (ev, data) {
       var temp = data.hosts;
@@ -69,14 +85,21 @@
           containers : temp[host]
         }
       }
-      $rootScope.$broadcast('DataService.notification.refresh');
+      $rootScope.$broadcast('DataService.notification.refresh.hosts');
+    });
+
+    $rootScope.$on('socket:networks', function (ev, data) {
+      networks = data.networks;
+      $rootScope.$broadcast('DataService.notification.refresh.networks');
     });
 
     //////////////////
 
     var dataService = {
       getHosts : getHosts,
-      getContainers : getContainers
+      getContainers : getContainers,
+      getNetworks : getNetworks,
+      getNetwork : getNetwork
     }
 
     return dataService;
@@ -91,6 +114,14 @@
       var containers = [];
       Object.values(hosts).forEach(function (h) { containers = containers.concat(h.containers); });
       return containers;
+    }
+
+    function getNetworks() {
+      return networks;
+    }
+
+    function getNetwork(id) {
+      return Object.values(networks).filter(function (n) {return n.id == id; })[0];
     }
 
   });
@@ -150,6 +181,66 @@
     });
   });
 
+  app.controller('networkViewerCtrl', function (socket, $scope, $routeParams, DataService) {
+
+    var vm = this;
+    var loaded = false;
+
+    //////////////////
+
+    vm.network_data = {};
+    vm.network_options = {};
+
+    //////////////////
+
+    $scope.$on('test', function (ev, data) {
+      console.log(data.nodes);
+      vm.network_data.nodes = data.nodes;
+      vm.network_options.edges = data.edges;
+    });
+
+    $scope.$on('DataService.notification.refresh.networks', function (ev, data) {
+      if (loaded) return;
+      loaded = true;
+
+      var network = DataService.getNetwork($routeParams.id);
+
+
+      var nodes = new vis.DataSet();
+      var edges = new vis.DataSet();
+
+      vm.network_data = {
+          nodes: nodes,
+          edges: edges
+      };
+
+       vm.onNodeSelect = function(properties) {
+            var selected = $scope.task_nodes.get(properties.nodes[0]);
+            console.log(selected);
+       };
+
+      var networks = DataService.getNetworks();
+      var containers = networks[network.name].containers;
+      var nodeList = [], edgeList = [];
+
+      containers.forEach(function (c) {
+        nodeList.push({
+          id:  c.endpoint,
+          label: c.name
+        });
+      });
+
+      containers.forEach(function (c1, i) {
+        var next = (i + 1 > containers.length - 1) ? undefined : i + 1;
+        if (next)
+          edgeList.push({ from: c1.endpoint, to: containers[next].endpoint});
+      });
+
+      nodes.add(nodeList);
+      edges.add(edgeList);
+    });
+  });
+
   app.controller('informationCtrl', function ($scope, DataService) {
 
     var vm = this;
@@ -175,7 +266,7 @@
       vm.runningContainers  = containers.filter(function(c) { return c.state === 'running'; }).length;
     }
 
-    $scope.$on('DataService.notification.refresh', function (ev, data) {
+    $scope.$on('DataService.notification.refresh.hosts', function (ev, data) {
       activate();
     });
 
@@ -205,7 +296,73 @@
       });
     }
 
-    $scope.$on('DataService.notification.refresh', function (ev, data) {
+    $scope.$on('DataService.notification.refresh.hosts', function (ev, data) {
+      activate();
+    });
+
+  });
+
+  app.controller('networksCtrl', function ($scope, DataService, $rootScope, $location) {
+
+    var vm = this;
+
+    //////////////////
+
+    vm.networks;
+    vm.network_data = {};
+    vm.network_options = {};
+
+    vm.view = view;
+
+    //////////////////
+
+    function activate() {
+      vm.networks = DataService.getNetworks();
+    }
+
+    function view(network) {
+      var nodes = new vis.DataSet();
+      var edges = new vis.DataSet();
+
+      vm.network_data = {
+          nodes: nodes,
+          edges: edges
+      };
+
+       vm.onNodeSelect = function(properties) {
+            var selected = $scope.task_nodes.get(properties.nodes[0]);
+            console.log(selected);
+       };
+
+      var networks = DataService.getNetworks();
+      var containers = networks[network.name].containers;
+      var nodeList = [], edgeList = [];
+
+      containers.forEach(function (c) {
+        nodeList.push({
+          id:  c.endpoint,
+          label: c.name
+        });
+      });
+
+      containers.forEach(function (c1, i) {
+        var next = (i + 1 > containers.length - 1) ? undefined : i + 1;
+        if (next)
+          edgeList.push({ from: c1.endpoint, to: containers[next].endpoint});
+      });
+
+      nodes.add(nodeList);
+      edges.add(edgeList);
+
+      $rootScope.$broadcast('test', {
+        nodes : nodes,
+        edges : edges
+      });
+
+      $location.path('/network/' + network.id);
+    }
+
+    $scope.$on('DataService.notification.refresh.networks', function (ev, data) {
       activate();
     });
 
@@ -275,6 +432,30 @@
       if(reverse) filtered.reverse();
       return filtered;
     };
+  });
+
+  app.directive('visNetwork', function() {
+    return {
+        restrict: 'E',
+        require: '^ngModel',
+        scope: {
+            ngModel: '=',
+            onSelect: '&',
+            options: '='
+        },
+        link: function($scope, $element, $attrs, ngModel) {
+            var network = new vis.Network($element[0], $scope.ngModel, $scope.options || {});
+            var onSelect = $scope.onSelect() || function(prop) {};
+            network.on('select', function(properties) {
+                onSelect(properties);
+            });
+            $scope.$watch('ngModel.nodes', function() {
+              console.log($scope.ngModel.nodes);
+                network = new vis.Network($element[0], $scope.ngModel, $scope.options || {});
+                network.redraw();
+            });
+        }
+    }
   });
 
 })();

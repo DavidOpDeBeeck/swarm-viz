@@ -25,6 +25,10 @@ header {
   box-shadow: 1px 1px 1px #404040;
 }
 
+header > a {
+  color: #FFFFFF;
+}
+
 /*-------------------------*/
 
 main {
@@ -117,6 +121,13 @@ aside input[type="checkbox"] {
 #search-results .search-result > .label {
   font-size: 0.5rem;
   padding: 3px;
+}
+
+/*-------------------------*/
+
+#networks-view a {
+  font-size: 0.7rem;
+  text-transform: none;
 }
 
 /*-------------------------*/
