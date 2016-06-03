@@ -1,0 +1,213 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,800,700,600,300);
+
+html, body {
+  color: #474747;
+  font-size: 1rem;
+  font-weight: 400;
+  font-family: 'Open Sans', sans-serif;
+  text-transform: uppercase;
+  height: 100%;
+}
+
+/*-------------------------*/
+
+header {
+  color: #FFFFFF;
+  font-size: 1rem;
+  font-weight: 700;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 1rem;
+  border-color: #404040;
+  background-color: #474747;
+  box-shadow: 1px 1px 1px #404040;
+}
+
+/*-------------------------*/
+
+main {
+  position: absolute;
+  top: calc(3rem + 2px);
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+/*-------------------------*/
+
+aside {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 280px;
+  background-color: #ffffff;
+  border-right: 1px solid #D9D9D9;
+  box-shadow: 1px 1px 1px #D9D9D9;
+}
+
+aside > section {
+  padding: 20px 10px 10px;
+  border-bottom: 1px solid #D9D9D9;
+}
+
+aside > section > h2 {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+aside > section > ul {
+  overflow: auto;
+  padding: 10px;
+}
+
+aside > section > ul > li {
+  overflow: auto;
+  padding: 5px 0;
+}
+
+aside > section > ul > li > span,
+aside > section > ul > li > label {
+  font-size: 0.8rem;
+}
+
+aside > section > ul > li > *:first-child {
+  float: right;
+}
+
+aside > section > ul > li > *:last-child {
+  float: left;
+}
+
+aside input[type="text"] {
+  width: 100%;
+  margin: 15px 0;
+  padding: 10px;
+  border: 1px solid #D9D9D9;
+  box-sizing: border-box;
+}
+
+aside input[type="checkbox"] {
+  margin: 0;
+}
+
+/*-------------------------*/
+
+#search-results .search-result {
+  display: block;
+  padding: 5px;
+  margin-bottom: 5px;
+  border: 1px solid #D9D9D9;
+}
+
+#search-results .search-result > p {
+  font-size: 0.4rem;
+  word-wrap: break-word;
+  padding: 2px 0 0px 0;
+}
+
+#search-results .search-result > .name {
+  display: block;
+  font-size: 0.6rem;
+  padding: 5px 0 5px 0;
+}
+
+/*-------------------------*/
+
+#overview {
+  position: absolute;
+  top: 0;
+  left: 285px;
+  right: 0;
+  bottom: 0;
+  padding: 5px;
+  white-space: nowrap;
+}
+
+/*-------------------------*/
+
+.host {
+  position: relative;
+  display: inline-block;
+  top: 0;
+  bottom: 0;
+  white-space: normal;
+  width: 400px;
+  height: calc(100% - 22px);
+  margin: 10px;
+  vertical-align: top;
+  background-color: #ffffff;
+  border: 1px solid #D9D9D9;
+  box-shadow: 1px 1px 1px #D9D9D9;
+}
+
+.host > h1 {
+  font-size: 2rem;
+  padding: 10px;
+  border-bottom: 1px solid #D9D9D9;
+}
+
+/*-------------------------*/
+
+.containers {
+  height: calc(100% - 2rem - 20px);
+  overflow-y: auto;
+}
+
+/*-------------------------*/
+
+.container {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.container > h1 {
+  font-size: 1.4rem;
+}
+
+.container > p {
+  font-size: 0.6rem;
+  word-wrap: break-word;
+  padding: 5px 0 0px 0;
+}
+
+.container > .name {
+  display: block;
+  font-size: 0.6rem;
+  padding: 10px 0 5px 0;
+}
+
+.label {
+  float: right;
+  color: #ffffff;
+  font-size: 0.5rem;
+  font-weight: 700;
+  padding: 5px;
+  margin-left: 5px;
+  border-color: #404040;
+  background-color: #474747;
+  box-shadow: 1px 1px 1px #404040;
+}
+
+.label.running {
+  border-color: #4BAD4B;
+  background-color: #5cb85c;
+  box-shadow: 1px 1px 1px #4BAD4B;
+}
+
+.label.created,
+.label.network {
+  border-color: #2D6DA3;
+  background-color: #337ab7;
+  box-shadow: 1px 1px 1px #2D6DA3;
+}
+
+.label.exited {
+  border-color:#D33A35;
+  background-color:#d9534f;
+  box-shadow:1px 1px 1px #D33A35;
+}
+
+/*-------------------------*/
