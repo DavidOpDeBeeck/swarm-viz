@@ -35,13 +35,13 @@ const dConnection = new docker({
 //---------------------------
 
 app.get( '/', ( req, res ) => {
-    res.sendFile( __dirname + '/static/index.html' );
+  res.sendFile( __dirname + '/static/index.html' );
 });
 
-app.use(express.static('static'));
+app.use( express.static('static') );
 
 http.listen( port, () => {
-    console.log( 'listening on *:3000' );
+  console.log( 'listening on *:3000' );
 });
 
 //---------------------------
@@ -49,36 +49,30 @@ http.listen( port, () => {
 //---------------------------
 
 function listNetworks( callback ) {
-  let res = {
-      networks: {}
-  };
-  dConnection.listNetworks({
-    all : 1
-  }, ( err, networks ) => {
-    networks.forEach( nInfo => {
-      let nName = nInfo.Name, nId = nInfo.Id;
-      let nContainers = nInfo.Containers;
-      let container, containers = [];
+  let res = [];
+  dConnection.listNetworks({ all: 1 }, ( err, networks ) => {
+    if ( networks ) {
+      networks.forEach( nInfo => {
+        let nName = nInfo.Name, nId = nInfo.Id;
+        let nContainers = nInfo.Containers, nContainerIds = Object.keys(nContainers).filter(c => c.indexOf('ep-') == -1);
+        let container, containers = [];
 
-      for ( let id in nContainers ) {
-        if ( id.indexOf("ep-") == -1 ) {
-          container = nContainers[id];
+        nContainerIds.forEach(id => {
           containers.push({
-            name: container.Name,
-            endpoint: container.EndpointID
+            name: nContainers[id].Name,
+            endpoint: nContainers[id].EndpointID
           });
-        }
-      }
+        })
 
-      res.networks[nName] = {
+        res.push({
           id : nId,
           name : nName,
           containers : containers
-      };
-    });
+        });
+      });
 
-    callback( res );
-
+      callback( res );
+    }
     setTimeout( function () {
         listNetworks( callback );
     }, refreshTime );
@@ -86,9 +80,7 @@ function listNetworks( callback ) {
 }
 
 function listContainers( callback ) {
-    let res = {
-        hosts: {}
-    };
+    let res = [];
     dConnection.listContainers({
       all: 1
     }, ( err, containers ) => {
@@ -117,13 +109,14 @@ function listContainers( callback ) {
                     networks: Object.keys(cInfo.NetworkSettings.Networks)
                 };
 
-                if ( !res.hosts[ cHost ] )
-                    res.hosts[ cHost ] = {
-                      name : cHost,
-                      containers : []
-                    };
+                var index = res.findIndex( h => h.name == cHost );
 
-                res.hosts[ cHost ].containers.push(container);
+                if ( index == -1 ){
+                  res.push({ name : cHost, containers : [] });
+                  index = res.length - 1;
+                }
+
+                res[index].containers.push(container);
             });
 
             callback( res );

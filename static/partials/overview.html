@@ -1,4 +1,11 @@
-<section class="host" ng-repeat="host in overview.hosts | orderObjectBy: 'name'" ng-show="overview.showHost(host)">
+<section id="host-list" ng-repeat="host in overview.hosts | orderBy: 'name'" ng-show="overview.showHost(host)">
+  <section class="host">
+    <i class="fa fa-server" aria-hidden="true"></i>
+    <span>{{ host.name }}</span>
+    <i class="fa fa-arrow-right" aria-hidden="true"></i>
+  </section>
+</section>
+<section id="host-information" ng-repeat="host in overview.hosts | orderBy: 'name'" ng-show="overview.showHost(host)">
   <h1>{{ host.name }}</h1>
   <div class="containers" ng-nicescroll>
     <section class="container" ng-repeat="container in host.containers | orderBy: ['state','-created']" ng-show="overview.showContainer(container)">
@@ -10,4 +17,4 @@
       <p>{{ container.id }}</p>
     </section>
   </div>
-</section
+</section>

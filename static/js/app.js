@@ -4,7 +4,8 @@
   var app = angular.module("swarm-viz", [
     "btford.socket-io",
     "angular-nicescroll",
-    "ngRoute"
+    "ngRoute",
+    "ui.bootstrap"
   ]);
 
   app.run(function (LocalStorage) {
@@ -76,15 +77,15 @@
 
   app.service('DataService', function ($rootScope) {
 
-    var hosts = {} , networks = {};
+    var hosts = [] , networks = [];
 
     $rootScope.$on('socket:containers', function (ev, data) {
-      hosts = data.hosts;
+      hosts = data;
       $rootScope.$broadcast('DataService.notification.refresh.hosts');
     });
 
     $rootScope.$on('socket:networks', function (ev, data) {
-      networks = data.networks;
+      networks = data;
       $rootScope.$broadcast('DataService.notification.refresh.networks');
     });
 
@@ -106,9 +107,7 @@
     }
 
     function getContainers() {
-      var containers = [];
-      Object.values(hosts).forEach(function (h) { containers = containers.concat(h.containers); });
-      return containers;
+      return [].concat.apply([], hosts.map(function (h) { return h.containers; }));
     }
 
     function getNetworks() {
@@ -116,7 +115,7 @@
     }
 
     function getNetwork(id) {
-      return Object.values(networks).filter(function (n) {return n.id == id; })[0];
+      return networks.filter(function (n) {return n.id == id; })[0];
     }
 
   });
@@ -200,10 +199,10 @@
 
     $scope.$on('DataService.notification.refresh.networks', function (ev, data) {
       if (loaded) return;
+
       loaded = true;
 
       var network = DataService.getNetwork($routeParams.id);
-
 
       var nodes = new vis.DataSet();
       var edges = new vis.DataSet();
@@ -213,13 +212,8 @@
           edges: edges
       };
 
-       vm.onNodeSelect = function(properties) {
-            var selected = $scope.task_nodes.get(properties.nodes[0]);
-            console.log(selected);
-       };
-
       var networks = DataService.getNetworks();
-      var containers = networks[network.name].containers;
+      var containers = network.containers;
       var nodeList = [], edgeList = [];
 
       containers.forEach(function (c) {
@@ -307,10 +301,7 @@
 
     //////////////////
 
-    vm.networks;
-    vm.network_data = {};
-    vm.network_options = {};
-
+    vm.networks = [];
     vm.view = view;
 
     //////////////////
@@ -379,20 +370,6 @@
       LocalStorage.set('displaySwarmContainers', vm.displaySwarmContainers);
     }
 
-  });
-
-  app.filter('orderObjectBy', function() {
-    return function(items, field, reverse) {
-      var filtered = [];
-      angular.forEach(items, function(item) {
-        filtered.push(item);
-      });
-      filtered.sort(function (a, b) {
-        return (a[field] > b[field] ? 1 : -1);
-      });
-      if(reverse) filtered.reverse();
-      return filtered;
-    };
   });
 
   app.directive('visNetwork', function() {

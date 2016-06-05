@@ -21,8 +21,8 @@ header {
   right: 0;
   padding: 1rem;
   border-color: #404040;
-  background-color: #474747;
-  box-shadow: 1px 1px 1px #404040;
+  background-color: #337ab7;
+  box-shadow: 1px 1px 1px #2d6a9f;
 }
 
 header > a {
@@ -133,35 +133,53 @@ aside input[type="checkbox"] {
 /*-------------------------*/
 
 #overview {
-  position: absolute;
-  top: 0;
-  left: 285px;
-  right: 0;
-  bottom: 0;
+  position: relative;
+  overflow: auto;
   padding: 5px;
-  white-space: nowrap;
+  margin-left: 285px;
 }
 
 /*-------------------------*/
 
-.host {
-  position: relative;
-  display: inline-block;
-  top: 0;
-  bottom: 0;
-  white-space: normal;
-  width: 400px;
-  height: calc(100% - 22px);
-  margin: 10px;
-  vertical-align: top;
+#host-list {
+  display: block;
+  float: left;
+  width: calc(50% - 10px);
+  padding: 5px;
+}
+
+#host-list > .host {
+  width: calc(100% - 40px);
+  padding: 20px;
+  margin-bottom: 10px;
   background-color: #ffffff;
   border: 1px solid #D9D9D9;
+  border-right: 1px solid #D9D9D9;
   box-shadow: 1px 1px 1px #D9D9D9;
 }
 
-.host > h1 {
-  font-size: 2rem;
+#host-list > .host > i:first-child {
+  float: left;
+  margin-right: 10px;
+}
+
+#host-list > .host > i:last-child {
+  float: right;
+  cursor: pointer;
+}
+
+/*-------------------------*/
+
+#host-information {
+  float: left;
+  width: calc(50% - 20px);
   padding: 10px;
+}
+
+#host-information > h1 {
+  font-size: 1.75rem;
+  padding: 10px 0;
+  margin: 0 10px;
   border-bottom: 1px solid #D9D9D9;
 }
 
@@ -175,7 +193,8 @@ aside input[type="checkbox"] {
 /*-------------------------*/
 
 .container {
-  padding: 10px;
+  padding: 10px 0;
+  margin: 0 10px;
   border-bottom: 1px solid #eee;
 }
 
