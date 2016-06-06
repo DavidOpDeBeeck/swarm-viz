@@ -1,0 +1,12 @@
+<section id="search">
+  <h2>Search a container</h2>
+  <input type="text" ng-model="search.query" ng-change="search.search()" placeholder="Type a container name or image"/>
+  <section id="search-results">
+    <section class="search-result" ng-repeat="container in search.results">
+      <span class="label {{container.state}}">{{ container.state }}</span>
+      <h1>{{ container.image }}</h1>
+      <span class="name">{{ container.name }}</span>
+      <p>{{ container.id }}</p>
+    </section>
+  </section>
+</section>

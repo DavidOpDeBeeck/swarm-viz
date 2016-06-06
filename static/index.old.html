@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Swarm VIZ</title>
+    <link rel="stylesheet" href="/css/reset.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="/css/vis.css"/>
+    <link rel="stylesheet" href="/css/app.css"/>
+  </head>
+  <body ng-app="swarm-viz">
+    <header>
+      <a href="#/overview">Swarm viz</a>
+    </header>
+    <main>
+      <aside ng-nicescroll>
+        <section id="networks" ng-controller="networksCtrl as networks">
+          <h2>Networks</h2>
+          <ul>
+            <li ng-repeat="network in networks.networks | orderBy: 'name'">
+              <a ng-click="networks.view(network)">view</a><span>{{ network.name }}</span>
+            </li>
+          </ul>
+        </section>
+        <section id="settings" ng-controller="settingsCtrl as settings">
+          <h2>Settings</h2>
+          <ul>
+            <li>
+                <input id="display-uptime" type="checkbox" ng-change="settings.toggleUptime()" ng-model="settings.displayUptime" />
+                <label for="display-uptime">Display uptime</label>
+            </li>
+            <li>
+                <input id="display-networks" type="checkbox" ng-change="settings.toggleNetworks()" ng-model="settings.displayNetworks" />
+                <label for="display-networks">Display networks</label>
+            </li>
+            <li>
+                <input id="display-empty-hosts" type="checkbox" ng-change="settings.toggleEmptyHosts()" ng-model="settings.displayEmptyHosts" />
+                <label for="display-empty-hosts">Display empty hosts</label>
+            </li>
+            <li>
+                <input id="display-exited-containers" type="checkbox" ng-change="settings.toggleExitedContainers()" ng-model="settings.displayExitedContainers" />
+                <label for="display-exited-containers">Display exited containers</label>
+            </li>
+            <li>
+                <input id="display-swarm-containers" type="checkbox" ng-change="settings.toggleSwarmContainers()" ng-model="settings.displaySwarmContainers" />
+                <label for="display-swarm-containers">Display Swarm containers</label>
+            </li>
+          </ul>
+      </aside>
+      <section id="overview" ng-view></section>
+    </main>
+    <script src="libs/jquery.min.js"></script>
+    <script src="libs/jquery.nicescroll.min.js"></script>
+    <script src="libs/vis.js"></script>
+    <script src="libs/angular.min.js"></script>
+    <script src="libs/angular-nicescroll.js"></script>
+    <script src="libs/angular-route.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.3.3/ui-bootstrap.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="libs/socket.min.js"></script>
+    <script src="dist/js/app.js"></script>
+  </body>
+</html>
