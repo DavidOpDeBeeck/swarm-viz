@@ -9,7 +9,7 @@
             this.dataService = dataService;
         }
 
-        get search() {
+        search() {
             this.results = this.dataService.getContainers()
                 .filter( c => ( this.query && ( c.name.indexOf( this.query ) > -1 || c.image.indexOf( this.query ) > -1 ) ) );
         }

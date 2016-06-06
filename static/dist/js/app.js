@@ -137,7 +137,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
         _createClass(ContainerSearchController, [{
             key: 'search',
-            get: function get() {
+            value: function search() {
                 var _this2 = this;
 
                 this.results = this.dataService.getContainers().filter(function (c) {
@@ -165,6 +165,60 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     };
 
     register('swarm-viz.directives').directive('containerSearch', ContainerSearch);
+})();
+;(function () {
+    'use strict';
+
+    var NetworkOverviewController = function () {
+        /*@ngInject*/
+
+        NetworkOverviewController.$inject = ["$scope", "$location", "dataService"];
+        function NetworkOverviewController($scope, $location, dataService) {
+            var _this3 = this;
+
+            _classCallCheck(this, NetworkOverviewController);
+
+            this.networks = [];
+            this.$location = $location;
+            this.dataService = dataService;
+            $scope.$on('DataService.notification.refresh.networks', function (ev, data) {
+                _this3.networks = dataService.getNetworks().map(function (n) {
+                    return n.name;
+                }).sort();
+            });
+        }
+
+        _createClass(NetworkOverviewController, [{
+            key: 'view',
+            value: function view(name) {
+                this.$location.path('/network/' + this.dataService.getNetworkByName(name).id + '/viewer');
+            }
+        }, {
+            key: 'names',
+            get: function get() {
+                return this.networks;
+            }
+        }]);
+
+        return NetworkOverviewController;
+    }();
+
+    register('swarm-viz.controllers').controller('NetworkOverviewController', NetworkOverviewController);
+})();
+;(function () {
+    'use strict';
+
+    var NetworkOverview = function NetworkOverview() {
+        _classCallCheck(this, NetworkOverview);
+
+        this.templateUrl = '/app/network-overview/network-overview.html';
+        this.restrict = 'E';
+        this.replace = true;
+        this.controller = 'NetworkOverviewController';
+        this.controllerAs = 'networks';
+    };
+
+    register('swarm-viz.directives').directive('networkOverview', NetworkOverview);
 })();
 ;(function () {
     'use strict';
@@ -207,10 +261,17 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 return networks;
             }
         }, {
-            key: 'getNetwork',
-            value: function getNetwork(id) {
+            key: 'getNetworkById',
+            value: function getNetworkById(id) {
                 return networks.find(function (n) {
                     return n.id == id;
+                });
+            }
+        }, {
+            key: 'getNetworkByName',
+            value: function getNetworkByName(name) {
+                return networks.find(function (n) {
+                    return n.name == name;
                 });
             }
         }]);

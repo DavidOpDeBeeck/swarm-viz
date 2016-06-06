@@ -13,14 +13,6 @@
     </header>
     <main>
       <aside ng-nicescroll>
-        <section id="networks" ng-controller="networksCtrl as networks">
-          <h2>Networks</h2>
-          <ul>
-            <li ng-repeat="network in networks.networks | orderBy: 'name'">
-              <a ng-click="networks.view(network)">view</a><span>{{ network.name }}</span>
-            </li>
-          </ul>
-        </section>
         <section id="settings" ng-controller="settingsCtrl as settings">
           <h2>Settings</h2>
           <ul>

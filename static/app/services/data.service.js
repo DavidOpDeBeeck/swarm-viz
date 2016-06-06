@@ -29,8 +29,12 @@
             return networks;
         }
 
-        getNetwork( id ) {
+        getNetworkById( id ) {
             return networks.find( n => n.id == id );
+        }
+
+        getNetworkByName( name ) {
+            return networks.find( n => n.name == name );
         }
     }
 
