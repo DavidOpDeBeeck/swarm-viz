@@ -1,12 +1,22 @@
-<section id="search">
+<section class="search">
   <h2>Search a container</h2>
-  <input type="text" ng-model="search.query" ng-change="search.search()" placeholder="Type a container name or image"/>
-  <section id="search-results">
-    <section class="search-result" ng-repeat="container in search.results">
-      <span class="label {{container.state}}">{{ container.state }}</span>
-      <h1>{{ container.image }}</h1>
-      <span class="name">{{ container.name }}</span>
-      <p>{{ container.id }}</p>
+  <input type="text" ng-model="search.query" ng-change="search.search()" placeholder="Type a container id, name or image"/>
+  <section class="search-options">
+    <select ng-model="search.filterOrder">
+      <option value="asc">ASC</option>
+      <option value="desc">DESC</option>
+    </select>
+    <select ng-model="search.filterType">
+      <option value="name">name</option>
+      <option value="image">image</option>
+      <option value="created">created</option>
+      <option value="uptime">uptime</option>
+      <option value="status">status</option>
+    </select>
+  </section>
+  <section class="search-results" ng-nicescroll>
+    <section class="search-result" ng-repeat="container in search.results | orderBy: search.filter">
+      <compact-container container="container"></container>
     </section>
   </section>
 </section>

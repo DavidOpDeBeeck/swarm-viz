@@ -3,17 +3,17 @@
     angular.module( 'swarm-viz.routes', [ 'ngRoute' ] )
         .config( ( $routeProvider ) => {
             $routeProvider.when( '/overview', {
-                    templateUrl: '/partials/overview.html',
-                    controller: 'overviewCtrl',
+                    templateUrl: '/app/overview/overview.html',
+                    controller: 'OverviewController',
                     controllerAs: 'overview'
                 } )
-                .when( '/network/:id/viewer', {
-                    templateUrl: '/partials/network-viewer.html',
-                    controller: 'networkViewerCtrl',
+                .when( '/view/:id', {
+                    templateUrl: '/app/network-viewer/network-viewer.html',
+                    controller: 'NetworkViewerController',
                     controllerAs: 'viewer'
                 } )
                 .otherwise( {
-                    redirectTo: '/'
+                    redirectTo: '/overview'
                 } )
         } );
 } )();

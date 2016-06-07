@@ -7,7 +7,7 @@
             this.socketFactory = socketFactory;
         }
 
-        get socket() {
+        getSocket() {
             return this.socketFactory();
         }
     }

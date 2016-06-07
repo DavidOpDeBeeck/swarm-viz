@@ -37,15 +37,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
     angular.module('swarm-viz.routes', ['ngRoute']).config(["$routeProvider", function ($routeProvider) {
         $routeProvider.when('/overview', {
-            templateUrl: '/partials/overview.html',
-            controller: 'overviewCtrl',
+            templateUrl: '/app/overview/overview.html',
+            controller: 'OverviewController',
             controllerAs: 'overview'
-        }).when('/network/:id/viewer', {
-            templateUrl: '/partials/network-viewer.html',
-            controller: 'networkViewerCtrl',
+        }).when('/view/:id', {
+            templateUrl: '/app/network-viewer/network-viewer.html',
+            controller: 'NetworkViewerController',
             controllerAs: 'viewer'
         }).otherwise({
-            redirectTo: '/'
+            redirectTo: '/overview'
         });
     }]);
 })();
@@ -132,6 +132,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
             this.query = "";
             this.results = [];
+            this.filterOrder = 'asc';
+            this.filterType = "created";
             this.dataService = dataService;
         }
 
@@ -140,9 +142,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             value: function search() {
                 var _this2 = this;
 
-                this.results = this.dataService.getContainers().filter(function (c) {
-                    return _this2.query && (c.name.indexOf(_this2.query) > -1 || c.image.indexOf(_this2.query) > -1);
+                var containers = this.dataService.getContainers();
+                this.results = containers.filter(function (c) {
+                    return _this2.query && (c.name.toLowerCase().indexOf(_this2.query.toLowerCase()) > -1 || c.image.toLowerCase().indexOf(_this2.query.toLowerCase()) > -1 || c.id.toLowerCase().indexOf(_this2.query.toLowerCase()) > -1);
                 });
+            }
+        }, {
+            key: 'filter',
+            get: function get() {
+                return (this.filterOrder === 'desc' ? '-' : '') + this.filterType;
             }
         }]);
 
@@ -169,20 +177,198 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 ;(function () {
     'use strict';
 
+    var CompactContainerDirective = function CompactContainerDirective() {
+        _classCallCheck(this, CompactContainerDirective);
+
+        this.templateUrl = '/app/container/compact-container.html';
+        this.restrict = 'E';
+        this.replace = true;
+        this.controller = 'ContainerController';
+        this.controllerAs = 'container';
+        this.bindToController = true;
+        this.scope = {
+            container: '='
+        };
+    };
+
+    register('swarm-viz.directives').directive('compactContainer', CompactContainerDirective);
+})();
+;(function () {
+    'use strict';
+
+    var Compact2ContainerDirective = function Compact2ContainerDirective() {
+        _classCallCheck(this, Compact2ContainerDirective);
+
+        this.templateUrl = '/app/container/compact2-container.html';
+        this.restrict = 'E';
+        this.replace = true;
+        this.controller = 'ContainerController';
+        this.controllerAs = 'container';
+        this.bindToController = true;
+        this.scope = {
+            container: '='
+        };
+    };
+
+    register('swarm-viz.directives').directive('compact2Container', Compact2ContainerDirective);
+})();
+;(function () {
+    'use strict';
+
+    var ContainerController = function () {
+        /*@ngInject*/
+
+        ContainerController.$inject = ["$scope", "localStorage"];
+        function ContainerController($scope, localStorage) {
+            var _this3 = this;
+
+            _classCallCheck(this, ContainerController);
+
+            this.displayUptime = localStorage.getBool('displayUptime');
+            this.displayNetworks = localStorage.getBool('displayNetworks');
+            this.displayExitedContainers = localStorage.getBool('displayExitedContainers');
+            this.displaySwarmContainers = localStorage.getBool('displaySwarmContainers');
+            $scope.$on('localStorage.notification.set', function (event, params) {
+                switch (params.key) {
+                    case "displayUptime":
+                        _this3.displayUptime = params.value;
+                        break;
+                    case "displayNetworks":
+                        _this3.displayNetworks = params.value;
+                        break;
+                    case "displaySwarmContainers":
+                        _this3.displaySwarmContainers = params.value;
+                        break;
+                    case "displayExitedContainers":
+                        _this3.displayExitedContainers = params.value;
+                        break;
+                }
+            });
+        }
+
+        _createClass(ContainerController, [{
+            key: 'display',
+            value: function display() {
+                if (!this.displaySwarmContainers && this.image === 'swarm') return false;
+                return this.displayExitedContainers ? true : this.state !== 'exited';
+            }
+        }, {
+            key: 'state',
+            get: function get() {
+                return this.container.state;
+            }
+        }, {
+            key: 'status',
+            get: function get() {
+                return this.container.status;
+            }
+        }, {
+            key: 'image',
+            get: function get() {
+                return this.container.image;
+            }
+        }, {
+            key: 'networks',
+            get: function get() {
+                return this.container.networks;
+            }
+        }, {
+            key: 'name',
+            get: function get() {
+                return this.container.name;
+            }
+        }, {
+            key: 'id',
+            get: function get() {
+                return this.container.id.substring(0, 10);
+            }
+        }]);
+
+        return ContainerController;
+    }();
+
+    register('swarm-viz.controllers').controller('ContainerController', ContainerController);
+})();
+;(function () {
+    'use strict';
+
+    var HostController = function () {
+        /*@ngInject*/
+
+        HostController.$inject = ["$scope", "localStorage"];
+        function HostController($scope, localStorage) {
+            var _this4 = this;
+
+            _classCallCheck(this, HostController);
+
+            this.displayEmptyHosts = localStorage.getBool('displayEmptyHosts');
+            $scope.$on('localStorage.notification.set', function (event, params) {
+                switch (params.key) {
+                    case "displayEmptyHosts":
+                        _this4.displayEmptyHosts = params.value;
+                        break;
+                }
+            });
+        }
+
+        _createClass(HostController, [{
+            key: 'display',
+            value: function display() {
+                return true;
+            }
+        }, {
+            key: 'name',
+            get: function get() {
+                return this.host.name;
+            }
+        }, {
+            key: 'containers',
+            get: function get() {
+                return this.host.containers;
+            }
+        }]);
+
+        return HostController;
+    }();
+
+    register('swarm-viz.controllers').controller('HostController', HostController);
+})();
+;(function () {
+    'use strict';
+
+    var HostDirective = function HostDirective() {
+        _classCallCheck(this, HostDirective);
+
+        this.templateUrl = '/app/host/host.html';
+        this.restrict = 'E';
+        this.replace = true;
+        this.controller = 'HostController';
+        this.controllerAs = 'host';
+        this.bindToController = true;
+        this.scope = {
+            host: '='
+        };
+    };
+
+    register('swarm-viz.directives').directive('host', HostDirective);
+})();
+;(function () {
+    'use strict';
+
     var NetworkOverviewController = function () {
         /*@ngInject*/
 
         NetworkOverviewController.$inject = ["$scope", "$location", "dataService"];
         function NetworkOverviewController($scope, $location, dataService) {
-            var _this3 = this;
+            var _this5 = this;
 
             _classCallCheck(this, NetworkOverviewController);
 
-            this.networks = [];
+            this.networkNames = [];
             this.$location = $location;
             this.dataService = dataService;
             $scope.$on('DataService.notification.refresh.networks', function (ev, data) {
-                _this3.networks = dataService.getNetworks().map(function (n) {
+                _this5.networkNames = dataService.getNetworks().map(function (n) {
                     return n.name;
                 }).sort();
             });
@@ -191,12 +377,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         _createClass(NetworkOverviewController, [{
             key: 'view',
             value: function view(name) {
-                this.$location.path('/network/' + this.dataService.getNetworkByName(name).id + '/viewer');
+                var network = this.dataService.getNetworkByName(name);
+                this.$location.path('/view/' + network.id);
             }
         }, {
             key: 'names',
             get: function get() {
-                return this.networks;
+                return this.networkNames;
             }
         }]);
 
@@ -223,22 +410,115 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 ;(function () {
     'use strict';
 
-    var hosts = [],
-        networks = [];
+    var NetworkViewerController =
+    /*@ngInject*/
+    ["$scope", "$routeParams", "dataService", function NetworkViewerController($scope, $routeParams, dataService) {
+        var _this6 = this;
+
+        _classCallCheck(this, NetworkViewerController);
+
+        this.currentNetworkId = undefined;
+        this.nodes = new vis.DataSet();
+        this.edges = new vis.DataSet();
+        this.network_data = {
+            nodes: this.nodes,
+            edges: this.edges
+        };
+        $scope.$on('DataService.notification.refresh.networks', function (ev, data) {
+            var network = dataService.getNetworkById($routeParams.id);
+
+            if (_this6.currentNetworkId !== $routeParams.id) {
+                _this6.nodes.clear();
+                _this6.edges.clear();
+                _this6.currentNetworkId = $routeParams.id;
+                _this6.nodes.add({
+                    id: network.name,
+                    label: network.name,
+                    mass: 5,
+                    shape: 'box',
+                    color: '#337ab7',
+                    font: {
+                        color: '#ffffff'
+                    }
+                });
+            }
+
+            var containers = network.containers;
+
+            containers.forEach(function (c) {
+                if (!_this6.nodes.get(c.endpoint)) _this6.nodes.add({
+                    id: c.endpoint,
+                    label: c.name,
+                    shape: 'box'
+                });
+            });
+
+            containers.forEach(function (c, i) {
+                if (!_this6.edges.get(c.endpoint)) _this6.edges.add({
+                    id: c.endpoint,
+                    from: c.endpoint,
+                    to: network.name
+                });
+            });
+        });
+    }];
+
+    register('swarm-viz.controllers').controller('NetworkViewerController', NetworkViewerController);
+})();
+;(function () {
+
+    angular.module('swarm-viz.directives').directive('visNetwork', function () {
+        return {
+            restrict: 'E',
+            require: '^ngModel',
+            scope: {
+                ngModel: '=',
+                options: '='
+            },
+            link: function link($scope, $element, $attrs, ngModel) {
+                new vis.Network($element[0], $scope.ngModel, $scope.options || {});
+            }
+        };
+    });
+})();
+;(function () {
+    'use strict';
+
+    var OverviewController =
+    /*@ngInject*/
+    ["$scope", "dataService", function OverviewController($scope, dataService) {
+        var _this7 = this;
+
+        _classCallCheck(this, OverviewController);
+
+        this.hosts = [];
+        $scope.$on('DataService.notification.refresh.hosts', function (ev, data) {
+            _this7.hosts = dataService.getHosts();
+        });
+    }];
+
+    register('swarm-viz.controllers').controller('OverviewController', OverviewController);
+})();
+;(function () {
+    'use strict';
 
     var DataService = function () {
         /*@ngInject*/
 
         DataService.$inject = ["$rootScope", "socketService"];
         function DataService($rootScope, socketService) {
+            var _this8 = this;
+
             _classCallCheck(this, DataService);
 
-            socketService.socket.on('containers', function (data) {
-                hosts = data;
+            this.hosts = [];
+            this.networks = [];
+            socketService.getSocket().on('containers', function (data) {
+                _this8.hosts = data;
                 $rootScope.$broadcast('DataService.notification.refresh.hosts');
             });
-            socketService.socket.on('networks', function (data) {
-                networks = data;
+            socketService.getSocket().on('networks', function (data) {
+                _this8.networks = data;
                 $rootScope.$broadcast('DataService.notification.refresh.networks');
             });
         }
@@ -246,31 +526,31 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         _createClass(DataService, [{
             key: 'getHosts',
             value: function getHosts() {
-                return hosts;
+                return this.hosts;
             }
         }, {
             key: 'getContainers',
             value: function getContainers() {
-                return [].concat.apply([], hosts.map(function (h) {
+                return [].concat.apply([], this.hosts.map(function (h) {
                     return h.containers;
                 }));
             }
         }, {
             key: 'getNetworks',
             value: function getNetworks() {
-                return networks;
+                return this.networks;
             }
         }, {
             key: 'getNetworkById',
             value: function getNetworkById(id) {
-                return networks.find(function (n) {
+                return this.networks.find(function (n) {
                     return n.id == id;
                 });
             }
         }, {
             key: 'getNetworkByName',
             value: function getNetworkByName(name) {
-                return networks.find(function (n) {
+                return this.networks.find(function (n) {
                     return n.name == name;
                 });
             }
@@ -345,8 +625,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }
 
         _createClass(SocketService, [{
-            key: 'socket',
-            get: function get() {
+            key: 'getSocket',
+            value: function getSocket() {
                 return this.socketFactory();
             }
         }]);
@@ -355,6 +635,71 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     }();
 
     register('swarm-viz.services').factory('socketService', SocketService);
+})();
+;(function () {
+    'use strict';
+
+    var SettingsController = function () {
+        /*@ngInject*/
+
+        SettingsController.$inject = ["localStorage"];
+        function SettingsController(localStorage) {
+            _classCallCheck(this, SettingsController);
+
+            this.localStorage = localStorage;
+            this.displayUptime = localStorage.getBool('displayUptime');
+            this.displayNetworks = localStorage.getBool('displayNetworks');
+            this.displayEmptyHosts = localStorage.getBool('displayEmptyHosts');
+            this.displayExitedContainers = localStorage.getBool('displayExitedContainers');
+            this.displaySwarmContainers = localStorage.getBool('displaySwarmContainers');
+        }
+
+        _createClass(SettingsController, [{
+            key: 'toggleUptime',
+            value: function toggleUptime() {
+                this.localStorage.set('displayUptime', this.displayUptime);
+            }
+        }, {
+            key: 'toggleNetworks',
+            value: function toggleNetworks() {
+                this.localStorage.set('displayNetworks', this.displayNetworks);
+            }
+        }, {
+            key: 'toggleEmptyHosts',
+            value: function toggleEmptyHosts() {
+                this.localStorage.set('displayEmptyHosts', this.displayEmptyHosts);
+            }
+        }, {
+            key: 'toggleExitedContainers',
+            value: function toggleExitedContainers() {
+                this.localStorage.set('displayExitedContainers', this.displayExitedContainers);
+            }
+        }, {
+            key: 'toggleSwarmContainers',
+            value: function toggleSwarmContainers() {
+                this.localStorage.set('displaySwarmContainers', this.displaySwarmContainers);
+            }
+        }]);
+
+        return SettingsController;
+    }();
+
+    register('swarm-viz.controllers').controller('SettingsController', SettingsController);
+})();
+;(function () {
+    'use strict';
+
+    var SettingsDirective = function SettingsDirective() {
+        _classCallCheck(this, SettingsDirective);
+
+        this.templateUrl = '/app/settings/settings.html';
+        this.restrict = 'E';
+        this.replace = true;
+        this.controller = 'SettingsController';
+        this.controllerAs = 'settings';
+    };
+
+    register('swarm-viz.directives').directive('settings', SettingsDirective);
 })();
 ; /**
   * A helper class to simplify registering Angular components and provide a consistent syntax for doing so.

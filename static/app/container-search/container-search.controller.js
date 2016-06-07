@@ -6,12 +6,25 @@
         constructor( dataService ) {
             this.query = "";
             this.results = [];
+            this.filterOrder = 'asc';
+            this.filterType = "created";
             this.dataService = dataService;
         }
 
+        get filter() {
+            return ( ( this.filterOrder === 'desc' ) ? '-' : '' ) + this.filterType;
+        }
+
         search() {
-            this.results = this.dataService.getContainers()
-                .filter( c => ( this.query && ( c.name.indexOf( this.query ) > -1 || c.image.indexOf( this.query ) > -1 ) ) );
+            let containers = this.dataService.getContainers();
+            this.results = containers.filter( c => {
+                return ( this.query && ( c.name.toLowerCase()
+                    .indexOf( this.query.toLowerCase() ) > -1 ||
+                    c.image.toLowerCase()
+                    .indexOf( this.query.toLowerCase() ) > -1 ||
+                    c.id.toLowerCase()
+                    .indexOf( this.query.toLowerCase() ) > -1 ) );
+            } );
         }
     }
 

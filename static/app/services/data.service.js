@@ -1,40 +1,41 @@
 ( () => {
     'use strict'
 
-    let hosts = [],
-        networks = [];
-
     class DataService {
         /*@ngInject*/
         constructor( $rootScope, socketService ) {
-            socketService.socket.on( 'containers', data => {
-                hosts = data;
-                $rootScope.$broadcast( 'DataService.notification.refresh.hosts' );
-            } );
-            socketService.socket.on( 'networks', data => {
-                networks = data;
-                $rootScope.$broadcast( 'DataService.notification.refresh.networks' );
-            } );
+            this.hosts = [];
+            this.networks = [];
+            socketService.getSocket()
+                .on( 'containers', data => {
+                    this.hosts = data;
+                    $rootScope.$broadcast( 'DataService.notification.refresh.hosts' );
+                } );
+            socketService.getSocket()
+                .on( 'networks', data => {
+                    this.networks = data;
+                    $rootScope.$broadcast( 'DataService.notification.refresh.networks' );
+                } );
         }
 
         getHosts() {
-            return hosts;
+            return this.hosts;
         }
 
         getContainers() {
-            return [].concat.apply( [], hosts.map( h => h.containers ) );
+            return [].concat.apply( [], this.hosts.map( h => h.containers ) );
         }
 
         getNetworks() {
-            return networks;
+            return this.networks;
         }
 
         getNetworkById( id ) {
-            return networks.find( n => n.id == id );
+            return this.networks.find( n => n.id == id );
         }
 
         getNetworkByName( name ) {
-            return networks.find( n => n.name == name );
+            return this.networks.find( n => n.name == name );
         }
     }
 

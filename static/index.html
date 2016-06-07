@@ -5,22 +5,21 @@
     <link rel="stylesheet" href="/css/reset.css"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" />
     <link rel="stylesheet" href="/css/vis.css"/>
-    <link rel="stylesheet" href="/css/app.css"/>
     <link rel="stylesheet" href="/dist/css/app.css"/>
   </head>
   <body ng-app="swarm-viz">
     <header>
       <a href="#/overview">Swarm viz</a>
     </header>
-    <main>
-      <aside ng-nicescroll>
-        <cluster-information></cluster-information>
-        <container-search></container-search>
-        <network-overview></network-overview>
-        <settings></settings>
-      </aside>
-      <section id="overview" ng-view></section>
-    </main>
+    <aside id="sidebar-left" ng-nicescroll>
+      <cluster-information></cluster-information>
+      <network-overview></network-overview>
+      <settings></settings>
+    </aside>
+    <main ng-view></main>
+    <aside id="sidebar-right">
+      <container-search></container-search>
+    </aside>
     <script src="libs/jquery.min.js"></script>
     <script src="libs/jquery.nicescroll.min.js"></script>
     <script src="libs/vis.js"></script>
