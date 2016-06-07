@@ -7,6 +7,11 @@
                     controller: 'OverviewController',
                     controllerAs: 'overview'
                 } )
+                .when( '/swarm', {
+                    templateUrl: '/app/network-viewer/network-viewer.html',
+                    controller: 'SwarmViewerController',
+                    controllerAs: 'viewer'
+                } )
                 .when( '/view/:id', {
                     templateUrl: '/app/network-viewer/network-viewer.html',
                     controller: 'NetworkViewerController',

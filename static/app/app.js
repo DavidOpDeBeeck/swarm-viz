@@ -19,4 +19,9 @@
         localStorage.setIfNotExists( 'displayExitedContainers', 'true' );
         localStorage.setIfNotExists( 'diplaySwarmContainers', 'false' );
     } );
+
+    app.run( ( $rootScope, $location ) => {
+        $rootScope.location = $location;
+    } );
+
 } )();

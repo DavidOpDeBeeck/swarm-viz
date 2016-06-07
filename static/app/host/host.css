@@ -4,7 +4,7 @@
     top: 0;
     bottom: 0;
     white-space: normal;
-    width: 400px;
+    width: 350px;
     height: calc(100% - 22px);
     margin: 10px;
     vertical-align: top;
@@ -15,7 +15,7 @@
 
 .host-heading {
     overflow: auto;
-    font-size: 2rem;
+    font-size: 1.75rem;
     padding: 10px;
     border-bottom: 1px solid #D9D9D9;
 }

@@ -10,6 +10,14 @@
   <body ng-app="swarm-viz">
     <header>
       <a href="#/overview">Swarm viz</a>
+      <ul>
+        <li ng-class="{'active': location.path() == '/overview'}">
+          <a href="#/overview">Overview</a>
+        </li>
+        <li ng-class="{'active': location.path() == '/swarm'}">
+          <a href="#/swarm">Swarm</a>
+        </li>
+      </ul>
     </header>
     <aside id="sidebar-left" ng-nicescroll>
       <cluster-information></cluster-information>
