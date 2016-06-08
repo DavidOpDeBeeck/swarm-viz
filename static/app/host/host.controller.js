@@ -3,19 +3,15 @@
 
     class HostController {
         /*@ngInject*/
-        constructor( $scope, localStorage ) {
-            this.displayEmptyHosts = localStorage.getBool( 'displayEmptyHosts' );
-            $scope.$on( 'localStorage.notification.set', ( event, params ) => {
-                switch ( params.key ) {
-                case "displayEmptyHosts":
-                    this.displayEmptyHosts = params.value;
-                    break;
-                }
-            } );
+        constructor( settings, containerUtils ) {
+            this.settings = settings;
+            this.containerUtils = containerUtils;
         }
 
-        display() {
-            return true;
+        get displayHost() {
+            return this.settings.displayEmptyHosts ? true : Object.keys( this.host.containers
+                    .filter( c => this.containerUtils.display( c ) ) )
+                .length > 0;
         }
 
         get name() {

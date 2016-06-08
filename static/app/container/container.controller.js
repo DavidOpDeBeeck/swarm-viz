@@ -3,33 +3,24 @@
 
     class ContainerController {
         /*@ngInject*/
-        constructor( $scope, localStorage ) {
-            this.displayUptime = localStorage.getBool( 'displayUptime' );
-            this.displayNetworks = localStorage.getBool( 'displayNetworks' );
-            this.displayExitedContainers = localStorage.getBool( 'displayExitedContainers' );
-            this.displaySwarmContainers = localStorage.getBool( 'displaySwarmContainers' );
-            $scope.$on( 'localStorage.notification.set', ( event, params ) => {
-                switch ( params.key ) {
-                case "displayUptime":
-                    this.displayUptime = params.value;
-                    break;
-                case "displayNetworks":
-                    this.displayNetworks = params.value;
-                    break;
-                case "displaySwarmContainers":
-                    this.displaySwarmContainers = params.value;
-                    break;
-                case "displayExitedContainers":
-                    this.displayExitedContainers = params.value;
-                    break;
-                }
-            } );
+        constructor( settings, containerUtils ) {
+            this.settings = settings;
+            this.containerUtils = containerUtils;
         }
 
-        display() {
-            if ( !this.displaySwarmContainers && this.image === 'swarm' )
-                return false;
-            return this.displayExitedContainers ? true : this.state !== 'exited';
+        get displayContainer() {
+            if ( this.ignoreFilters ) return true;
+            return this.containerUtils.display( this.container );
+        }
+
+        get displayUptime() {
+            if ( this.ignoreFilters ) return true;
+            return this.settings.displayUptime;
+        }
+
+        get displayNetworks() {
+            if ( this.ignoreFilters ) return true;
+            return this.settings.displayNetworks;
         }
 
         get state() {

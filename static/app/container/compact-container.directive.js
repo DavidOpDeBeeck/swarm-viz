@@ -10,7 +10,8 @@
             this.controllerAs = 'container'
             this.bindToController = true;
             this.scope = {
-                container: '='
+                container: '=',
+                ignoreFilters: '='
             };
         }
     }
