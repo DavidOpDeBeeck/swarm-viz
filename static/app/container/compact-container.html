@@ -7,6 +7,6 @@
     <span class="name">{{ container.name }}</span>
   </section>
   <section class="container-networks" ng-show="container.displayNetworks">
-    <span class="label network" ng-show="container.displayNetworks" ng-repeat="network in container.networks">{{ network }}</span>
+    <span class="label network" ng-show="container.displayNetworks" ng-repeat="network in container.networks">{{ network.name }}</span>
   </section>
 </section>

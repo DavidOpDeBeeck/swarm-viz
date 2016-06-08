@@ -20,6 +20,9 @@
     margin-left: 5px;
 }
 
+
+/*-------------------------*/
+
 .search-results {
     position: absolute;
     top: 160px;
@@ -27,4 +30,12 @@
     left: 0;
     right: 0;
     padding: 0 10px;
+}
+
+.search-results .container.compact> .container-info {
+    border: 1px solid #D9D9D9;
+}
+
+.search-results .container.compact> .container-networks {
+    margin-bottom: 10px;
 }

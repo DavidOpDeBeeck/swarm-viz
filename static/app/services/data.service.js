@@ -26,6 +26,11 @@
             return [].concat.apply( [], this.hosts.map( h => h.containers ) );
         }
 
+        getContainerByName( name ) {
+            return this.getContainers()
+                .find( c => c.name == name );
+        }
+
         getNetworks() {
             return this.networks;
         }

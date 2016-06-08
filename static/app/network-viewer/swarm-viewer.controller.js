@@ -21,7 +21,7 @@
                         this.nodes.add( {
                             id: networkId,
                             label: network.name,
-                            mass: 5,
+                            mass: 10,
                             shape: 'box',
                             color: '#337ab7',
                             font: {
@@ -45,9 +45,9 @@
                             this.nodes.add( {
                                 id: nodeId,
                                 label: c.name,
-                                mass: 3,
+                                mass: 6,
                                 shape: 'box',
-                                color: '#5bc0de',
+                                color: '#41b5d8',
                                 font: {
                                     color: '#ffffff'
                                 }
@@ -58,7 +58,7 @@
                                 id: edgeId,
                                 from: nodeId,
                                 to: networkId,
-                                color: '#5bc0de'
+                                color: '#337ab7'
                             } );
                         }
                     } );
