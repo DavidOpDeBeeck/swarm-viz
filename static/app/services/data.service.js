@@ -4,35 +4,35 @@
     class DataService {
         /*@ngInject*/
         constructor( $rootScope, socketService ) {
-            this.hosts = [];
-            this.networks = [];
+            this._hosts = [];
+            this._networks = [];
             socketService.getSocket()
                 .on( 'containers', data => {
-                    this.hosts = data;
+                    this._hosts = data;
+                    console.log( data );
                     $rootScope.$broadcast( 'DataService.notification.refresh.hosts' );
                 } );
             socketService.getSocket()
                 .on( 'networks', data => {
-                    this.networks = data;
+                    this._networks = data;
                     $rootScope.$broadcast( 'DataService.notification.refresh.networks' );
                 } );
         }
 
-        getHosts() {
-            return this.hosts;
+        get hosts() {
+            return this._hosts;
         }
 
-        getContainers() {
+        get networks() {
+            return this._networks;
+        }
+
+        get containers() {
             return [].concat.apply( [], this.hosts.map( h => h.containers ) );
         }
 
         getContainerByName( name ) {
-            return this.getContainers()
-                .find( c => c.name == name );
-        }
-
-        getNetworks() {
-            return this.networks;
+            return this.containers.find( c => c.name == name );
         }
 
         getNetworkById( id ) {

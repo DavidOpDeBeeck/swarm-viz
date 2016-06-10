@@ -20,14 +20,36 @@ header {
     top: 0;
     left: 0;
     right: 0;
-    padding: 1rem;
     border-color: #404040;
     background-color: #337ab7;
     box-shadow: 1px 1px 1px #2d6a9f;
 }
 
-header> a {
+header >a {
+    float: left;
+    width: calc(280px - 2rem);
+    padding: 1rem;
+    text-align: left;
+}
+
+header a {
     color: #FFFFFF;
+}
+
+header> ul {
+    float: left;
+    padding: 0.5rem;
+}
+
+header> ul >li {
+    float: left;
+    padding: 0.5rem;
+    margin: 0 10px;
+    border-radius: 5px;
+}
+
+header> ul >li.active, header> ul >li:hover {
+    background-color: #2d6a9f;
 }
 
 
@@ -124,12 +146,12 @@ aside input[type="checkbox"] {
 
 .search-options select {
     float: left;
+    box-sizing: border-box;
     width: calc(50% - 5px);
     margin: 0 0 15px;
     padding: 10px;
     text-transform: uppercase;
-    border: 1px solid #D9D9D9;
-    box-sizing: border-box;
+    border: 1px solid #d9d9d9;
 }
 
 .search-options> select:first-child {
@@ -140,13 +162,25 @@ aside input[type="checkbox"] {
     margin-left: 5px;
 }
 
+
+/*-------------------------*/
+
 .search-results {
     position: absolute;
     top: 160px;
+    right: 0;
     bottom: 0;
     left: 0;
-    right: 0;
     padding: 0 10px;
+}
+
+.search-results .container.compact> .container-info {
+    border: 1px solid #d9d9d9;
+}
+
+.search-results .container.compact> .container-networks {
+    border: 1px solid #D9D9D9;
+    margin-bottom: 10px;
 }
 
 .container.compact .label {
@@ -159,45 +193,45 @@ aside input[type="checkbox"] {
     box-shadow: 1px 1px 1px #404040;
 }
 
-.container.compact > .container-info {
+.container.compact> .container-info {
+    opacity: .99;
     padding: 10px 10px 5px 10px;
     background-color: #ffffff;
-    border: 1px solid #D9D9D9;
     box-shadow: 1px 1px 1px #D9D9D9;
 }
 
-.container.compact > .container-info > h1 {
+.container.compact> .container-info> h1 {
     font-size: 1.4rem;
 }
 
-.container.compact > .container-info > .id {
+.container.compact> .container-info> .id {
     float: right;
 }
 
-.container.compact > .container-info > .id, .container > .container-info > .name {
+.container.compact> .container-info> .id, .container> .container-info> .name {
     display: block;
     font-size: 0.6rem;
     padding: 10px 0 5px 0;
 }
 
-.container.compact > .container-info > .label {
+.container.compact> .container-info> .label {
     float: right;
     margin-left: 5px;
 }
 
-.container.compact > .container-info > .label.running {
+.container.compact> .container-info> .label.running {
     border-color: #4BAD4B;
     background-color: #5cb85c;
     box-shadow: 1px 1px 1px #4BAD4B;
 }
 
-.container.compact > .container-info > .label.created {
+.container.compact> .container-info> .label.created {
     border-color: #2D6DA3;
     background-color: #337ab7;
     box-shadow: 1px 1px 1px #2D6DA3;
 }
 
-.container.compact > .container-info > .label.exited {
+.container.compact> .container-info> .label.exited {
     border-color: #D33A35;
     background-color: #d9534f;
     box-shadow: 1px 1px 1px #D33A35;
@@ -206,83 +240,20 @@ aside input[type="checkbox"] {
 
 /*-------------------------*/
 
-.container.compact > .container-networks {
-    margin-bottom: 10px;
+.container.compact> .container-networks {
+    border-bottom: 1px solid #D9D9D9;
+    background-color: #ffffff;
+    box-shadow: 1px 1px 1px #D9D9D9;
 }
 
-.container.compact > .container-networks > .label.network {
+.container.compact> .container-networks> .network {
+    color: #474747;
     display: block;
-    width: calc(100% - 10px);
-    padding: 5px;
-    border-color: #2D6DA3;
-    background-color: #337ab7;
-    box-shadow: 1px 1px 1px #2D6DA3;
-}
-
-.container.compact2 .label {
-    color: #ffffff;
-    font-size: 0.5rem;
     font-weight: 700;
-    padding: 3px;
-    border-color: #404040;
-    background-color: #474747;
-    box-shadow: 1px 1px 1px #404040;
-}
-
-.container.compact2> .container-info {
-    padding: 10px 10px 5px 10px;
-    background-color: #ffffff;
-    border: 1px solid #D9D9D9;
-    box-shadow: 1px 1px 1px #D9D9D9;
-}
-
-.container.compact2> .container-info> h1 {
-    font-size: 1.4rem;
-}
-
-.container.compact2> .container-info> .id {
-    float: right;
-}
-
-.container.compact2> .container-info> .id, .container> .container-info> .name {
-    display: block;
-    font-size: 0.6rem;
-    padding: 10px 0 5px 0;
-}
-
-.container.compact2> .container-info> .label {
-    float: right;
-    margin-left: 5px;
-}
-
-.container.compact2> .container-info> .label.running {
-    border-color: #4BAD4B;
-    background-color: #5cb85c;
-    box-shadow: 1px 1px 1px #4BAD4B;
-}
-
-.container.compact2> .container-info> .label.created {
-    border-color: #2D6DA3;
-    background-color: #337ab7;
-    box-shadow: 1px 1px 1px #2D6DA3;
-}
-
-.container.compact2> .container-info> .label.exited {
-    border-color: #D33A35;
-    background-color: #d9534f;
-    box-shadow: 1px 1px 1px #D33A35;
-}
-
-
-/*-------------------------*/
-
-.container.compact2> .container-networks> .label.network {
-    display: block;
+    font-size: 0.5rem;
     width: calc(100% - 10px);
     padding: 5px;
-    border-color: #2D6DA3;
-    background-color: #337ab7;
-    box-shadow: 1px 1px 1px #2D6DA3;
+    text-align: right;
 }
 
 .host {
@@ -291,7 +262,7 @@ aside input[type="checkbox"] {
     top: 0;
     bottom: 0;
     white-space: normal;
-    width: 400px;
+    width: 350px;
     height: calc(100% - 22px);
     margin: 10px;
     vertical-align: top;
@@ -302,7 +273,7 @@ aside input[type="checkbox"] {
 
 .host-heading {
     overflow: auto;
-    font-size: 2rem;
+    font-size: 1.75rem;
     padding: 10px;
     border-bottom: 1px solid #D9D9D9;
 }
@@ -324,11 +295,30 @@ aside input[type="checkbox"] {
     overflow-y: auto;
 }
 
+.host-containers .container.compact> .container-info {
+    border-bottom: 1px solid #D9D9D9;
+}
+
 .network-overview a {
     font-size: 0.8rem;
     text-transform: none;
 }
 
+.network-info {
+    position: absolute;
+    top: 20px;
+    left: 10px;
+}
+
+.network-info > h1 {
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.network-info > small {
+    font-size: 0.6rem;
+    font-weight: 400;
+}
 
 #host-list {
     position: absolute;

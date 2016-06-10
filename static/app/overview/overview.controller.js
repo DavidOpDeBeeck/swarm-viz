@@ -6,7 +6,7 @@
         constructor( $scope, dataService ) {
             this.hosts = [];
             $scope.$on( 'DataService.notification.refresh.hosts', ( ev, data ) => {
-                let newHosts = dataService.getHosts();
+                let newHosts = dataService.hosts;
                 // TODO mybe move this code to the DataService
                 // remove hosts that are no longer alive
                 this.hosts.forEach( oldHost => {

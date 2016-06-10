@@ -9,40 +9,57 @@
         /*@ngInject*/
         constructor( $rootScope, localStorage ) {
             this.localStorage = localStorage;
-
-            this.displayUptime = localStorage.getBool( 'displayUptime' );
-            this.displayNetworks = localStorage.getBool( 'displayNetworks' );
-            this.displayExitedContainers = localStorage.getBool( 'displayExitedContainers' );
-            this.displaySwarmContainers = localStorage.getBool( 'displaySwarmContainers' );
-            this.displayEmptyHosts = localStorage.getBool( 'displayEmptyHosts' );
-
-            $rootScope.$on( 'LocalStorage.notification.set', ( event, params ) => {
-                switch ( params.key ) {
-                case "displayUptime":
-                    this.displayUptime = params.value;
-                    break;
-                case "displayNetworks":
-                    this.displayNetworks = params.value;
-                    break;
-                case "displayExitedContainers":
-                    this.displayExitedContainers = params.value;
-                    break;
-                case "displaySwarmContainers":
-                    this.displaySwarmContainers = params.value;
-                    break;
-                case "displayEmptyHosts":
-                    this.displayEmptyHosts = params.value;
-                    break;
-                }
-            } );
+            // load values from localstorage
+            this._displayUptime = localStorage.getBool( 'displayUptime' );
+            this._displayNetworks = localStorage.getBool( 'displayNetworks' );
+            this._displayExitedContainers = localStorage.getBool( 'displayExitedContainers' );
+            this._displaySwarmContainers = localStorage.getBool( 'displaySwarmContainers' );
+            this._displayEmptyHosts = localStorage.getBool( 'displayEmptyHosts' );
         }
 
-        setDefault( key, value ) {
-            this.localStorage.setIfNotExists( key, value );
+        set displayUptime( value ) {
+            this._displayUptime = value;
+            this.localStorage.set( 'displayUptime', value );
         }
 
-        set( key, value ) {
-            this.localStorage.set( key, value );
+        set displayNetworks( value ) {
+            this._displayNetworks = value;
+            this.localStorage.set( 'displayNetworks', value );
+        }
+
+        set displayExitedContainers( value ) {
+            this._displayExitedContainers = value;
+            this.localStorage.set( 'displayExitedContainers', value );
+        }
+
+        set displaySwarmContainers( value ) {
+            this._displaySwarmContainers = value;
+            this.localStorage.set( 'displaySwarmContainers', value );
+        }
+
+        set displayEmptyHosts( value ) {
+            this._displayEmptyHosts = value;
+            this.localStorage.set( 'displayEmptyHosts', value );
+        }
+
+        get displayUptime() {
+            return this._displayUptime;
+        }
+
+        get displayNetworks() {
+            return this._displayNetworks;
+        }
+
+        get displayExitedContainers() {
+            return this._displayExitedContainers;
+        }
+
+        get displaySwarmContainers() {
+            return this._displaySwarmContainers;
+        }
+
+        get displayEmptyHosts() {
+            return this._displayEmptyHosts;
         }
     }
 

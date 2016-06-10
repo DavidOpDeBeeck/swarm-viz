@@ -12,14 +12,6 @@
         'swarm-viz.directives'
     ] );
 
-    app.run( settings => {
-        settings.setDefault( 'displayUptime', 'true' );
-        settings.setDefault( 'displayNetworks', 'true' );
-        settings.setDefault( 'displayEmptyHosts', 'false' );
-        settings.setDefault( 'displayExitedContainers', 'true' );
-        settings.setDefault( 'diplaySwarmContainers', 'false' );
-    } );
-
     app.run( ( $rootScope, $location ) => {
         $rootScope.location = $location;
     } );

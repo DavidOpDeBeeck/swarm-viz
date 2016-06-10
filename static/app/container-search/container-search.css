@@ -4,12 +4,12 @@
 
 .search-options select {
     float: left;
+    box-sizing: border-box;
     width: calc(50% - 5px);
     margin: 0 0 15px;
     padding: 10px;
     text-transform: uppercase;
-    border: 1px solid #D9D9D9;
-    box-sizing: border-box;
+    border: 1px solid #d9d9d9;
 }
 
 .search-options> select:first-child {
@@ -26,16 +26,17 @@
 .search-results {
     position: absolute;
     top: 160px;
+    right: 0;
     bottom: 0;
     left: 0;
-    right: 0;
     padding: 0 10px;
 }
 
 .search-results .container.compact> .container-info {
-    border: 1px solid #D9D9D9;
+    border: 1px solid #d9d9d9;
 }
 
 .search-results .container.compact> .container-networks {
+    border: 1px solid #D9D9D9;
     margin-bottom: 10px;
 }

@@ -7,8 +7,8 @@
             this.hosts = [];
             this.containers = [];
             $scope.$on( 'DataService.notification.refresh.hosts', ( ev, data ) => {
-                this.hosts = dataService.getHosts();
-                this.containers = dataService.getContainers();
+                this.hosts = dataService.hosts;
+                this.containers = dataService.containers;
             } );
         }
 

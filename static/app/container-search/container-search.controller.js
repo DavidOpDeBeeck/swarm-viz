@@ -16,7 +16,7 @@
         }
 
         search() {
-            let containers = this.dataService.getContainers();
+            let containers = this.dataService.containers;
             this.results = containers.filter( c => {
                 return ( this.query && ( c.name.toLowerCase()
                     .indexOf( this.query.toLowerCase() ) > -1 ||

@@ -8,7 +8,7 @@
             this.$location = $location;
             this.dataService = dataService;
             $scope.$on( 'DataService.notification.refresh.networks', ( ev, data ) => {
-                this.networkNames = dataService.getNetworks()
+                this.networkNames = dataService.networks
                     .map( n => n.name )
                     .sort();
             } );

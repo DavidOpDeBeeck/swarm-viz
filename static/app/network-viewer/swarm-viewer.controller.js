@@ -12,7 +12,7 @@
             };
             this.networkIds = [];
             $scope.$on( 'DataService.notification.refresh.networks', ( ev, data ) => {
-                let networks = dataService.getNetworks();
+                let networks = dataService.networks;
 
                 networks.forEach( network => {
                     let networkId = network.name;

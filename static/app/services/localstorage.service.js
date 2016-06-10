@@ -9,10 +9,6 @@
         }
 
         set( key, value ) {
-            this.$rootScope.$broadcast( 'LocalStorage.notification.set', {
-                key: key,
-                value: value
-            } );
             this.$window.localStorage.setItem( key, value )
         }
 

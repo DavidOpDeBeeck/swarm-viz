@@ -13,23 +13,23 @@
         }
 
         toggleUptime() {
-            this.settings.set( 'displayUptime', this.displayUptime );
+            this.settings.displayUptime = this.displayUptime;
         }
 
         toggleNetworks() {
-            this.settings.set( 'displayNetworks', this.displayNetworks );
+            this.settings.displayNetworks = this.displayNetworks;
         }
 
         toggleEmptyHosts() {
-            this.settings.set( 'displayEmptyHosts', this.displayEmptyHosts );
+            this.settings.displayEmptyHosts = this.displayEmptyHosts;
         }
 
         toggleExitedContainers() {
-            this.settings.set( 'displayExitedContainers', this.displayExitedContainers );
+            this.settings.displayExitedContainers = this.displayExitedContainers;
         }
 
         toggleSwarmContainers() {
-            this.settings.set( 'displaySwarmContainers', this.displaySwarmContainers );
+            this.settings.displaySwarmContainers = this.displaySwarmContainers;
         }
     }
 
