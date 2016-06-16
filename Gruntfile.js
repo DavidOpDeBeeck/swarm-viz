@@ -1,11 +1,26 @@
 module.exports = function ( grunt ) {
 
-    var app = './static/app/';
-    var dist = {};
-
-    dist.default = './static/dist/';
-    dist.js = dist.default+'js/app.js';
-    dist.css = dist.default+'css/app.css';
+    var app = {
+        'js'    : [ 'app/app.js', 'app/app-*.js' , 'app/**/*.js' ],
+        'css'   : 'app/**/*.css',
+        'html'  : 'app/**/*.html'
+    };
+    var libs = {
+        'js' : [ 'libs/js/angular.min.js' , 'libs/js/*.js' ],
+        'css': 'libs/css/*.css'
+    }
+    var dist = {
+        'default' : './static/dist',
+        'app'     : {
+            'js'  : './static/dist/js/app.js',
+            'css' : './static/dist/css/app.css',
+            'html': './static/dist/html/'
+        },
+        'libs'     : {
+            'js'   : './static/dist/js/libs.js',
+            'css'  : './static/dist/css/libs.css'
+        },
+    };
 
     ///////////////////
 
@@ -17,12 +32,23 @@ module.exports = function ( grunt ) {
                 options: {
                     separator: ';'
                 },
-                src: [ app + '*/app*.js', app + '**/*.js' ],
-                dest: dist.js
+                src: app.js,
+                dest: dist.app.js
             },
             'app-css': {
-                src: app + '**/*.css',
-                dest: dist.css
+                src: app.css,
+                dest: dist.app.css
+            },
+            'lib-js': {
+                options: {
+                    separator: ';\n'
+                },
+                src: libs.js,
+                dest: dist.libs.js
+            },
+            'lib-css': {
+                src: libs.css,
+                dest: dist.libs.css
             }
         },
         babel: {
@@ -32,8 +58,8 @@ module.exports = function ( grunt ) {
             },
             app: {
                 files: [ {
-                    src: dist.js,
-                    dest: dist.js
+                    src: dist.app.js,
+                    dest: dist.app.js
                 } ]
             }
         },
@@ -42,6 +68,16 @@ module.exports = function ( grunt ) {
                 files: {
                     "./static/dist/js/app.js": [ "./static/dist/js/app.js" ]
                 }
+            }
+        },
+        copy: {
+            templates: {
+                files: [ {
+                    expand: true,
+                    flatten: true,
+                    src: app.html,
+                    dest: dist.app.html
+                } ]
             }
         }
     } );
@@ -52,6 +88,7 @@ module.exports = function ( grunt ) {
     grunt.loadNpmTasks( 'grunt-ng-annotate' );
     grunt.loadNpmTasks( 'grunt-contrib-clean' );
     grunt.loadNpmTasks( 'grunt-contrib-concat' );
+    grunt.loadNpmTasks( 'grunt-contrib-copy' );
 
-    grunt.registerTask( 'default', [ 'clean', 'concat', 'babel', 'ngAnnotate' ] );
+    grunt.registerTask( 'default', [ 'clean', 'concat', 'babel', 'ngAnnotate', 'copy' ] );
 };

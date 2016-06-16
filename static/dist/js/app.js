@@ -5,23 +5,6 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 (function () {
-    'use strict';
-
-    angular.module('swarm-viz.config', []);
-})();
-;(function () {
-    'use strict';
-
-    angular.module('swarm-viz.controllers', []);
-})();
-;(function () {
-    'use strict';
-
-    angular.module('swarm-viz.directives', []);
-})();
-;(function () {
-    'use strict';
-
     var app = angular.module('swarm-viz', ['btford.socket-io', 'angular-nicescroll', 'ngRoute', 'swarm-viz.config', 'swarm-viz.routes', 'swarm-viz.controllers', 'swarm-viz.services', 'swarm-viz.directives']);
 
     app.run(["$rootScope", "$location", function ($rootScope, $location) {
@@ -29,19 +12,26 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     }]);
 })();
 ;(function () {
-    'use strict';
-
+    angular.module('swarm-viz.config', []);
+})();
+;(function () {
+    angular.module('swarm-viz.controllers', []);
+})();
+;(function () {
+    angular.module('swarm-viz.directives', []);
+})();
+;(function () {
     angular.module('swarm-viz.routes', ['ngRoute']).config(["$routeProvider", function ($routeProvider) {
         $routeProvider.when('/overview', {
-            templateUrl: '/app/overview/overview.html',
+            templateUrl: '/dist/html/overview.html',
             controller: 'OverviewController',
             controllerAs: 'overview'
         }).when('/swarm', {
-            templateUrl: '/app/network-viewer/network-viewer.html',
+            templateUrl: '/dist/html/network-viewer.html',
             controller: 'SwarmViewerController',
             controllerAs: 'viewer'
         }).when('/view/:id', {
-            templateUrl: '/app/network-viewer/network-viewer.html',
+            templateUrl: '/dist/html/network-viewer.html',
             controller: 'NetworkViewerController',
             controllerAs: 'viewer'
         }).otherwise({
@@ -50,13 +40,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     }]);
 })();
 ;(function () {
-    'use strict';
-
     angular.module('swarm-viz.services', []);
 })();
 ;(function () {
-    'use strict';
-
     var ClusterInformationController = function () {
         /*@ngInject*/
 
@@ -66,35 +52,35 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
             _classCallCheck(this, ClusterInformationController);
 
-            this.hosts = [];
-            this.containers = [];
+            this._hosts = [];
+            this._containers = [];
             $scope.$on('DataService.notification.refresh.hosts', function (ev, data) {
-                _this.hosts = dataService.hosts;
-                _this.containers = dataService.containers;
+                _this._hosts = dataService.hosts;
+                _this._containers = dataService.containers;
             });
         }
 
         _createClass(ClusterInformationController, [{
             key: 'totalHosts',
             get: function get() {
-                return this.hosts.length;
+                return this._hosts.length;
             }
         }, {
             key: 'totalContainers',
             get: function get() {
-                return this.containers.length;
+                return this._containers.length;
             }
         }, {
             key: 'exitedContainers',
             get: function get() {
-                return this.containers.filter(function (c) {
+                return this._containers.filter(function (c) {
                     return c.state === 'exited';
                 }).length;
             }
         }, {
             key: 'runningContainers',
             get: function get() {
-                return this.containers.filter(function (c) {
+                return this._containers.filter(function (c) {
                     return c.state === 'running';
                 }).length;
             }
@@ -106,12 +92,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     register('swarm-viz.controllers').controller('ClusterInformationController', ClusterInformationController);
 })();
 ;(function () {
-    'use strict';
-
     var ClusterInformation = function ClusterInformation() {
         _classCallCheck(this, ClusterInformation);
 
-        this.templateUrl = '/app/cluster-information/cluster-information.html';
+        this.templateUrl = '/dist/html/cluster-information.html';
         this.restrict = 'E';
         this.replace = true;
         this.controller = 'ClusterInformationController';
@@ -121,8 +105,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     register('swarm-viz.directives').directive('clusterInformation', ClusterInformation);
 })();
 ;(function () {
-    'use strict';
-
     var ContainerSearchController = function () {
         /*@ngInject*/
 
@@ -134,7 +116,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             this.results = [];
             this.filterOrder = 'asc';
             this.filterType = "created";
-            this.dataService = dataService;
+            this._dataService = dataService;
         }
 
         _createClass(ContainerSearchController, [{
@@ -142,7 +124,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             value: function search() {
                 var _this2 = this;
 
-                var containers = this.dataService.containers;
+                var containers = this._dataService.containers;
                 this.results = containers.filter(function (c) {
                     return _this2.query && (c.name.toLowerCase().indexOf(_this2.query.toLowerCase()) > -1 || c.image.toLowerCase().indexOf(_this2.query.toLowerCase()) > -1 || c.id.toLowerCase().indexOf(_this2.query.toLowerCase()) > -1);
                 });
@@ -160,12 +142,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     register('swarm-viz.controllers').controller('ContainerSearchController', ContainerSearchController);
 })();
 ;(function () {
-    'use strict';
-
     var ContainerSearch = function ContainerSearch() {
         _classCallCheck(this, ContainerSearch);
 
-        this.templateUrl = '/app/container-search/container-search.html';
+        this.templateUrl = '/dist/html/container-search.html';
         this.restrict = 'E';
         this.replace = true;
         this.controller = 'ContainerSearchController';
@@ -175,12 +155,76 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     register('swarm-viz.directives').directive('containerSearch', ContainerSearch);
 })();
 ;(function () {
-    'use strict';
+    var ContainerController = function () {
+        /*@ngInject*/
 
-    var CompactContainerDirective = function CompactContainerDirective() {
-        _classCallCheck(this, CompactContainerDirective);
+        ContainerController.$inject = ["settings", "containerUtils"];
+        function ContainerController(settings, containerUtils) {
+            _classCallCheck(this, ContainerController);
 
-        this.templateUrl = '/app/container/compact-container.html';
+            this._settings = settings;
+            this._containerUtils = containerUtils;
+            this._container = this.container;
+            this._ignoreFilters = this.ignoreFilters;
+        }
+
+        _createClass(ContainerController, [{
+            key: 'displayContainer',
+            get: function get() {
+                return this._ignoreFilters || this._containerUtils.display(this._container);
+            }
+        }, {
+            key: 'displayUptime',
+            get: function get() {
+                return this._ignoreFilters || this._settings.displayUptime;
+            }
+        }, {
+            key: 'displayNetworks',
+            get: function get() {
+                return this._ignoreFilters || this._settings.displayNetworks;
+            }
+        }, {
+            key: 'state',
+            get: function get() {
+                return this._container.state;
+            }
+        }, {
+            key: 'status',
+            get: function get() {
+                return this._container.status;
+            }
+        }, {
+            key: 'image',
+            get: function get() {
+                return this._container.image;
+            }
+        }, {
+            key: 'networks',
+            get: function get() {
+                return this._container.networks;
+            }
+        }, {
+            key: 'name',
+            get: function get() {
+                return this._container.name;
+            }
+        }, {
+            key: 'id',
+            get: function get() {
+                return this._container.id.substring(0, 10);
+            }
+        }]);
+
+        return ContainerController;
+    }();
+
+    register('swarm-viz.controllers').controller('ContainerController', ContainerController);
+})();
+;(function () {
+    var ContainerDirective = function ContainerDirective() {
+        _classCallCheck(this, ContainerDirective);
+
+        this.templateUrl = '/dist/html/container.html';
         this.restrict = 'E';
         this.replace = true;
         this.controller = 'ContainerController';
@@ -192,80 +236,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         };
     };
 
-    register('swarm-viz.directives').directive('compactContainer', CompactContainerDirective);
+    register('swarm-viz.directives').directive('container', ContainerDirective);
 })();
 ;(function () {
-    'use strict';
-
-    var ContainerController = function () {
-        /*@ngInject*/
-
-        ContainerController.$inject = ["settings", "containerUtils"];
-        function ContainerController(settings, containerUtils) {
-            _classCallCheck(this, ContainerController);
-
-            this.settings = settings;
-            this.containerUtils = containerUtils;
-        }
-
-        _createClass(ContainerController, [{
-            key: 'displayContainer',
-            get: function get() {
-                if (this.ignoreFilters) return true;
-                return this.containerUtils.display(this.container);
-            }
-        }, {
-            key: 'displayUptime',
-            get: function get() {
-                if (this.ignoreFilters) return true;
-                return this.settings.displayUptime;
-            }
-        }, {
-            key: 'displayNetworks',
-            get: function get() {
-                if (this.ignoreFilters) return true;
-                return this.settings.displayNetworks;
-            }
-        }, {
-            key: 'state',
-            get: function get() {
-                return this.container.state;
-            }
-        }, {
-            key: 'status',
-            get: function get() {
-                return this.container.status;
-            }
-        }, {
-            key: 'image',
-            get: function get() {
-                return this.container.image;
-            }
-        }, {
-            key: 'networks',
-            get: function get() {
-                return this.container.networks;
-            }
-        }, {
-            key: 'name',
-            get: function get() {
-                return this.container.name;
-            }
-        }, {
-            key: 'id',
-            get: function get() {
-                return this.container.id.substring(0, 10);
-            }
-        }]);
-
-        return ContainerController;
-    }();
-
-    register('swarm-viz.controllers').controller('ContainerController', ContainerController);
-})();
-;(function () {
-    'use strict';
-
     var HostController = function () {
         /*@ngInject*/
 
@@ -273,8 +246,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         function HostController(settings, containerUtils) {
             _classCallCheck(this, HostController);
 
-            this.settings = settings;
-            this.containerUtils = containerUtils;
+            this._settings = settings;
+            this._containerUtils = containerUtils;
+            this._host = this.host;
         }
 
         _createClass(HostController, [{
@@ -282,19 +256,19 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             get: function get() {
                 var _this3 = this;
 
-                return this.settings.displayEmptyHosts ? true : Object.keys(this.host.containers.filter(function (c) {
-                    return _this3.containerUtils.display(c);
+                return this._settings.displayEmptyHosts ? true : Object.keys(this.host.containers.filter(function (c) {
+                    return _this3._containerUtils.display(c);
                 })).length > 0;
             }
         }, {
             key: 'name',
             get: function get() {
-                return this.host.name;
+                return this._host.name;
             }
         }, {
             key: 'containers',
             get: function get() {
-                return this.host.containers;
+                return this._host.containers;
             }
         }]);
 
@@ -304,12 +278,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     register('swarm-viz.controllers').controller('HostController', HostController);
 })();
 ;(function () {
-    'use strict';
-
     var HostDirective = function HostDirective() {
         _classCallCheck(this, HostDirective);
 
-        this.templateUrl = '/app/host/host.html';
+        this.templateUrl = '/dist/html/host.html';
         this.restrict = 'E';
         this.replace = true;
         this.controller = 'HostController';
@@ -323,8 +295,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     register('swarm-viz.directives').directive('host', HostDirective);
 })();
 ;(function () {
-    'use strict';
-
     var NetworkOverviewController = function () {
         /*@ngInject*/
 
@@ -334,11 +304,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
             _classCallCheck(this, NetworkOverviewController);
 
-            this.networkNames = [];
-            this.$location = $location;
-            this.dataService = dataService;
+            this._names = [];
+            this._$location = $location;
+            this._dataService = dataService;
             $scope.$on('DataService.notification.refresh.networks', function (ev, data) {
-                _this4.networkNames = dataService.networks.map(function (n) {
+                _this4._names = dataService.networks.map(function (n) {
                     return n.name;
                 }).sort();
             });
@@ -347,13 +317,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         _createClass(NetworkOverviewController, [{
             key: 'view',
             value: function view(name) {
-                var network = this.dataService.getNetworkByName(name);
-                this.$location.path('/view/' + network.id);
+                var network = this._dataService.getNetworkByName(name);
+                this._$location.path('/view/' + network.id);
             }
         }, {
             key: 'names',
             get: function get() {
-                return this.networkNames;
+                return this._names;
             }
         }]);
 
@@ -363,12 +333,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     register('swarm-viz.controllers').controller('NetworkOverviewController', NetworkOverviewController);
 })();
 ;(function () {
-    'use strict';
-
     var NetworkOverview = function NetworkOverview() {
         _classCallCheck(this, NetworkOverview);
 
-        this.templateUrl = '/app/network-overview/network-overview.html';
+        this.templateUrl = '/dist/html/network-overview.html';
         this.restrict = 'E';
         this.replace = true;
         this.controller = 'NetworkOverviewController';
@@ -378,8 +346,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     register('swarm-viz.directives').directive('networkOverview', NetworkOverview);
 })();
 ;(function () {
-    'use strict';
-
     var NetworkViewerController = function () {
         /*@ngInject*/
 
@@ -389,39 +355,37 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
             _classCallCheck(this, NetworkViewerController);
 
-            this.dataService = dataService;
-            this.$routeParams = $routeParams;
-            this.nodes = new vis.DataSet();
-            this.edges = new vis.DataSet();
+            this._dataService = dataService;
+            this._$routeParams = $routeParams;
+
+            this._nodes = new vis.DataSet();
+            this._edges = new vis.DataSet();
+
             this.network_data = {
-                nodes: this.nodes,
-                edges: this.edges
+                nodes: this._nodes,
+                edges: this._edges
             };
-            this.currentNetworkId = undefined;
+
+            this._initialised = undefined;
+
             $scope.$on('DataService.notification.refresh.networks', function (ev, data) {
                 var network = dataService.getNetworkById($routeParams.id);
 
                 if (network == undefined) return;
 
                 var networkId = network.name;
-                if (_this5.currentNetworkId !== $routeParams.id) {
-                    _this5.nodes.clear();
-                    _this5.edges.clear();
-                    _this5.currentNetworkId = $routeParams.id;
-                    _this5.nodes.add({
+                if (!_this5._initialised) {
+                    _this5._nodes.clear();
+                    _this5._edges.clear();
+                    _this5._initialised = true;
+                    _this5._nodes.add({
                         id: networkId,
                         label: network.name,
                         mass: 5,
                         shape: 'box',
                         color: '#337ab7',
-                        font: {
-                            color: '#ffffff'
-                        },
-                        scaling: {
-                            label: {
-                                enabled: true
-                            }
-                        },
+                        font: { color: '#ffffff' },
+                        scaling: { label: { enabled: true } },
                         value: 20
                     });
                 }
@@ -430,21 +394,19 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
                 containers.forEach(function (c) {
                     var nodeId = c.name;
-                    var edgeId = nodeId + ':' + network.name;
-                    if (!_this5.nodes.get(nodeId)) {
-                        _this5.nodes.add({
+                    var edgeId = nodeId + ':' + networkId;
+                    if (!_this5._nodes.get(nodeId)) {
+                        _this5._nodes.add({
                             id: nodeId,
                             label: c.name,
                             mass: 3,
                             shape: 'box',
                             color: '#5bc0de',
-                            font: {
-                                color: '#ffffff'
-                            }
+                            font: { color: '#ffffff' }
                         });
                     }
-                    if (!_this5.edges.get(edgeId)) {
-                        _this5.edges.add({
+                    if (!_this5._edges.get(edgeId)) {
+                        _this5._edges.add({
                             id: edgeId,
                             from: nodeId,
                             to: networkId,
@@ -453,15 +415,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     }
                 });
 
-                _this5.nodes.forEach(function (n) {
+                _this5._nodes.forEach(function (n) {
                     var nodeId = n.id;
-                    var edgeId = nodeId + ':' + network.name;
+                    var edgeId = nodeId + ':' + networkId;
                     if (nodeId == networkId) return;
                     if (!containers.find(function (c) {
                         return c.name == nodeId;
                     })) {
-                        _this5.nodes.remove(nodeId);
-                        _this5.edges.remove(edgeId);
+                        _this5._nodes.remove(nodeId);
+                        _this5._edges.remove(edgeId);
                     }
                 });
             });
@@ -470,7 +432,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         _createClass(NetworkViewerController, [{
             key: 'name',
             get: function get() {
-                var network = this.dataService.getNetworkById(this.$routeParams.id);
+                var network = this._dataService.getNetworkById(this._$routeParams.id);
                 return network == undefined ? "" : network.name;
             }
         }]);
@@ -481,20 +443,29 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     register('swarm-viz.controllers').controller('NetworkViewerController', NetworkViewerController);
 })();
 ;(function () {
+    var VisNetwork = function () {
+        function VisNetwork() {
+            _classCallCheck(this, VisNetwork);
 
-    angular.module('swarm-viz.directives').directive('visNetwork', function () {
-        return {
-            restrict: 'E',
-            require: '^ngModel',
-            scope: {
+            this.restrict = 'E';
+            this.require = '^ngModel';
+            this.scope = {
                 ngModel: '=',
                 options: '='
-            },
-            link: function link($scope, $element, $attrs, ngModel) {
+            };
+        }
+
+        _createClass(VisNetwork, [{
+            key: 'link',
+            value: function link($scope, $element, $attrs, ngModel) {
                 new vis.Network($element[0], $scope.ngModel, $scope.options || {});
             }
-        };
-    });
+        }]);
+
+        return VisNetwork;
+    }();
+
+    register('swarm-viz.directives').directive('visNetwork', VisNetwork);
 })();
 ;(function () {
     'use strict';
@@ -508,36 +479,32 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
             _classCallCheck(this, SwarmViewerController);
 
-            this.nodes = new vis.DataSet();
-            this.edges = new vis.DataSet();
+            this._nodes = new vis.DataSet();
+            this._edges = new vis.DataSet();
+
             this.network_data = {
-                nodes: this.nodes,
-                edges: this.edges
+                nodes: this._nodes,
+                edges: this._edges
             };
-            this.networkIds = [];
+
+            this._networkIds = [];
             $scope.$on('DataService.notification.refresh.networks', function (ev, data) {
                 var networks = dataService.networks;
 
                 networks.forEach(function (network) {
                     var networkId = network.name;
-                    if (!_this6.networkIds.find(function (n) {
+                    if (!_this6._networkIds.find(function (n) {
                         return n == network.id;
                     })) {
-                        _this6.networkIds.push(network.id);
-                        _this6.nodes.add({
+                        _this6._networkIds.push(network.id);
+                        _this6._nodes.add({
                             id: networkId,
                             label: network.name,
                             mass: 10,
                             shape: 'box',
                             color: '#337ab7',
-                            font: {
-                                color: '#ffffff'
-                            },
-                            scaling: {
-                                label: {
-                                    enabled: true
-                                }
-                            },
+                            font: { color: '#ffffff' },
+                            scaling: { label: { enabled: true } },
                             value: 20
                         });
                     }
@@ -546,21 +513,19 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
                     containers.forEach(function (c) {
                         var nodeId = c.name;
-                        var edgeId = nodeId + ':' + network.name;
-                        if (!_this6.nodes.get(nodeId)) {
-                            _this6.nodes.add({
+                        var edgeId = nodeId + ':' + networkId;
+                        if (!_this6._nodes.get(nodeId)) {
+                            _this6._nodes.add({
                                 id: nodeId,
                                 label: c.name,
                                 mass: 6,
                                 shape: 'box',
                                 color: '#41b5d8',
-                                font: {
-                                    color: '#ffffff'
-                                }
+                                font: { color: '#ffffff' }
                             });
                         }
-                        if (!_this6.edges.get(edgeId)) {
-                            _this6.edges.add({
+                        if (!_this6._edges.get(edgeId)) {
+                            _this6._edges.add({
                                 id: edgeId,
                                 from: nodeId,
                                 to: networkId,
@@ -569,7 +534,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                         }
                     });
 
-                    var containersFromNetwork = _this6.edges.get({
+                    var containersFromNetwork = _this6._edges.get({
                         filter: function filter(item) {
                             return item.to == networkId;
                         }
@@ -581,7 +546,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                         if (!containers.find(function (c) {
                             return c.name == nodeId;
                         })) {
-                            _this6.edges.remove(edgeId);
+                            _this6._edges.remove(edgeId);
                         }
                     });
                 });
@@ -666,8 +631,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     register('swarm-viz.controllers').controller('OverviewController', OverviewController);
 })();;
 ;(function () {
-    'use strict';
-
     var ContainerUtils = function () {
         /*@ngInject*/
 
@@ -675,14 +638,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         function ContainerUtils(settings) {
             _classCallCheck(this, ContainerUtils);
 
-            this.settings = settings;
+            this._settings = settings;
         }
 
         _createClass(ContainerUtils, [{
             key: 'display',
             value: function display(container) {
-                if (!this.settings.displaySwarmContainers && container.image === 'swarm') return false;
-                return this.settings.displayExitedContainers ? true : container.state !== 'exited';
+                if (!this._settings.displaySwarmContainers && container.image === 'swarm') return false;
+                return this._settings.displayExitedContainers ? true : container.state !== 'exited';
             }
         }]);
 
@@ -692,8 +655,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     register('swarm-viz.services').factory('containerUtils', ContainerUtils);
 })();
 ;(function () {
-    'use strict';
-
     var DataService = function () {
         /*@ngInject*/
 
@@ -705,12 +666,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
             this._hosts = [];
             this._networks = [];
-            socketService.getSocket().on('containers', function (data) {
+            socketService.socket.on('containers', function (data) {
                 _this8._hosts = data;
-                console.log(data);
                 $rootScope.$broadcast('DataService.notification.refresh.hosts');
             });
-            socketService.getSocket().on('networks', function (data) {
+            socketService.socket.on('networks', function (data) {
                 _this8._networks = data;
                 $rootScope.$broadcast('DataService.notification.refresh.networks');
             });
@@ -762,28 +722,25 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     register('swarm-viz.services').service('dataService', DataService);
 })();
 ;(function () {
-    'use strict';
-
     var LocalStorage = function () {
         /*@ngInject*/
 
-        LocalStorage.$inject = ["$rootScope", "$window"];
-        function LocalStorage($rootScope, $window) {
+        LocalStorage.$inject = ["$window"];
+        function LocalStorage($window) {
             _classCallCheck(this, LocalStorage);
 
-            this.$rootScope = $rootScope;
-            this.$window = $window;
+            this._$window = $window;
         }
 
         _createClass(LocalStorage, [{
             key: 'set',
             value: function set(key, value) {
-                this.$window.localStorage.setItem(key, value);
+                this._$window.localStorage.setItem(key, value);
             }
         }, {
             key: 'get',
             value: function get(key) {
-                return this.$window.localStorage.getItem(key);
+                return this._$window.localStorage.getItem(key);
             }
         }, {
             key: 'getBool',
@@ -808,8 +765,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     register('swarm-viz.services').service('localStorage', LocalStorage);
 })();
 ;(function () {
-    'use strict';
-
     /*
       Settings are now implemented using localstorage, with the intention that this can be changed in the future.
     */
@@ -883,8 +838,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     register('swarm-viz.services').service('settings', Settings);
 })();
 ;(function () {
-    'use strict';
-
     var SocketService = function () {
         /*@ngInject*/
 
@@ -892,13 +845,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         function SocketService(socketFactory) {
             _classCallCheck(this, SocketService);
 
-            this.socketFactory = socketFactory;
+            this._socketFactory = socketFactory;
         }
 
         _createClass(SocketService, [{
-            key: 'getSocket',
-            value: function getSocket() {
-                return this.socketFactory();
+            key: 'socket',
+            get: function get() {
+                return this._socketFactory();
             }
         }]);
 
@@ -908,8 +861,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     register('swarm-viz.services').factory('socketService', SocketService);
 })();
 ;(function () {
-    'use strict';
-
     var SettingsController = function () {
         /*@ngInject*/
 
@@ -917,7 +868,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         function SettingsController(settings) {
             _classCallCheck(this, SettingsController);
 
-            this.settings = settings;
+            this._settings = settings;
             this.displayUptime = settings.displayUptime;
             this.displayNetworks = settings.displayNetworks;
             this.displayEmptyHosts = settings.displayEmptyHosts;
@@ -928,27 +879,27 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         _createClass(SettingsController, [{
             key: 'toggleUptime',
             value: function toggleUptime() {
-                this.settings.displayUptime = this.displayUptime;
+                this._settings.displayUptime = this.displayUptime;
             }
         }, {
             key: 'toggleNetworks',
             value: function toggleNetworks() {
-                this.settings.displayNetworks = this.displayNetworks;
+                this._settings.displayNetworks = this.displayNetworks;
             }
         }, {
             key: 'toggleEmptyHosts',
             value: function toggleEmptyHosts() {
-                this.settings.displayEmptyHosts = this.displayEmptyHosts;
+                this._settings.displayEmptyHosts = this.displayEmptyHosts;
             }
         }, {
             key: 'toggleExitedContainers',
             value: function toggleExitedContainers() {
-                this.settings.displayExitedContainers = this.displayExitedContainers;
+                this._settings.displayExitedContainers = this.displayExitedContainers;
             }
         }, {
             key: 'toggleSwarmContainers',
             value: function toggleSwarmContainers() {
-                this.settings.displaySwarmContainers = this.displaySwarmContainers;
+                this._settings.displaySwarmContainers = this.displaySwarmContainers;
             }
         }]);
 
@@ -958,12 +909,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     register('swarm-viz.controllers').controller('SettingsController', SettingsController);
 })();
 ;(function () {
-    'use strict';
-
     var SettingsDirective = function SettingsDirective() {
         _classCallCheck(this, SettingsDirective);
 
-        this.templateUrl = '/app/settings/settings.html';
+        this.templateUrl = '/dist/html/settings.html';
         this.restrict = 'E';
         this.replace = true;
         this.controller = 'SettingsController';
