@@ -7,5 +7,4 @@ viz:
    - SWARM_CA
    - SWARM_KEY
    - SWARM_CERT
-   - "constraint:node==swarm-0"
   restart: always

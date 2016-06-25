@@ -1,0 +1,44 @@
+header {
+    z-index: 3;
+    display: block;
+    overflow: auto;
+    position: relative;
+    width: 100%;
+    background-color: #337ab7;
+    box-shadow: 1px 1px 1px #2d6a9f;
+    border-bottom: 1px solid #275d8b;
+}
+
+/*-------------------------*/
+
+header a {
+    color: #FFFFFF;
+    font-weight: 700;
+}
+
+/*-------------------------*/
+
+header > #brand {
+    float: left;
+    width: 260px;
+    padding: 1rem 10px;
+}
+
+/*-------------------------*/
+
+header > ul {
+    float: left;
+    padding: 0.5rem;
+}
+
+header > ul > li {
+    float: left;
+    padding: 0.5rem;
+    margin-right: 10px;
+    border-radius: 5px;
+}
+
+header > ul > li.active,
+header > ul > li:hover {
+    background-color: #2d6a9f;
+}

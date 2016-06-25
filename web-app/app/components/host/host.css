@@ -1,0 +1,40 @@
+host > .host {
+    position: relative;
+    display: inline-block;
+    white-space: normal;
+    width: 350px;
+    height: calc(100% - 2px);
+    margin-right: 10px;
+    vertical-align: top;
+    background-color: #ffffff;
+    border: 1px solid #D9D9D9;
+    box-shadow: 1px 1px 1px #D9D9D9;
+}
+
+host > .host > .host-name {
+    overflow: auto;
+    font-size: 1.75rem;
+    padding: 10px;
+    border-bottom: 1px solid #D9D9D9;
+}
+
+host > .host > .host-name > i {
+    padding: 2px;
+    margin-right: 10px;
+}
+
+host > .host > .host-name > h1,
+host > .host > .host-name > i {
+    float: left;
+}
+
+/*-------------------------*/
+
+host > .host > .host-containers {
+    height: calc(100% - 2rem - 20px);
+    overflow-y: auto;
+}
+
+host > .host > .host-containers .container > .container-info {
+    border-bottom: 1px solid #D9D9D9;
+}

@@ -1,0 +1,14 @@
+.network-info {
+    position: absolute;
+    top: 0;
+}
+
+.network-info > h1 {
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.network-info > small {
+    font-size: 0.6rem;
+    font-weight: 400;
+}

@@ -1,0 +1,9 @@
+<div class="sidebar sidebar-{{sidebar.dir}}" ng-class="{'collapsed': sidebar.collapsed}">
+  <div class="sidebar-controls">
+    <span class="sidebar-control" ng-click="sidebar.toggleCollapse()">
+      <i ng-show="sidebar.showLeftArrow" class="fa fa-caret-left" aria-hidden="true"></i>
+      <i ng-show="sidebar.showRightArrow"class="fa fa-caret-right" aria-hidden="true"></i>
+    </span>
+  </div>
+  <div class="sidebar-content" ng-transclude ng-nicescroll></div>
+</div>

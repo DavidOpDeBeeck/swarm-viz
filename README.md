@@ -10,11 +10,10 @@
 ## Demo
 
 ### Overview
-![overview](https://raw.githubusercontent.com/DavidOpDeBeeck/swarm-viz/master/demo/overview.png)
+![overview](https://raw.githubusercontent.com/DavidOpDeBeeck/swarm-viz/master/screenshots/overview.png)
 
 ### Network
-![overview](https://raw.githubusercontent.com/DavidOpDeBeeck/swarm-viz/master/demo/network.png)
+![network](https://raw.githubusercontent.com/DavidOpDeBeeck/swarm-viz/master/screenshots/network.png)
 
 ### Swarm
-![overview](https://raw.githubusercontent.com/DavidOpDeBeeck/swarm-viz/master/demo/swarm.png)
-
+![swarm](https://raw.githubusercontent.com/DavidOpDeBeeck/swarm-viz/master/screenshots/swarm.png)

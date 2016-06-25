@@ -1,0 +1,23 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,800,700,600,300);
+
+html, body {
+    color: #474747;
+    font-size: 1rem;
+    font-weight: 400;
+    font-family: 'Open Sans', sans-serif;
+    text-transform: uppercase;
+    height: 100%;
+    background-color: #ffffff;
+}
+
+a {
+    text-decoration: none;
+}
+
+/*-------------------------*/
+
+main {
+    position: relative;
+    width: 100%;
+    height: calc(100% - 3rem - 1px);
+}
