@@ -3,6 +3,7 @@
         constructor() {
             this.templateUrl = '/assets/html/container.html';
             this.restrict = 'E';
+            this.replace = true;
             this.controller = 'ContainerController';
             this.controllerAs = 'container'
             this.bindToController = true;

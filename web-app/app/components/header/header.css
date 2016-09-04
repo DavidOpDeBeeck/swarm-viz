@@ -1,9 +1,9 @@
 header {
-    z-index: 3;
-    display: block;
-    overflow: auto;
-    position: relative;
+    flex: none;
+    display: flex;
+    flex-direction: row;
     width: 100%;
+    padding: 15px 0;
     background-color: #337ab7;
     box-shadow: 1px 1px 1px #2d6a9f;
     border-bottom: 1px solid #275d8b;
@@ -11,34 +11,46 @@ header {
 
 /*-------------------------*/
 
-header a {
+header > .brand {
+    flex: none;
     color: #FFFFFF;
     font-weight: 700;
+    font-size: 1.5rem;
+    margin-left: 10px;
 }
 
 /*-------------------------*/
 
-header > #brand {
-    float: left;
-    width: 260px;
-    padding: 1rem 10px;
+header > nav {
+    display: flex;
+    flex-direction: row-reverse;
+
+    flex: 1;
+
+    padding: 0.2rem;
 }
 
-/*-------------------------*/
+header > nav > ul {
+    display: flex;
+    flex-direction: row;
 
-header > ul {
-    float: left;
-    padding: 0.5rem;
-}
-
-header > ul > li {
-    float: left;
-    padding: 0.5rem;
+    flex: none;
     margin-right: 10px;
-    border-radius: 5px;
 }
 
-header > ul > li.active,
-header > ul > li:hover {
-    background-color: #2d6a9f;
+header > nav > ul > li {
+    flex: none;
+    margin: 0 0.25rem;
+}
+
+header > nav > ul > li > a{
+    color: #DDDDDD;
+    font-weight: 700;
+    font-size: 0.75rem;
+    margin: 0 5px;
+}
+
+header > nav > ul > li.active > a,
+header > nav > ul > li:hover > a {
+    color: #FFFFFF;
 }

@@ -23,7 +23,6 @@
         "grunt-ng-annotate": "^2.0.2",
         "jquery": "^3.0.0",
         "nicescroll": "inuyaksa/jquery.nicescroll",
-        "reset-css": "^2.0.2011012603",
         "socket.io": "^1.4.8",
         "vis": "^4.16.1"
     }

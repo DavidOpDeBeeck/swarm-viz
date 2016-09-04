@@ -1,61 +1,56 @@
-sidebar > .sidebar {
+.sidebar {
+    flex: initial;
+    display: flex;
+    flex-direction: column;
     position: relative;
-    width: 280px;
+    min-width: 280px;
     height: 100%;
 }
 
-sidebar > .sidebar.sidebar-left {
-    float: left;
-    margin-right: 25px;
-}
-
-sidebar > .sidebar.sidebar-right {
-    float: right;
-    margin-left: 25px;
-}
-
-sidebar > .sidebar.collapsed {
+.sidebar.collapsed {
     width: 0;
+    min-width: 0;
     border: 0px !important;
     box-shadow: none !important;
 }
 
 /*-------------------------*/
 
-sidebar > .sidebar > .sidebar-controls {
+.sidebar > .sidebar-controls {
     position: absolute;
+    z-index: 3;
     padding: 10px;
 }
 
-sidebar > .sidebar.sidebar-left > .sidebar-controls {
+.sidebar.sidebar-left > .sidebar-controls {
     left: 280px;
 }
 
-sidebar > .sidebar.sidebar-right > .sidebar-controls {
+.sidebar.sidebar-right > .sidebar-controls {
     right: 280px;
 }
 
-sidebar > .sidebar.sidebar-left.collapsed > .sidebar-controls {
+.sidebar.sidebar-left.collapsed > .sidebar-controls {
     left: 0;
 }
 
-sidebar > .sidebar.sidebar-right.collapsed > .sidebar-controls {
+.sidebar.sidebar-right.collapsed > .sidebar-controls {
     right: 0;
 }
 
-sidebar > .sidebar > .sidebar-controls > .sidebar-control {
+.sidebar > .sidebar-controls > .sidebar-control {
     display: block;
     color: #666666;
 }
 
-sidebar > .sidebar > .sidebar-controls > .sidebar-control:hover {
+.sidebar > .sidebar-controls > .sidebar-control:hover {
     cursor: pointer;
 }
 
 /*-------------------------*/
 
-sidebar > .sidebar > .sidebar-content {
-    width: calc(100% - 1px);
+.sidebar > .sidebar-content-container {
+    width: 100%;
     position: absolute;
     left: 0;
     right: 0;
@@ -63,63 +58,74 @@ sidebar > .sidebar > .sidebar-content {
     bottom: 0;
 }
 
-sidebar > .sidebar.sidebar-left > .sidebar-content {
+.sidebar .sidebar-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.sidebar.sidebar-left .sidebar-content-container {
     border-right: 1px solid #D9D9D9;
     box-shadow: 1px 1px 1px #D9D9D9;
 }
 
-sidebar > .sidebar.sidebar-right > .sidebar-content {
+.sidebar.sidebar-right .sidebar-content-container {
     border-left: 1px solid #D9D9D9;
     box-shadow: -1px 1px 1px #D9D9D9;
 }
 
-sidebar > .sidebar.collapsed > .sidebar-content {
+.sidebar.collapsed .sidebar-content-container {
     display: none;
 }
 
 /*-------------------------*/
 
-sidebar > .sidebar > .sidebar-content > * {
+.sidebar .sidebar-content > * {
     display: block;
+    flex: none;
     padding: 20px 10px 10px;
 }
 
-sidebar > .sidebar.sidebar-left > .sidebar-content > * {
+.sidebar.sidebar-left .sidebar-content > * {
     border-bottom: 1px solid #D9D9D9;
 }
 
-sidebar > .sidebar > .sidebar-content > * > h2 {
+.sidebar .sidebar-content > * > h2 {
     font-size: 1rem;
     font-weight: 700;
 }
 
-sidebar > .sidebar > .sidebar-content > * > ul {
+.sidebar .sidebar-content > * > ul {
     overflow: auto;
     padding: 10px;
 }
 
-sidebar > .sidebar > .sidebar-content > * > ul > li {
-    overflow: auto;
+.sidebar .sidebar-content > * > ul > li {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
     padding: 5px 0;
 }
 
-sidebar > .sidebar > .sidebar-content > * > ul > li > span,
-sidebar > .sidebar > .sidebar-content > * > ul > li > label {
+.sidebar .sidebar-content > * > ul > li > span,
+.sidebar .sidebar-content > * > ul > li > label {
     font-size: 0.8rem;
+    line-height: normal;
 }
 
-sidebar > .sidebar > .sidebar-content > * > ul > li > *:first-child {
-    float: right;
+.sidebar .sidebar-content > * > ul > li > *:first-child {
+    flex: 1;
 }
 
-sidebar > .sidebar > .sidebar-content > * > ul > li > *:last-child {
-    float: left;
+.sidebar .sidebar-content > * > ul > li > *:last-child {
+    flex: none;
 }
 
 /*-------------------------*/
 
-sidebar > .sidebar > .sidebar-content input[type="text"],
-sidebar > .sidebar > .sidebar-content select {
+.sidebar .sidebar-content input[type="text"],
+.sidebar .sidebar-content select {
     padding: 10px;
     border-radius: 2px;
     background-color: #FCFCFC;
@@ -127,10 +133,10 @@ sidebar > .sidebar > .sidebar-content select {
     box-sizing: border-box;
 }
 
-sidebar > .sidebar > .sidebar-content select {
+.sidebar .sidebar-content select {
     padding: 5px;
 }
 
-sidebar > .sidebar > .sidebar-content input[type="checkbox"] {
+.sidebar .sidebar-content input[type="checkbox"] {
     margin: 0;
 }

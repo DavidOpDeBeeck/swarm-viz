@@ -36,7 +36,6 @@ module.exports = function ( grunt ) {
             ['vis', 'dist/vis.min.js']
         ],
         'css' : [
-            ['reset-css', 'reset.css'],
             ['font-awesome', 'css/font-awesome.min.css'],
             ['vis', 'dist/vis.min.css']
         ],

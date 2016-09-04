@@ -1,24 +1,12 @@
 .content {
-  float: left;
   position: relative;
-  width: calc(100% - 612px);
-  height: 100%;
+  flex: 1;
 }
 
-.content.sidebar-left-collapsed,
-.content.sidebar-right-collapsed {
-  width: calc(100% - 330px);
-}
-
-.content.sidebar-left-collapsed.sidebar-right-collapsed {
-  width: calc(100% - 50px);
-}
-
-/*-------------------------*/
-
-.content > div {
-  position: relative;
-  width: calc(100% - 10px);
-  height: calc(100% - 20px);
-  margin: 10px 5px;
+.content > .container {
+  position: absolute;
+  top: 10px;
+  left: 25px;
+  right: 25px;
+  bottom: 10px;
 }
