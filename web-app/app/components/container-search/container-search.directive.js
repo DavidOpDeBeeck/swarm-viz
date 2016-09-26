@@ -9,6 +9,6 @@
         }
     }
 
-    register( 'swarm-viz.directives' )
-        .directive( 'containerSearch', ContainerSearch );
+    angular.module( 'swarm-viz.directives' )
+        .directive( 'containerSearch', () => new ContainerSearch() );
 } )();

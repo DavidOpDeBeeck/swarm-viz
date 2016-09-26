@@ -8,6 +8,6 @@
         }
     }
 
-    register( 'swarm-viz.directives' )
-        .directive( 'header', HeaderDirective );
+    angular.module( 'swarm-viz.directives' )
+        .directive( 'header', () => new HeaderDirective() );
 } )();

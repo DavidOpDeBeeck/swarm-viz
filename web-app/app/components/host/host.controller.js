@@ -1,25 +1,25 @@
 ( () => {
     class HostController {
-        /*@ngInject*/
-        constructor( settings, containerUtils ) {
-            this._settings = settings;
-            this._containerUtils = containerUtils;
-            this._host = this.host;
+
+        constructor( Settings, containerUtils ) {
+            this.Settings = Settings;
+            this.containerUtils = containerUtils;
+            this.host = this.host;
         }
 
         get displayHost() {
-            return this._settings.displayEmptyHosts ? true : Object.keys( this.host.containers.filter( c => this._containerUtils.display( c ) ) ).length > 0;
+            return this.Settings.displayEmptyHosts ? true : Object.keys( this.host.containers.filter( c => this.containerUtils.display( c ) ) ).length > 0;
         }
 
         get name() {
-            return this._host.name;
+            return this.host.name;
         }
 
         get containers() {
-            return this._host.containers;
+            return this.host.containers;
         }
     }
 
-    register( 'swarm-viz.controllers' )
+    angular.module( 'swarm-viz.controllers' )
         .controller( 'HostController', HostController );
 } )();

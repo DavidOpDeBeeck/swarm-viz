@@ -1,23 +1,19 @@
 ( () => {
-    angular.module( 'swarm-viz.routes', [ 'ngRoute' ] )
-        .config( ( $routeProvider ) => {
-            $routeProvider.when( '/overview', {
-                    templateUrl: '/assets/html/overview.html',
-                    controller: 'OverviewController',
-                    controllerAs: 'overview'
-                } )
-                .when( '/swarm', {
-                    templateUrl: '/assets/html/network-viewer.html',
-                    controller: 'SwarmViewerController',
-                    controllerAs: 'viewer'
-                } )
-                .when( '/view/:id', {
-                    templateUrl: '/assets/html/network-viewer.html',
-                    controller: 'NetworkViewerController',
-                    controllerAs: 'viewer'
-                } )
-                .otherwise( {
-                    redirectTo: '/overview'
-                } )
-        } );
+    angular.module( 'swarm-viz.routes', [ 'ui.router' ] )
+        .config( ($stateProvider, $urlRouterProvider) => {
+            $stateProvider.state('overview', {
+                url: "/overview",
+                templateUrl: '/assets/html/overview.html',
+                controller: 'OverviewController as overview'
+            }).state('swarm', {
+                url: "/swarm",
+                templateUrl: '/assets/html/network-viewer.html',
+                controller: 'SwarmViewerController as viewer'
+            }).state('network.view', {
+                url: "/view/:id",
+                templateUrl: '/assets/html/network-viewer.html',
+                controller: 'NetworkViewerController as viewer'
+            });
+            $urlRouterProvider.otherwise("/overview");
+        });
 } )();

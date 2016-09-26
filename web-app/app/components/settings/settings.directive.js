@@ -9,6 +9,6 @@
         }
     }
 
-    register( 'swarm-viz.directives' )
-        .directive( 'settings', SettingsDirective );
+    angular.module( 'swarm-viz.directives' )
+        .directive( 'settings', () => new SettingsDirective() );
 } )();

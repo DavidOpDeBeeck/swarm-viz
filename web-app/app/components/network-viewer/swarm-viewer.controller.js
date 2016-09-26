@@ -2,7 +2,7 @@
     'use strict'
 
     class SwarmViewerController {
-        /*@ngInject*/
+        
         constructor( $scope, dataService ) {
             this._nodes = new vis.DataSet();
             this._edges = new vis.DataSet();
@@ -85,6 +85,6 @@
         }
     }
 
-    register( 'swarm-viz.controllers' )
+    angular.module( 'swarm-viz.controllers' )
         .controller( 'SwarmViewerController', SwarmViewerController );
 } )();

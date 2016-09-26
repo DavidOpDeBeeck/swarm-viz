@@ -30,7 +30,7 @@ module.exports = function ( grunt ) {
             ['jquery', 'dist/jquery.min.js'],
             ['nicescroll', 'jquery.nicescroll.min.js'],
             ['angular', 'angular.min.js'],
-            ['angular-route', 'angular-route.min.js'],
+            ['angular-ui-router', 'release/angular-ui-router.min.js'],
             ['angular-nicescroll', 'angular-nicescroll.js'],
             ['angular-socket-io', 'socket.min.js'],
             ['vis', 'dist/vis.min.js']
@@ -141,20 +141,12 @@ module.exports = function ( grunt ) {
                     dest: release.app.js
                 }]
             }
-        },
-        ngAnnotate: {
-            'release': {
-                files: {
-                    "static/assets/js/app.js": [ "static/assets/js/app.js" ]
-                }
-            }
         }
     } );
 
     ///////////////////
 
     grunt.loadNpmTasks( 'grunt-babel' );
-    grunt.loadNpmTasks( 'grunt-ng-annotate' );
     grunt.loadNpmTasks( 'grunt-contrib-clean' );
     grunt.loadNpmTasks( 'grunt-contrib-concat' );
     grunt.loadNpmTasks( 'grunt-contrib-copy' );
@@ -165,5 +157,5 @@ module.exports = function ( grunt ) {
         'copy:dependencies-fonts'
     ] );
 
-    grunt.registerTask( 'release', [ 'clean', 'copy:app-templates', 'concat', 'babel', 'ngAnnotate' ] );
+    grunt.registerTask( 'release', [ 'clean', 'copy:app-templates', 'concat', 'babel' ] );
 };

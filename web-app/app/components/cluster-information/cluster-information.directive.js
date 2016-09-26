@@ -9,6 +9,6 @@
         }
     }
 
-    register( 'swarm-viz.directives' )
-        .directive( 'clusterInformation', ClusterInformation );
+    angular.module( 'swarm-viz.directives' )
+        .directive( 'clusterInformation', () => new ClusterInformation() );
 } )();

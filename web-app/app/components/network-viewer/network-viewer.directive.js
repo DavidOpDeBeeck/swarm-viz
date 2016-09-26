@@ -13,6 +13,6 @@
         }
     }
 
-    register( 'swarm-viz.directives' )
-        .directive( 'visNetwork', VisNetwork );
+    angular.module( 'swarm-viz.directives' )
+        .directive( 'visNetwork', () => new VisNetwork() );
 } )();

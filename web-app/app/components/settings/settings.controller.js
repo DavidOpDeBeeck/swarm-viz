@@ -1,36 +1,36 @@
 ( () => {
     class SettingsController {
-        /*@ngInject*/
-        constructor( settings ) {
-            this._settings = settings;
-            this.displayUptime = settings.displayUptime;
-            this.displayNetworks = settings.displayNetworks;
-            this.displayEmptyHosts = settings.displayEmptyHosts;
-            this.displayExitedContainers = settings.displayExitedContainers;
-            this.displaySwarmContainers = settings.displaySwarmContainers;
+
+        constructor( Settings ) {
+            this.Settings = Settings;
+            this.displayUptime = Settings.displayUptime;
+            this.displayNetworks = Settings.displayNetworks;
+            this.displayEmptyHosts = Settings.displayEmptyHosts;
+            this.displayExitedContainers = Settings.displayExitedContainers;
+            this.displaySwarmContainers = Settings.displaySwarmContainers;
         }
 
         toggleUptime() {
-            this._settings.displayUptime = this.displayUptime;
+            this.Settings.displayUptime = this.displayUptime;
         }
 
         toggleNetworks() {
-            this._settings.displayNetworks = this.displayNetworks;
+            this.Settings.displayNetworks = this.displayNetworks;
         }
 
         toggleEmptyHosts() {
-            this._settings.displayEmptyHosts = this.displayEmptyHosts;
+            this.Settings.displayEmptyHosts = this.displayEmptyHosts;
         }
 
         toggleExitedContainers() {
-            this._settings.displayExitedContainers = this.displayExitedContainers;
+            this.Settings.displayExitedContainers = this.displayExitedContainers;
         }
 
         toggleSwarmContainers() {
-            this._settings.displaySwarmContainers = this.displaySwarmContainers;
+            this.Settings.displaySwarmContainers = this.displaySwarmContainers;
         }
     }
 
-    register( 'swarm-viz.controllers' )
+    angular.module( 'swarm-viz.controllers' )
         .controller( 'SettingsController', SettingsController );
 } )();

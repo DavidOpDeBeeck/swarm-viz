@@ -1,31 +1,32 @@
 ( () => {
+
     class ClusterInformationController {
-        /*@ngInject*/
         constructor( $scope, dataService ) {
-            this._hosts = [];
-            this._containers = [];
+            this.hosts = [];
+            this.containers = [];
             $scope.$on( 'DataService.notification.refresh.hosts', ( ev, data ) => {
-                this._hosts = dataService.hosts;
-                this._containers = dataService.containers;
+                this.hosts = dataService.hosts;
+                this.containers = dataService.containers;
             } );
         }
 
         get totalHosts() {
-            return this._hosts.length;
+            return this.hosts.length;
         }
 
         get totalContainers() {
-            return this._containers.length;
+            return this.containers.length;
         }
 
         get exitedContainers() {
-            return this._containers.filter( c => c.state === 'exited' ).length
+            return this.containers.filter( c => c.state === 'exited' ).length
         }
         get runningContainers() {
-            return this._containers.filter( c => c.state === 'running' ).length
+            return this.containers.filter( c => c.state === 'running' ).length
         }
     }
 
-    register( 'swarm-viz.controllers' )
+    angular.module( 'swarm-viz.controllers' )
         .controller( 'ClusterInformationController', ClusterInformationController );
+
 } )();

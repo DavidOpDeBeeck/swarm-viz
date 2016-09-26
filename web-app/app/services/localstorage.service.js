@@ -1,16 +1,15 @@
 ( () => {
     class LocalStorage {
-        /*@ngInject*/
         constructor( $window ) {
-            this._$window = $window;
+            this.$window = $window;
         }
 
         set( key, value ) {
-            this._$window.localStorage.setItem( key, value )
+            this.$window.localStorage.setItem( key, value )
         }
 
         get( key ) {
-            return this._$window.localStorage.getItem( key );
+            return this.$window.localStorage.getItem( key );
         }
 
         getBool( key ) {
@@ -27,6 +26,6 @@
         }
     }
 
-    register( 'swarm-viz.services' )
+    angular.module( 'swarm-viz.services' )
         .service( 'localStorage', LocalStorage );
 } )();

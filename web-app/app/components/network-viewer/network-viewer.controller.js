@@ -1,6 +1,6 @@
 ( () => {
     class NetworkViewerController {
-        /*@ngInject*/
+        
         constructor( $scope, $routeParams, dataService ) {
             this._dataService = dataService;
             this._$routeParams = $routeParams;
@@ -81,6 +81,6 @@
         }
     }
 
-    register( 'swarm-viz.controllers' )
+    angular.module( 'swarm-viz.controllers' )
         .controller( 'NetworkViewerController', NetworkViewerController );
 } )();

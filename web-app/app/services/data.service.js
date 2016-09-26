@@ -1,29 +1,24 @@
 ( () => {
     class DataService {
-        /*@ngInject*/
         constructor( $rootScope, socketService ) {
-            this._hosts = [];
-            this._networks = [];
+            this.hosts = [];
+            this.networks = [];
             socketService.socket.on( 'containers', data => {
-                    this._hosts = data;
+                    this.hosts = data;
                     $rootScope.$broadcast( 'DataService.notification.refresh.hosts' );
             } );
             socketService.socket.on( 'networks', data => {
-                    this._networks = data;
+                    this.networks = data;
                     $rootScope.$broadcast( 'DataService.notification.refresh.networks' );
             } );
         }
 
-        get hosts() {
-            return this._hosts;
-        }
-
-        get networks() {
-            return this._networks;
-        }
-
         get containers() {
             return [].concat.apply( [], this.hosts.map( h => h.containers ) );
+        }
+
+        getContainerById( id ) {
+            return this.containers.find( c => c.id == id );
         }
 
         getContainerByName( name ) {
@@ -39,6 +34,6 @@
         }
     }
 
-    register( 'swarm-viz.services' )
+    angular.module( 'swarm-viz.services' )
         .service( 'dataService', DataService );
 } )();

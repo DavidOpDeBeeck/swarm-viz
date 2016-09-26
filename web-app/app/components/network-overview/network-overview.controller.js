@@ -1,6 +1,6 @@
 ( () => {
     class NetworkOverviewController {
-        /*@ngInject*/
+        
         constructor( $scope, $location, dataService ) {
             this._names = [];
             this._$location = $location;
@@ -22,6 +22,6 @@
         }
     }
 
-    register( 'swarm-viz.controllers' )
+    angular.module( 'swarm-viz.controllers' )
         .controller( 'NetworkOverviewController', NetworkOverviewController );
 } )();

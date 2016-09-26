@@ -1,50 +1,51 @@
 ( () => {
+
     class ContainerController {
-        /*@ngInject*/
-        constructor( settings, containerUtils ) {
-            this._settings = settings;
-            this._containerUtils = containerUtils;
-            this._container = this.container;
-            this._ignoreFilters = this.ignoreFilters;
+        constructor( Settings, dataService, containerUtils ) {
+            this.Settings = Settings;
+            this.containerUtils = containerUtils;
+            this.ignoreFilters = this.ignoreFilters;
+            this.container = dataService.getContainerById(this.containerId);
         }
 
         get displayContainer() {
-            return this._ignoreFilters || this._containerUtils.display( this._container );
+            return this.ignoreFilters || this.containerUtils.display( this.container );
         }
 
         get displayUptime() {
-            return this._ignoreFilters || this._settings.displayUptime;
+            return this.ignoreFilters || this.Settings.displayUptime;
         }
 
         get displayNetworks() {
-            return this._ignoreFilters || this._settings.displayNetworks;
+            return this.ignoreFilters || this.Settings.displayNetworks;
         }
 
         get state() {
-            return this._container.state;
+            return this.container.state;
         }
 
         get status() {
-            return this._container.status;
+            return this.container.status;
         }
 
         get image() {
-            return this._container.image;
+            return this.container.image;
         }
 
         get networks() {
-            return this._container.networks;
+            return this.container.networks;
         }
 
         get name() {
-            return this._container.name;
+            return this.container.name;
         }
 
         get id() {
-            return this._container.id.substring( 0, 10 );
+            return this.container.id.substring( 0, 10 );
         }
     }
 
-    register( 'swarm-viz.controllers' )
+    angular.module( 'swarm-viz.controllers' )
         .controller( 'ContainerController', ContainerController );
+
 } )();

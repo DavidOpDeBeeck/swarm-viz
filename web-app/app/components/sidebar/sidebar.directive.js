@@ -14,6 +14,6 @@
         }
     }
 
-    register( 'swarm-viz.directives' )
-        .directive( 'sidebar', SidebarDirective );
+    angular.module( 'swarm-viz.directives' )
+        .directive( 'sidebar', () => new SidebarDirective() );
 } )();

@@ -1,12 +1,7 @@
 ( () => {
-    /*
-      Settings are now implemented using localstorage, with the intention that this can be changed in the future.
-    */
     class Settings {
-        /*@ngInject*/
-        constructor( $rootScope, localStorage ) {
+        constructor( localStorage ) {
             this.localStorage = localStorage;
-            // load values from localstorage
             this._displayUptime = localStorage.getBool( 'displayUptime' );
             this._displayNetworks = localStorage.getBool( 'displayNetworks' );
             this._displayExitedContainers = localStorage.getBool( 'displayExitedContainers' );
@@ -80,6 +75,6 @@
         }
     }
 
-    register( 'swarm-viz.services' )
-        .service( 'settings', Settings );
+    angular.module( 'swarm-viz.services' )
+        .service( 'Settings', Settings );
 } )();

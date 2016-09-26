@@ -1,6 +1,6 @@
 ( () => {
     class NavigationController {
-        /*@ngInject*/
+        
         constructor( $location ) {
             this._$location = $location;
             this._brand = {
@@ -32,6 +32,6 @@
         }
     }
 
-    register( 'swarm-viz.controllers' )
+    angular.module( 'swarm-viz.controllers' )
         .controller( 'NavigationController', NavigationController );
 } )();

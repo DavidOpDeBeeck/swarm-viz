@@ -1,12 +1,12 @@
 ( () => {
+
     class ContainerSearchController {
-        /*@ngInject*/
         constructor( dataService ) {
             this.query = "";
             this.results = [];
             this.filterOrder = 'asc';
             this.filterType = "created";
-            this._dataService = dataService;
+            this.dataService = dataService;
         }
 
         get filter() {
@@ -14,7 +14,7 @@
         }
 
         search() {
-            const containers = this._dataService.containers;
+            const containers = this.dataService.containers;
             this.results = containers.filter( c => {
                 return ( this.query && ( c.name.toLowerCase()
                     .indexOf( this.query.toLowerCase() ) > -1 ||
@@ -26,6 +26,7 @@
         }
     }
 
-    register( 'swarm-viz.controllers' )
+    angular.module( 'swarm-viz.controllers' )
         .controller( 'ContainerSearchController', ContainerSearchController );
+
 } )();

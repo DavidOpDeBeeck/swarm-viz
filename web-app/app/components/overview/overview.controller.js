@@ -2,7 +2,6 @@
     'use strict'
 
     class OverviewController {
-        /*@ngInject*/
         constructor( $scope, dataService ) {
             this.hosts = [];
             $scope.$on( 'DataService.notification.refresh.hosts', ( ev, data ) => {
@@ -48,6 +47,6 @@
         }
     }
 
-    register( 'swarm-viz.controllers' )
+    angular.module( 'swarm-viz.controllers' )
         .controller( 'OverviewController', OverviewController );
 } )();;

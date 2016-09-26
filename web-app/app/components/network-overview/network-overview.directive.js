@@ -9,6 +9,6 @@
         }
     }
 
-    register( 'swarm-viz.directives' )
-        .directive( 'networkOverview', NetworkOverview );
+    angular.module( 'swarm-viz.directives' )
+        .directive( 'networkOverview', () => new NetworkOverview() );
 } )();

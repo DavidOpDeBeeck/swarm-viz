@@ -1,21 +1,16 @@
 ( () => {
     class SidebarController {
-        /*@ngInject*/
-        constructor( settings ) {
-            this._settings = settings;
-            this._collapsed = (this.dir === 'left') ? settings.displayLeftSidebar : settings.displayRightSidebar;
+        constructor( Settings ) {
+            this.Settings = Settings;
+            this.collapsed = (this.dir === 'left') ? Settings.displayLeftSidebar : Settings.displayRightSidebar;
         }
 
         toggleCollapse() {
-            this._collapsed = !this._collapsed;
+            this.collapsed = !this.collapsed;
             if (this.dir === 'left')
-                this._settings.displayLeftSidebar = this._collapsed;
+                this.Settings.displayLeftSidebar = this.collapsed;
             else
-                this._settings.displayRightSidebar = this._collapsed;
-        }
-
-        get collapsed() {
-            return this._collapsed;
+                this.Settings.displayRightSidebar = this.collapsed;
         }
 
         get showLeftArrow() {
@@ -27,6 +22,6 @@
         }
     }
 
-    register( 'swarm-viz.controllers' )
+    angular.module( 'swarm-viz.controllers' )
         .controller( 'SidebarController', SidebarController );
 } )();

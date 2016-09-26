@@ -13,6 +13,6 @@
         }
     }
 
-    register( 'swarm-viz.directives' )
-        .directive( 'host', HostDirective );
+    angular.module( 'swarm-viz.directives' )
+        .directive( 'host', () => new HostDirective() );
 } )();

@@ -10,6 +10,6 @@
         }
     }
 
-    register( 'swarm-viz.directives' )
-        .directive( 'content', ContentDirective );
+    angular.module( 'swarm-viz.directives' )
+        .directive( 'content', () => new ContentDirective() );
 } )();

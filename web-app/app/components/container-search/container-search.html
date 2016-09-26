@@ -18,7 +18,7 @@
   </section>
   <section class="search-results" ng-nicescroll>
     <section class="search-result" ng-repeat="container in search.results | orderBy: search.filter">
-      <container container="container" ignore-filters="true"></container>
+      <container container-id="container.id" ignore-filters="true"></container>
     </section>
   </section>
 </section>

@@ -8,12 +8,12 @@
             this.controllerAs = 'container'
             this.bindToController = true;
             this.scope = {
-                container: '=',
+                containerId: '=',
                 ignoreFilters: '='
             };
         }
     }
 
-    register( 'swarm-viz.directives' )
-        .directive( 'container', ContainerDirective );
+    angular.module( 'swarm-viz.directives' )
+        .directive( 'container', () => new ContainerDirective() );
 } )();

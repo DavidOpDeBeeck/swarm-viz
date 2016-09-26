@@ -1,19 +1,18 @@
 ( () => {
     class ContentController {
-        /*@ngInject*/
-        constructor( settings ) {
-            this._settings = settings;
+        constructor( Settings ) {
+            this.Settings = Settings;
         }
 
         get sidebarLeftCollapsed() {
-            return this._settings.displayLeftSidebar;
+            return this.Settings.displayLeftSidebar;
         }
 
         get sidebarRightCollapsed() {
-            return this._settings.displayRightSidebar;
+            return this.Settings.displayRightSidebar;
         }
     }
 
-    register( 'swarm-viz.controllers' )
+    angular.module( 'swarm-viz.controllers' )
         .controller( 'ContentController', ContentController );
 } )();
