@@ -8,7 +8,7 @@
             this.controllerAs = 'host'
             this.bindToController = true;
             this.scope = {
-                host: '='
+                hostName: '='
             };
         }
     }

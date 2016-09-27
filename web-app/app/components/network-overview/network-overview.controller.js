@@ -1,24 +1,19 @@
 ( () => {
     class NetworkOverviewController {
-        
-        constructor( $scope, $location, dataService ) {
-            this._names = [];
-            this._$location = $location;
-            this._dataService = dataService;
-            $scope.$on( 'DataService.notification.refresh.networks', ( ev, data ) => {
-                this._names = dataService.networks
-                    .map( n => n.name )
-                    .sort();
-            } );
+        constructor( $state, DataService ) {
+            this.names = [];
+            this.$state = $state;
+            this.DataService = DataService;
+            this.DataService.onNetworksRefresh(networks => this.onNetworksRefresh(networks));
         }
 
-        get names() {
-            return this._names;
+        onNetworksRefresh(networks) {
+            this.names = networks.map( n => n.name ).sort();
         }
 
         view( name ) {
-            const network = this._dataService.getNetworkByName( name );
-            this._$location.path( '/view/' + network.id );
+            const network = this.DataService.getNetworkByName( name );
+            this.$state.go('network', { id: network.id });
         }
     }
 

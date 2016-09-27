@@ -1,20 +1,38 @@
 ( () => {
     class DataService {
-        constructor( $rootScope, socketService ) {
+        constructor( Socket ) {
             this.hosts = [];
+            this.containers = [];
             this.networks = [];
-            socketService.socket.on( 'containers', data => {
-                    this.hosts = data;
-                    $rootScope.$broadcast( 'DataService.notification.refresh.hosts' );
-            } );
-            socketService.socket.on( 'networks', data => {
-                    this.networks = data;
-                    $rootScope.$broadcast( 'DataService.notification.refresh.networks' );
-            } );
+
+            this.onHostsRefreshCallbacks = [];
+            this.onNetworksRefreshCallbacks = [];
+
+            Socket.onHostsRefresh(hosts => this.refreshHosts(hosts));
+            Socket.onNetworksRefresh(networks => this.refreshNetworks(networks));
         }
 
-        get containers() {
-            return [].concat.apply( [], this.hosts.map( h => h.containers ) );
+        refreshHosts(hosts) {
+            this.hosts = hosts;
+            this.containers = [].concat.apply([], this.hosts.map(h => h.containers));
+            this.onHostsRefreshCallbacks.forEach(callback => callback(hosts,this.containers));
+        }
+
+        refreshNetworks(networks) {
+            this.networks = networks;
+            this.onNetworksRefreshCallbacks.forEach(callback => callback(networks));
+        }
+
+        onHostsRefresh(callback) {
+            this.onHostsRefreshCallbacks.push(callback);
+        }
+
+        onNetworksRefresh(callback) {
+            this.onNetworksRefreshCallbacks.push(callback);
+        }
+
+        getHostByName( name ) {
+            return this.hosts.find( h => h.name == name );
         }
 
         getContainerById( id ) {
@@ -35,5 +53,5 @@
     }
 
     angular.module( 'swarm-viz.services' )
-        .service( 'dataService', DataService );
+        .service( 'DataService', DataService );
 } )();

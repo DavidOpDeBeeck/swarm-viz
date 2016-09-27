@@ -9,7 +9,7 @@
                 url: "/swarm",
                 templateUrl: '/assets/html/network-viewer.html',
                 controller: 'SwarmViewerController as viewer'
-            }).state('network.view', {
+            }).state('network', {
                 url: "/view/:id",
                 templateUrl: '/assets/html/network-viewer.html',
                 controller: 'NetworkViewerController as viewer'

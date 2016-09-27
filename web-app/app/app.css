@@ -119,3 +119,16 @@ main {
     z-index: 1;
     position: relative;
 }
+
+main .content {
+  position: relative;
+  flex: 1;
+}
+
+main .content > .container {
+  position: absolute;
+  top: 10px;
+  left: 25px;
+  right: 25px;
+  bottom: 10px;
+}

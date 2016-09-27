@@ -1,13 +1,15 @@
 ( () => {
 
     class ClusterInformationController {
-        constructor( $scope, dataService ) {
+        constructor( DataService ) {
             this.hosts = [];
             this.containers = [];
-            $scope.$on( 'DataService.notification.refresh.hosts', ( ev, data ) => {
-                this.hosts = dataService.hosts;
-                this.containers = dataService.containers;
-            } );
+            DataService.onHostsRefresh((hosts,containers) => this.onHostsRefresh(hosts,containers));
+        }
+
+        onHostsRefresh(hosts, containers) {
+            this.hosts = hosts;
+            this.containers = containers;
         }
 
         get totalHosts() {

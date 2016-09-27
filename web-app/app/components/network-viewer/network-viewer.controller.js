@@ -1,32 +1,31 @@
 ( () => {
     class NetworkViewerController {
-        
-        constructor( $scope, $routeParams, dataService ) {
-            this._dataService = dataService;
-            this._$routeParams = $routeParams;
 
-            this._nodes = new vis.DataSet();
-            this._edges = new vis.DataSet();
+        constructor( $scope, $stateParams, DataService ) {
+            this.id = $stateParams['id'];
+            this.DataService = DataService;
+
+            this.nodes = new vis.DataSet();
+            this.edges = new vis.DataSet();
 
             this.network_data = {
-                nodes: this._nodes,
-                edges: this._edges
+                nodes: this.nodes,
+                edges: this.edges
             };
 
-            this._initialised = undefined;
-
-            $scope.$on( 'DataService.notification.refresh.networks', ( ev, data ) => {
-                const network = dataService.getNetworkById( $routeParams.id );
+            this.initialised = false;
+            this.DataService.onNetworksRefresh( () => {
+                const network = DataService.getNetworkById( this.id );
 
                 if ( network == undefined )
                     return;
 
                 const networkId = network.name;
-                if ( !this._initialised ) {
-                    this._nodes.clear();
-                    this._edges.clear();
-                    this._initialised = true;
-                    this._nodes.add( {
+                if ( !this.initialised ) {
+                    this.nodes.clear();
+                    this.edges.clear();
+                    this.initialised = true;
+                    this.nodes.add( {
                         id: networkId,
                         label: network.name,
                         mass: 5,
@@ -43,8 +42,8 @@
                 containers.forEach( c => {
                     let nodeId = c.name;
                     let edgeId = nodeId + ':' + networkId
-                    if ( !this._nodes.get( nodeId ) ) {
-                        this._nodes.add( {
+                    if ( !this.nodes.get( nodeId ) ) {
+                        this.nodes.add( {
                             id: nodeId,
                             label: c.name,
                             mass: 3,
@@ -53,30 +52,31 @@
                             font: { color: '#ffffff' }
                         } );
                     }
-                    if ( !this._edges.get( edgeId ) ) {
-                        this._edges.add( {
+                    if ( !this.edges.get( edgeId ) ) {
+                        this.edges.add( {
                             id: edgeId,
                             from: nodeId,
                             to: networkId,
                             color: '#5bc0de'
                         } );
                     }
-                } );
+                });
 
-                this._nodes.forEach( n => {
+                this.nodes.forEach( n => {
                     let nodeId = n.id;
                     let edgeId = nodeId + ':' + networkId
                     if ( nodeId == networkId ) return;
                     if ( !containers.find( c => c.name == nodeId ) ) {
-                        this._nodes.remove( nodeId );
-                        this._edges.remove( edgeId );
+                        this.nodes.remove( nodeId );
+                        this.edges.remove( edgeId );
                     }
-                } );
-            } );
+                });
+                console.log(this.nodes);
+            });
         }
 
         get name() {
-            const network = this._dataService.getNetworkById( this._$routeParams.id );
+            const network = this.DataService.getNetworkById( this.id );
             return ( network == undefined ) ? "" : network.name;
         }
     }

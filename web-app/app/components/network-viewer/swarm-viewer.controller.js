@@ -3,7 +3,7 @@
 
     class SwarmViewerController {
         
-        constructor( $scope, dataService ) {
+        constructor( $scope, DataService ) {
             this._nodes = new vis.DataSet();
             this._edges = new vis.DataSet();
 
@@ -23,7 +23,7 @@
 
             this._networkIds = [];
             $scope.$on( 'DataService.notification.refresh.networks', ( ev, data ) => {
-                const networks = dataService.networks;
+                const networks = DataService.networks;
 
                 networks.forEach( network => {
                     const networkId = network.name;

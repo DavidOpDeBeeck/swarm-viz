@@ -1,12 +1,12 @@
 ( () => {
 
     class ContainerSearchController {
-        constructor( dataService ) {
+        constructor( DataService ) {
             this.query = "";
             this.results = [];
             this.filterOrder = 'asc';
             this.filterType = "created";
-            this.dataService = dataService;
+            this.DataService = DataService;
         }
 
         get filter() {
@@ -14,7 +14,7 @@
         }
 
         search() {
-            const containers = this.dataService.containers;
+            const containers = this.DataService.containers;
             this.results = containers.filter( c => {
                 return ( this.query && ( c.name.toLowerCase()
                     .indexOf( this.query.toLowerCase() ) > -1 ||

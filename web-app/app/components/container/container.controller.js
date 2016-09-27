@@ -1,15 +1,15 @@
 ( () => {
 
     class ContainerController {
-        constructor( Settings, dataService, containerUtils ) {
+        constructor( Settings, DataService, ContainerUtils ) {
             this.Settings = Settings;
-            this.containerUtils = containerUtils;
+            this.ContainerUtils = ContainerUtils;
             this.ignoreFilters = this.ignoreFilters;
-            this.container = dataService.getContainerById(this.containerId);
+            this.container = DataService.getContainerById(this.containerId);
         }
 
         get displayContainer() {
-            return this.ignoreFilters || this.containerUtils.display( this.container );
+            return this.ignoreFilters || this.ContainerUtils.displayContainer( this.container );
         }
 
         get displayUptime() {
