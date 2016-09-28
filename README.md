@@ -1,25 +1,23 @@
 ## Installation
 
 ```
-export CERT_PATH=/path/to/cert/directory
+> ls /path/to/cert/directory
+ca.pem  server-key.pem  server.pem
 ```
 
 ```
-export SWARM_CA=$(cat $CERT_PATH/ca.pem)
-export SWARM_CERT=$(cat $CERT_PATH/cert.pem)
-export SWARM_KEY=$(cat $CERT_PATH/key.pem)
-export SWARM_HOST=tcp://swarm-master-ip:3376
+> export CERT_PATH=/path/to/cert/directory
+> export SWARM_HOST=tcp://swarm-master-ip:3376
 ```
 
 ```
-docker 
+> docker 
       run
         -itd
         -p 3000:3000
-        -e SWARM_CA=$SWARM_CA
-        -e SWARM_CERT=$SWARM_CERT
-        -e SWARM_KEY=$SWARM_KEY
+        -e CERT_PATH=$CERT_PATH 
         -e SWARM_HOST=$SWARM_HOST
+        -v $CERT_PATH:$CERT_PATH
       dodb/swarm-viz
 ```
 
