@@ -2,17 +2,17 @@
     'use strict'
 
     class SwarmViewerController {
-        
+
         constructor( $scope, DataService ) {
-            this._nodes = new vis.DataSet();
-            this._edges = new vis.DataSet();
+            this.nodes = new vis.DataSet();
+            this.edges = new vis.DataSet();
 
             this.network_data = {
-                nodes: this._nodes,
-                edges: this._edges
+                nodes: this.nodes,
+                edges: this.edges
             };
 
-            this.network_options = {
+            this.networkoptions = {
                 edges: {
                   smooth: {
                     forceDirection: "none",
@@ -21,15 +21,13 @@
                 }
             };
 
-            this._networkIds = [];
-            $scope.$on( 'DataService.notification.refresh.networks', ( ev, data ) => {
-                const networks = DataService.networks;
-
+            this.networkIds = [];
+            DataService.onNetworksRefresh( networks => {
                 networks.forEach( network => {
                     const networkId = network.name;
-                    if ( !this._networkIds.find( n => n == network.id ) ) {
-                        this._networkIds.push( network.id );
-                        this._nodes.add( {
+                    if ( !this.networkIds.find( n => n == network.id ) ) {
+                        this.networkIds.push( network.id );
+                        this.nodes.add( {
                             id: networkId,
                             label: network.name,
                             shape: 'box',
@@ -45,8 +43,8 @@
                     containers.forEach( c => {
                         const nodeId = c.name;
                         const edgeId = nodeId + ':' + networkId
-                        if ( !this._nodes.get( nodeId ) ) {
-                            this._nodes.add( {
+                        if ( !this.nodes.get( nodeId ) ) {
+                            this.nodes.add( {
                                 id: nodeId,
                                 label: c.name,
                                 shape: 'box',
@@ -54,8 +52,8 @@
                                 font: { color: '#ffffff' }
                             } );
                         }
-                        if ( !this._edges.get( edgeId ) ) {
-                            this._edges.add( {
+                        if ( !this.edges.get( edgeId ) ) {
+                            this.edges.add( {
                                 id: edgeId,
                                 from: nodeId,
                                 to: networkId,
@@ -64,7 +62,7 @@
                         }
                     } );
 
-                    const containersFromNetwork = this._edges.get( {
+                    const containersFromNetwork = this.edges.get( {
                         filter: item => item.to == networkId
                     } );
 
@@ -72,7 +70,7 @@
                         const edgeId = n.id
                         const nodeId = n.id.split( ':' )[ 0 ];
                         if ( !containers.find( c => c.name == nodeId ) ) {
-                            this._edges.remove( edgeId );
+                            this.edges.remove( edgeId );
                         }
                     } );
 
