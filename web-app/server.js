@@ -4,136 +4,149 @@
 
 "use strict"
 
-const express = require( 'express' );
+const express = require('express');
 const app = express();
-const http = require( 'http' ).Server( app );
-const io = require( 'socket.io' )( http );
-const docker = require( 'dockerode' );
-const fs = require( 'fs' );
+const http = require('http').Server( app );
+const io = require('socket.io')( http );
+const docker = require('dockerode');
+const fs = require('fs');
 
 //---------------------------
 // Globals
 //---------------------------
 
 const port = 3000;
-const refreshTime = 2000;
-const dHost = process.env.SWARM_HOST.match( /tcp:\/\/(.*):.*$/ )[ 1 ];
-const dPort = process.env.SWARM_HOST.match( /tcp:\/\/.*:(.*)$/ )[ 1 ];
-const dCertPath = process.env.CERT_PATH;
+const refreshTime = 4000;
 
-const dConnection = new docker( {
-    protocol: 'https',
-    host: dHost,
-    port: dPort,
-    ca: process.env.SWARM_CA || fs.readFileSync( dCertPath + '/ca.pem' ),
-    cert: process.env.SWARM_CERT || fs.readFileSync( dCertPath + '/server.pem' ),
-    key: process.env.SWARM_KEY || fs.readFileSync( dCertPath + '/server-key.pem' )
-} );
+const dockerHost = process.env.SWARM_HOST.match( /tcp:\/\/(.*):.*$/ )[ 1 ];
+const dockerPort = process.env.SWARM_HOST.match( /tcp:\/\/.*:(.*)$/ )[ 1 ];
+const dockerTLS = process.env.TLS_VERIFY;
+const dockerCertPath = process.env.CERT_PATH;
+const dockerClient = new docker(getConnectionProperties());
+
+function getConnectionProperties() {
+    if (dockerTLS) {
+        return {
+            protocol: 'https',
+            host: dockerHost,
+            port: dockerPort,
+            ca: fs.readFileSync(dockerCertPath + '/ca.pem', 'utf8'),
+            cert: fs.readFileSync(dockerCertPath + '/cert.pem', 'utf8'),
+            key: fs.readFileSync(dockerCertPath + '/key.pem', 'utf8')
+        } 
+    } else {
+        return {
+            protocol: 'http',
+            host: dockerHost,
+            port: dockerPort
+        } 
+    }
+}
 
 //---------------------------
 // Routes
 //---------------------------
 
-app.use( express.static( 'static' ) );
+app.use(express.static( 'static' ));
 
-http.listen( port, () => {
-    console.log( 'listening on *:3000' );
-} );
+http.listen(port, () => console.log('listening on *:3000'));
+
+//---------------------------
+// Docker network fetch
+//---------------------------
+
+function listNetworks( callback ) {
+    dockerClient.listNetworks({all: 1}, ( err, networks ) => {
+        handleNetworksResponse(networks, callback);
+        setTimeout(() => listNetworks( callback ), refreshTime);
+    });
+}
+
+function handleNetworksResponse( networks, callback ) {
+    if ( !networks ) return;
+
+    let res = [];
+
+    networks.forEach( networkInfo => {
+        let networkName = networkInfo.Name;
+        let networkId = networkInfo.Id;
+        let networkContainers = networkInfo.Containers;
+        let networkContainerIds = Object.keys( networkContainers )
+                                        .filter( c => c.indexOf( 'ep-' ) == -1 );
+
+        let filteredNetworkContainers = [];
+
+        networkContainerIds.forEach( id => {
+            filteredNetworkContainers.push({
+                name: networkContainers[ id ].Name,
+                endpoint: networkContainers[ id ].EndpointID
+            });
+        } )
+
+        res.push({
+            id: networkId,
+            name: networkName,
+            containers: filteredNetworkContainers
+        });
+    } );
+
+    callback(res);
+}
+
+listNetworks( networks => io.emit( 'networks', networks ) );
 
 //---------------------------
 // Docker container fetch
 //---------------------------
 
-function listNetworks( callback ) {
-    let res = [];
-    dConnection.listNetworks( {
-        all: 1
-    }, ( err, networks ) => {
-        if ( networks ) {
-            networks.forEach( nInfo => {
-                let nName = nInfo.Name,
-                    nId = nInfo.Id;
-                let nContainers = nInfo.Containers,
-                    nContainerIds = Object.keys( nContainers )
-                    .filter( c => c.indexOf( 'ep-' ) == -1 );
-                let container, containers = [];
-
-                nContainerIds.forEach( id => {
-                    containers.push( {
-                        name: nContainers[ id ].Name,
-                        endpoint: nContainers[ id ].EndpointID
-                    } );
-                } )
-
-                res.push( {
-                    id: nId,
-                    name: nName,
-                    containers: containers
-                } );
-            } );
-
-            callback( res );
-        }
-        setTimeout( function () {
-            listNetworks( callback );
-        }, refreshTime );
-    } );
-}
-
 function listContainers( callback ) {
-    let res = [];
-    dConnection.listContainers( {
-        all: 1
-    }, ( err, containers ) => {
-        if ( containers ) {
-            containers.forEach( cInfo => {
-                let cNames = cInfo.Names;
-
-                if ( !cNames.length )
-                    return;
-
-                let tokens = cNames[ 0 ].split( '/' );
-
-                if ( tokens.length < 2 )
-                    return;
-
-                let cHost = tokens[ 1 ];
-                let cName = tokens[ 2 ];
-
-                let container = {
-                    id: cInfo.Id,
-                    name: cName,
-                    image: cInfo.Image.split( ":" )[ 0 ],
-                    state: cInfo.State,
-                    status: cInfo.Status,
-                    created: cInfo.Created,
-                    networks: Object.keys( cInfo.NetworkSettings.Networks )
-                };
-
-                var index = res.findIndex( h => h.name == cHost );
-
-                if ( index == -1 ) {
-                    res.push( {
-                        name: cHost,
-                        containers: []
-                    } );
-                    index = res.length - 1;
-                }
-
-                res[ index ].containers.push( container );
-            } );
-
-            callback( res );
-        }
-        setTimeout( function () {
-            listContainers( callback );
-        }, refreshTime );
-    } );
+    dockerClient.listContainers({all: 1}, ( err, containers ) => {
+        handleContainersResponse(containers, callback);
+        setTimeout( () => listContainers(callback), refreshTime );
+    });
 }
 
-listNetworks( function ( networks ) {
-    io.emit( 'networks', networks );
-} );
-listContainers( function ( containers ) {
-    io.emit( 'containers', containers );
-} );
+function handleContainersResponse( containers, callback ) {
+    if ( !containers ) return;
+
+    let res = [];
+
+    containers.forEach( containerInfo => {
+        let containerNames = containerInfo.Names;
+
+        if ( !containerNames.length ) return;
+
+        let tokens = containerNames[0].split( '/' );
+
+        if ( tokens.length < 2 ) return;
+
+        let containerHost = tokens[ 1 ];
+        let containerName = tokens[ 2 ];
+
+        let container = {
+            id: containerInfo.Id,
+            name: containerName,
+            image: containerInfo.Image.split( ":" )[ 0 ],
+            state: containerInfo.State,
+            status: containerInfo.Status,
+            created: containerInfo.Created,
+            networks: Object.keys( containerInfo.NetworkSettings.Networks )
+        };
+
+        var index = res.findIndex( h => h.name == containerHost );
+
+        if ( index == -1 ) {
+            res.push({
+                name: containerHost,
+                containers: []
+            });
+            index = res.length - 1;
+        }
+
+        res[index].containers.push( container );
+    });
+
+    callback(res);
+}
+
+listContainers( containers => io.emit( 'containers', containers ) );
