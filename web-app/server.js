@@ -31,8 +31,8 @@ function getConnectionProperties() {
             host: dockerHost,
             port: dockerPort,
             ca: fs.readFileSync(dockerCertPath + '/ca.pem', 'utf8'),
-            cert: fs.readFileSync(dockerCertPath + '/cert.pem', 'utf8'),
-            key: fs.readFileSync(dockerCertPath + '/key.pem', 'utf8')
+            cert: fs.readFileSync(dockerCertPath + '/server.pem', 'utf8'),
+            key: fs.readFileSync(dockerCertPath + '/server-key.pem', 'utf8')
         } 
     } else {
         return {
