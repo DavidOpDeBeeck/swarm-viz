@@ -59,6 +59,7 @@ http.listen(port, () => console.log('listening on *:3000'));
 
 function listNetworks( callback ) {
     dockerClient.listNetworks({all: 1}, ( err, networks ) => {
+        logError(err);
         handleNetworksResponse(networks, callback);
         setTimeout(() => listNetworks( callback ), refreshTime);
     });
@@ -103,6 +104,7 @@ listNetworks( networks => io.emit( 'networks', networks ) );
 
 function listContainers( callback ) {
     dockerClient.listContainers({all: 1}, ( err, containers ) => {
+        logError(err);
         handleContainersResponse(containers, callback);
         setTimeout( () => listContainers(callback), refreshTime );
     });
@@ -152,3 +154,11 @@ function handleContainersResponse( containers, callback ) {
 }
 
 listContainers( containers => io.emit( 'containers', containers ) );
+
+//---------------------------
+// Error Logging
+//---------------------------
+
+function logError(error) {
+    if (error) console.log(error);
+}
