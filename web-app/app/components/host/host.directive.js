@@ -1,15 +1,15 @@
 ( () => {
     class HostDirective {
         constructor() {
-            this.templateUrl = '/assets/html/host.html';
             this.restrict = 'E';
-            this.replace = true;
-            this.controller = 'HostController';
-            this.controllerAs = 'host'
-            this.bindToController = true;
             this.scope = {
-                hostName: '='
+                'hostName': '='
             };
+            this.replace = true;
+            this.bindToController = true;
+            this.controllerAs = 'host'
+            this.controller = 'HostController';
+            this.templateUrl = '/assets/html/host.html';
         }
     }
 

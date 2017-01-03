@@ -4,6 +4,8 @@
 
 "use strict"
 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
 const express = require('express');
 const app = express();
 const http = require('http').Server( app );
@@ -30,9 +32,9 @@ function getConnectionProperties() {
             protocol: 'https',
             host: dockerHost,
             port: dockerPort,
-            ca: fs.readFileSync(dockerCertPath + '/ca.pem', 'utf8'),
-            cert: fs.readFileSync(dockerCertPath + '/server.pem', 'utf8'),
-            key: fs.readFileSync(dockerCertPath + '/server-key.pem', 'utf8')
+            ca: fs.readFileSync(dockerCertPath + '/ca.cert', 'utf8'),
+            cert: fs.readFileSync(dockerCertPath + '/server.cert', 'utf8'),
+            key: fs.readFileSync(dockerCertPath + '/server-key.key', 'utf8')
         } 
     } else {
         return {

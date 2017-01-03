@@ -3,8 +3,10 @@
 
     class OverviewController {
         constructor( $scope, DataService ) {
-            this.hosts = [];
-            DataService.onHostsRefresh(hosts => this.hosts = hosts.map(h => h.name));
+            this.hostNames = [];
+            DataService.onHostsRefresh(hosts => {
+            	this.hostNames = hosts.map(h => h.name);
+            });
         }
     }
 

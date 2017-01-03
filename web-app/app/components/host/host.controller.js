@@ -4,7 +4,7 @@
         constructor( Settings, ContainerUtils , DataService ) {
             this.Settings = Settings;
             this.ContainerUtils = ContainerUtils;
-
+            
             this.host = DataService.getHostByName(this.hostName);
 
             DataService.onHostsRefresh(hosts => {

@@ -14,10 +14,11 @@
 
             this.networkoptions = {
                 edges: {
-                  smooth: {
-                    forceDirection: "none",
-                    roundness: 0.05
-                  }
+                    stabilization: true,
+                    smooth: {
+                        forceDirection: "none",
+                        roundness: 0.05
+                    }
                 }
             };
 

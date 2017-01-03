@@ -6,7 +6,7 @@
     "start": "node server"
   },
   "devDependencies": {
-    "angular": "^1.5.7",
+    "angular": "1.5.7",
     "angular-nicescroll": "0.0.0",
     "angular-ui-router": "^0.3.1",
     "angular-socket-io": "^0.7.0",

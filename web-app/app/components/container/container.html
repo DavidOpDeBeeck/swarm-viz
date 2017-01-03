@@ -2,9 +2,9 @@
   <section class="container-info">
     <span class="label {{container.state}}">{{ container.state }}</span>
     <span class="label" ng-show="container.displayUptime">{{ container.status }}</span>
-    <h1>{{ container.name }}</h1>
+    <h1>{{ container.image }}</h1>
     <span class="id">{{ container.id }}</span>
-    <span class="name">{{ container.image }}</span>
+    <span class="name">{{ container.name }}</span>
   </section>
   <section class="container-networks" ng-show="container.displayNetworks">
     <span class="network" ng-show="container.displayNetworks" ng-repeat="network in container.networks">{{ network }}</span>
