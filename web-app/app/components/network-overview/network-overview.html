@@ -1,11 +1,14 @@
 <section class="network-overview">
   <h2>Networks</h2>
-  <ul>
-    <li ng-repeat="name in networks.names">
-      <span>{{ name }}</span>
-      <a ng-click="networks.view(name)">
-        <i class="fa fa-angle-right" aria-hidden="true"></i>
-      </a>
-    </li>
-  </ul>
+  <section ng-repeat="host in networks.hosts">
+  	<h3 ng-bind="host.name"></h3>
+	<ul>
+		<li ng-repeat="network in host.networks track by $index">
+			<span>{{ network.name }}</span>
+			<a ui-sref="network({id: network.id})">
+				<i class="fa fa-eye" aria-hidden="true"></i>
+			</a>
+		</li>
+	</ul>
+  </section>
 </section>

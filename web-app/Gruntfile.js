@@ -1,7 +1,7 @@
 module.exports = function ( grunt ) {
     var app = {
         'js'    : ['app/app.js', 'app/app-*.js' , 'app/**/*.js'],
-        'css'   : 'app/**/*.css',
+        'css'   : ['app/reset.css', 'app/**/*.css'],
         'html'  : 'app/**/*.html'
     };
 
@@ -10,7 +10,7 @@ module.exports = function ( grunt ) {
                      'libs/js/jquery.nicescroll.min.js',
                      'libs/js/angular.min.js',
                      'libs/js/*'],
-        'css'     : ['libs/css/reset.css', 'libs/css/*']
+        'css'     : 'libs/css/*'
     };
 
     var release = {

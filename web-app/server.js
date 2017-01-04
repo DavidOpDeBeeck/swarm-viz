@@ -75,8 +75,8 @@ function handleNetworksResponse( networks, callback ) {
         let networkId = networkInfo.Id;
         let networkContainers = networkInfo.Containers;
         let networkContainerIds = Object.keys( networkContainers )
-                                        .filter( c => c.indexOf( 'ep-' ) == -1 );
-
+                                        .filter( id => id.indexOf( 'ep-' ) == -1 )
+                                        .filter( id => networkContainers[ id ].Name.indexOf( 'gateway_' ) == -1 );
         let filteredNetworkContainers = [];
 
         networkContainerIds.forEach( id => {

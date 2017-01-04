@@ -17,7 +17,7 @@
         addOrUpdateContainer( container ) {
             let id = this.containers.findIndex( old => old.name == container.name );
             if ( id == -1 ) {
-                this.containers.push( newContainer );
+                this.containers.push( container );
             } else {
                 this.containers[ id ].state = container.state;
                 this.containers[ id ].status = container.status;

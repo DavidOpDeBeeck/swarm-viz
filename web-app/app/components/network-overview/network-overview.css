@@ -1,5 +1,20 @@
 .network-overview a {
     cursor: pointer;
     font-size: 0.8rem;
+    margin-left: 10px;
     text-transform: none;
+}
+
+.network-overview h3 {
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 5px 0;
+}
+
+.network-overview section {
+	padding-top: 5px;
+}
+
+.network-overview > section > ul {
+	padding: 5px !important;
 }

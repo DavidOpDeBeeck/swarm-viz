@@ -1,19 +1,36 @@
 ( () => {
     class NetworkOverviewController {
-        constructor( $state, DataService ) {
-            this.names = [];
-            this.$state = $state;
-            this.DataService = DataService;
-            this.DataService.onNetworksRefresh(networks => this.onNetworksRefresh(networks));
+        constructor( DataService ) {
+            this.hosts = {};
+            DataService.onNetworksRefresh(networks => {
+                let nameSplit, host, networkName;
+                networks.forEach((network) => {
+                    nameSplit = network.name.split("/");
+                    host = nameSplit.length === 2 ? nameSplit[0] : "overlay";
+                    networkName = nameSplit[(nameSplit.length === 2 ? 1 : 0)];
+                    this.addHost(host);
+                    this.addNetwork(host, network.id, networkName);
+                });
+            });
         }
 
-        onNetworksRefresh(networks) {
-            this.names = networks.map( n => n.name ).sort();
+        addHost( hostName ) {
+            if (!this.hostExist(hostName)) 
+                this.hosts[hostName] = { name : "", networks : [] };
+            this.hosts[hostName].name = hostName;
         }
 
-        view( name ) {
-            const network = this.DataService.getNetworkByName( name );
-            this.$state.go('network', { id: network.id });
+        addNetwork( hostName, networkId, networkName ) {
+            if (!this.hostNetworkExist(hostName, networkName))
+                this.hosts[hostName].networks.push({ id : networkId, name : networkName });
+        }
+
+        hostExist( hostName ) {
+            return this.hosts[hostName];
+        }
+
+        hostNetworkExist( hostName, networkName ) {
+            return this.hosts[hostName].networks.find( n => n.name == networkName );
         }
     }
 

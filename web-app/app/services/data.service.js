@@ -5,6 +5,9 @@
             this.containers = [];
             this.networks = [];
 
+            this.hostVersion = 0;
+            this.networkVersion = 0;
+
             this.onHostsRefreshCallbacks = [];
             this.onNetworksRefreshCallbacks = [];
 
@@ -13,12 +16,15 @@
         }
 
         refreshHosts(hosts) {
+            this.hostVersion++;
             this.hosts = hosts;
             this.containers = [].concat.apply([], this.hosts.map(h => h.containers));
             this.onHostsRefreshCallbacks.forEach(callback => callback(hosts,this.containers));
         }
 
         refreshNetworks(networks) {
+            if (this.networkVersion >= this.hostVersion) return;
+            this.networkVersion++;
             this.networks = networks;
             this.onNetworksRefreshCallbacks.forEach(callback => callback(networks));
         }

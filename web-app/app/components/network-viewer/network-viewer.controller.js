@@ -40,12 +40,13 @@
                 const containers = network.containers;
 
                 containers.forEach( c => {
+                    let image = DataService.getContainerByName(c.name).image;
                     let nodeId = c.name;
                     let edgeId = nodeId + ':' + networkId
                     if ( !this.nodes.get( nodeId ) ) {
                         this.nodes.add( {
                             id: nodeId,
-                            label: c.name,
+                            label: c.name + "\n" + image,
                             mass: 3,
                             shape: 'box',
                             color: '#5bc0de',
@@ -71,7 +72,6 @@
                         this.edges.remove( edgeId );
                     }
                 });
-                console.log(this.nodes);
             });
         }
 

@@ -13,11 +13,15 @@
             };
 
             this.networkoptions = {
-                edges: {
-                    stabilization: true,
-                    smooth: {
-                        forceDirection: "none",
-                        roundness: 0.05
+                physics: {
+                    enabled: true,
+                    barnesHut: {
+                      gravitationalConstant: -2500,
+                      centralGravity: 0.3,
+                      springLength: 95,
+                      springConstant: 0.04,
+                      damping: 0.09,
+                      avoidOverlap: 1
                     }
                 }
             };
@@ -39,15 +43,16 @@
                         } );
                     }
 
-                    const containers = network.containers;
+                    let containers = network.containers;
 
                     containers.forEach( c => {
-                        const nodeId = c.name;
-                        const edgeId = nodeId + ':' + networkId
+                        let image = DataService.getContainerByName(c.name).image;
+                        let nodeId = c.name;
+                        let edgeId = nodeId + ':' + networkId
                         if ( !this.nodes.get( nodeId ) ) {
                             this.nodes.add( {
                                 id: nodeId,
-                                label: c.name,
+                                label: c.name + "\n" + image,
                                 shape: 'box',
                                 color: '#41b5d8',
                                 font: { color: '#ffffff' }
@@ -63,7 +68,7 @@
                         }
                     } );
 
-                    const containersFromNetwork = this.edges.get( {
+                    let containersFromNetwork = this.edges.get( {
                         filter: item => item.to == networkId
                     } );
 
