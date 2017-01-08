@@ -1,0 +1,51 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,800,700,600,300)
+
+html, body
+  color: #474747
+  font-size: 1rem
+  font-weight: 400
+  font-family: 'Open Sans', sans-serif
+  text-transform: uppercase
+  height: 100%
+  background-color: #ffffff
+
+body
+  display: flex
+  flex-direction: column
+
+a
+  text-decoration: none
+
+input[type="text"], select
+    font-size: 0.75rem
+    padding: 10px
+    border-radius: 2px
+    background-color: #FCFCFC
+    border: 1px solid #D9D9D9
+    box-sizing: border-box
+
+select
+    padding: 5px
+
+input[type="checkbox"]
+    margin: 0
+
+/*-------------------------*/
+
+main
+  display: flex
+  flex-direction: row
+  flex: 1
+  z-index: 1
+  position: relative
+
+main .content 
+  position: relative
+  flex: 1
+
+main .content > .container
+  position: absolute
+  top: 10px
+  left: 25px
+  right: 25px
+  bottom: 10px

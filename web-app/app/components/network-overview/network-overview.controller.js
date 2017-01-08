@@ -1,36 +1,34 @@
 ( () => {
     class NetworkOverviewController {
-        constructor( DataService ) {
+        constructor( NetworkService ) {
             this.hosts = {};
-            DataService.onNetworksRefresh(networks => {
-                let nameSplit, host, networkName;
-                networks.forEach((network) => {
-                    nameSplit = network.name.split("/");
-                    host = nameSplit.length === 2 ? nameSplit[0] : "overlay";
-                    networkName = nameSplit[(nameSplit.length === 2 ? 1 : 0)];
-                    this.addHost(host);
-                    this.addNetwork(host, network.id, networkName);
-                });
-            });
+            this.networkService = NetworkService;
+            this.init();
         }
 
-        addHost( hostName ) {
-            if (!this.hostExist(hostName)) 
-                this.hosts[hostName] = { name : "", networks : [] };
-            this.hosts[hostName].name = hostName;
+        init() {
+            this.networkService.onNetworkAdded( network => this.addNetwork(network));
+            this.networkService.onNetworkRemoved( network => this.removeNetwork(network));
+            this.networkService.getAllNetworks().then( networks => this.addNetworks(networks));
         }
 
-        addNetwork( hostName, networkId, networkName ) {
-            if (!this.hostNetworkExist(hostName, networkName))
-                this.hosts[hostName].networks.push({ id : networkId, name : networkName });
+        addNetworks( networks ) {
+            networks.forEach((network) => this.addNetwork(network));
         }
 
-        hostExist( hostName ) {
-            return this.hosts[hostName];
+        addNetwork( network ) {
+            let host = network.host;
+            this.hosts[host] = this.hosts[host] || {name: host, networks: []};
+            this.hosts[host].networks.push({id: network.id, name: network.name});
         }
 
-        hostNetworkExist( hostName, networkName ) {
-            return this.hosts[hostName].networks.find( n => n.name == networkName );
+        removeNetwork( network ) {
+            let host = network.host;
+            let index = this.hosts[host].networks.findIndex(n => n.id === network.id);
+
+            this.hosts[host].networks.splice(index, 1);
+            if (this.hosts[host].networks.length === 0) 
+                delete this.hosts[host];
         }
     }
 

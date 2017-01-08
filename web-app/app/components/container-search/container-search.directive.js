@@ -5,7 +5,7 @@
             this.restrict = 'E';
             this.replace = true;
             this.controller = 'ContainerSearchController';
-            this.controllerAs = 'search'
+            this.controllerAs = 'containerSearchCtrl'
         }
     }
 

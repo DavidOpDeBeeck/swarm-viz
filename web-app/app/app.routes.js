@@ -12,7 +12,12 @@
             }).state('network', {
                 url: "/view/:id",
                 templateUrl: '/assets/html/network-viewer.html',
-                controller: 'NetworkViewerController as viewer'
+                controller: 'NetworkViewerController as viewer',
+                resolve: {
+                     network: ($stateParams, NetworkService) => {
+                         return NetworkService.getNetworkById($stateParams.id);
+                     }
+                 }
             });
             $urlRouterProvider.otherwise("/overview");
         });

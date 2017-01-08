@@ -3,27 +3,27 @@
         constructor( socketFactory ) {
             let socket = socketFactory();
 
-            socket.on('containers', hosts => this.refreshHosts(hosts));
-            socket.on('networks', networks => this.refreshNetworks(networks));
+            socket.on('networks', event => this.networkEvent(event));
+            socket.on('containers', event => this.containerEvent(event));
 
-            this.onHostsRefreshCallbacks = [];
-            this.onNetworksRefreshCallbacks = [];
+            this.onNetworkEventCallbacks = [];
+            this.onContainerEventCallbacks = [];
         }
 
-        refreshHosts(hosts) {
-            this.onHostsRefreshCallbacks.forEach(callback => callback(hosts));
+        networkEvent(event) {
+            this.onNetworkEventCallbacks.forEach(callback => callback(event));
         }
 
-        refreshNetworks(networks) {
-            this.onNetworksRefreshCallbacks.forEach(callback => callback(networks));
+        containerEvent(event) {
+            this.onContainerEventCallbacks.forEach(callback => callback(event));
         }
 
-        onHostsRefresh(callback) {
-            this.onHostsRefreshCallbacks.push(callback);
+        onNetworkEvent(callback) {
+            this.onNetworkEventCallbacks.push(callback);
         }
 
-        onNetworksRefresh(callback) {
-            this.onNetworksRefreshCallbacks.push(callback);
+        onContainerEvent(callback) {
+            this.onContainerEventCallbacks.push(callback);
         }
     }
 

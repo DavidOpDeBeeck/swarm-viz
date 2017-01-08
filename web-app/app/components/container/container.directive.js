@@ -5,10 +5,10 @@
             this.restrict = 'E';
             this.replace = true;
             this.controller = 'ContainerController';
-            this.controllerAs = 'container'
+            this.controllerAs = 'containerCtrl'
             this.bindToController = true;
             this.scope = {
-                containerId: '=',
+                container: '=',
                 ignoreFilters: '='
             };
         }

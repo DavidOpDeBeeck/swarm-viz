@@ -1,12 +1,12 @@
-<section class="container" ng-show="container.displayContainer">
+<section class="container" ng-show="containerCtrl.displayContainer">
   <section class="container-info">
-    <span class="label {{container.state}}">{{ container.state }}</span>
-    <span class="label" ng-show="container.displayUptime">{{ container.status }}</span>
-    <h1>{{ container.image }}</h1>
-    <span class="id">{{ container.id }}</span>
-    <span class="name">{{ container.name }}</span>
+    <span class="label {{containerCtrl.container.state}}">{{ containerCtrl.container.state }}</span>
+    <span class="label" ng-show="containerCtrl.displayUptime">{{ containerCtrl.container.status }}</span>
+    <h1>{{ containerCtrl.container.image }}</h1>
+    <span class="id">{{ containerCtrl.container.id | limitTo:20 }}</span>
+    <span class="name">{{ containerCtrl.container.name }}</span>
   </section>
-  <section class="container-networks" ng-show="container.displayNetworks">
-    <span class="network" ng-show="container.displayNetworks" ng-repeat="network in container.networks">{{ network }}</span>
+  <section class="container-networks" ng-show="containerCtrl.displayNetworks">
+    <span class="network" ng-show="containerCtrl.displayNetworks" ng-repeat="network in containerCtrl.container.networks">{{ network.name }}</span>
   </section>
 </section>

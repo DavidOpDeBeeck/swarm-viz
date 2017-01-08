@@ -1,7 +1,7 @@
 module.exports = function ( grunt ) {
     var app = {
-        'js'    : ['app/app.js', 'app/app-*.js' , 'app/**/*.js'],
-        'css'   : ['app/reset.css', 'app/**/*.css'],
+        'js'    : ['app/custom/**/*.js', 'app/app.js', 'app/app-*.js' , 'app/**/*.js'],
+        'css'   : ['app/reset.sass', 'app/**/*.sass'],
         'html'  : 'app/**/*.html'
     };
 
@@ -17,6 +17,7 @@ module.exports = function ( grunt ) {
         'app'     : {
             'js'  : 'static/assets/js/app.js',
             'css' : 'static/assets/css/app.css',
+            'sass' : 'static/assets/css/app.sass',
             'html': 'static/assets/html/'
         },
         'libs'     : {
@@ -32,6 +33,7 @@ module.exports = function ( grunt ) {
             ['angular', 'angular.min.js'],
             ['angular-ui-router', 'release/angular-ui-router.min.js'],
             ['angular-nicescroll', 'angular-nicescroll.js'],
+            ['angular-resource', 'angular-resource.min.js'],
             ['angular-socket-io', 'socket.min.js'],
             ['vis', 'dist/vis.min.js']
         ],
@@ -60,6 +62,16 @@ module.exports = function ( grunt ) {
     dependencies.fonts.forEach((dependency, index) => {
         dependencies.fonts[ index ] = 'node_modules/' + dependency[0] + '/' + dependency[1];
     });
+
+    ///////////////////
+
+    var sassConfig = {
+        options: {
+            indentedSyntax: true
+        },
+        dist: { files: {} }
+    }
+    sassConfig.dist.files[release.app.css] = release.app.sass;
 
     ///////////////////
 
@@ -116,7 +128,7 @@ module.exports = function ( grunt ) {
             },
             'app-css': {
                 src: app.css,
-                dest: release.app.css
+                dest: release.app.sass
             },
             'libs-js': {
                 options: {
@@ -141,12 +153,14 @@ module.exports = function ( grunt ) {
                     dest: release.app.js
                 }]
             }
-        }
+        },
+        sass: sassConfig
     } );
 
     ///////////////////
 
     grunt.loadNpmTasks( 'grunt-babel' );
+    grunt.loadNpmTasks( 'grunt-sass' );
     grunt.loadNpmTasks( 'grunt-contrib-clean' );
     grunt.loadNpmTasks( 'grunt-contrib-concat' );
     grunt.loadNpmTasks( 'grunt-contrib-copy' );
@@ -157,5 +171,5 @@ module.exports = function ( grunt ) {
         'copy:dependencies-fonts'
     ] );
 
-    grunt.registerTask( 'release', [ 'clean', 'copy:app-templates', 'concat', 'babel' ] );
+    grunt.registerTask( 'release', [ 'clean', 'copy:app-templates', 'concat', 'babel', 'sass' ] );
 };

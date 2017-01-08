@@ -1,51 +1,42 @@
 ( () => {
     class HostController {
 
-        constructor( Settings, ContainerUtils , DataService ) {
-            this.Settings = Settings;
-            this.ContainerUtils = ContainerUtils;
-            
-            this.host = DataService.getHostByName(this.hostName);
-
-            DataService.onHostsRefresh(hosts => {
-                let newHost = DataService.getHostByName(this.hostName);
-                newHost.containers.forEach( newContainer => this.addOrUpdateContainer(newContainer));
-                this.removeInActiveContainers(newHost.containers);
-            });
+        constructor( ContainerUtils , ContainerService ) {
+            this.containerUtils = ContainerUtils;
+            this.containerService = ContainerService;
+            this._containers = {};
+            this.init();
         }
 
-        addOrUpdateContainer( container ) {
-            let id = this.containers.findIndex( old => old.name == container.name );
-            if ( id == -1 ) {
-                this.containers.push( container );
-            } else {
-                this.containers[ id ].state = container.state;
-                this.containers[ id ].status = container.status;
-                this.containers[ id ].image = container.image;
-                this.containers[ id ].name = container.name;
-                this.containers[ id ].networks = container.networks;
-                this.containers[ id ].id = container.id;
-            }
+        init() {
+            this.containerService.onHostContainerAdded(this.name, container => this.addContainer(container));
+            this.containerService.onHostContainerUpdated(this.name, container => this.updateContainer(container));
+            this.containerService.onHostContainerRemoved(this.name, container => this.removeContainer(container));
+            this.containerService.getHostContainers(this.name).then( containers => this.addContainers(containers));
         }
 
-        removeInActiveContainers( containers ) {
-            this.containers.forEach(old => {
-                let index = containers.findIndex( newC => newC.name == old.name );
-                if ( index === -1 )
-                    this.host.containers.splice( index, 1 );
-            });
+        addContainer(container) {
+            this._containers[container.id] = container;
+        }
+
+        updateContainer(container) {
+            this._containers[container.id] = container;
+        }
+
+        removeContainer(container) {
+            delete this._containers[container.id];
+        }
+
+        addContainers(containers) {
+            containers.forEach( container => this.addContainer(container));
         }
 
         get displayHost() {
-            return this.ContainerUtils.displayHost(this.host);
-        }
-
-        get name() {
-            return this.host.name;
+            return true;//this.ContainerUtils.displayHost(this.host);
         }
 
         get containers() {
-            return this.host.containers;
+            return Object.values(this._containers);
         }
     }
 

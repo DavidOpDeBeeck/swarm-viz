@@ -1,0 +1,52 @@
+.sidebar
+    flex: initial
+    display: flex
+    flex-direction: column
+    position: relative
+    min-width: 280px
+    height: 100%
+
+    &.collapsed
+        width: 0
+        min-width: 0
+        border: 0px !important
+        box-shadow: none !important
+
+    > .sidebar-controls
+        position: absolute
+        z-index: 3
+        padding: 10px
+
+        > .sidebar-control
+            display: block
+            color: #666666
+
+            &:hover
+                cursor: pointer
+
+    &.sidebar-left 
+        &.collapsed
+            > .sidebar-controls
+                left: 0
+                margin-left: 0
+        > .sidebar-controls
+            left: 270px
+            margin-left: 5px
+
+    &.sidebar-right 
+        &.collapsed
+            > .sidebar-controls
+                right: 0
+                margin-right: 0
+        > .sidebar-controls
+            right: 270px
+            margin-right: 5px
+
+    > .sidebar-content-container
+        height: 100%
+
+        > .sidebar-content
+            display: flex
+            flex-direction: column
+            height: calc(100% - 20px)
+            margin: 10px

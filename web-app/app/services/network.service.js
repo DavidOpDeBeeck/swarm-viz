@@ -1,0 +1,53 @@
+( () => {
+    class NetworkService {
+        constructor( Socket, $resource ) {
+            this.resource = $resource('/api/networks/:id', {id: '@id'});
+
+            this.onNetworkAddedCallbacks = [];
+            this.onNetworkRemovedCallbacks = [];
+            this.onNetworkEndpointAddedCallbacks = [];
+            this.onNetworkEndpointRemovedCallbacks = [];
+
+            Socket.onNetworkEvent(event => this.onNetworkEvent(event));
+        }
+
+        getAllNetworks() {
+            return this.resource.query().$promise;
+        }
+
+        getNetworkById(id) {
+            return this.resource.get({id: id}).$promise;
+        }
+
+        onNetworkEvent(event) {
+            console.log(event);
+            if (event.name === "NetworkAdded")
+                this.onNetworkAddedCallbacks.forEach(callback => callback(event.payload));
+            else if (event.name === "NetworkRemoved")
+                this.onNetworkRemovedCallbacks.forEach(callback => callback(event.payload));
+            else if (event.name === "NetworkEndpointAdded")
+                this.onNetworkEndpointAddedCallbacks.forEach(callback => callback(event.payload));
+            else if (event.name === "NetworkEndpointRemoved")
+                this.onNetworkEndpointRemovedCallbacks.forEach(callback => callback(event.payload));
+        }
+
+        onNetworkAdded(callback) {
+            this.onNetworkAddedCallbacks.push(callback);
+        }
+
+        onNetworkRemoved(callback) {
+            this.onNetworkRemovedCallbacks.push(callback);
+        }
+
+        onNetworkEndpointAdded(callback) {
+            this.onNetworkEndpointAddedCallbacks.push(callback);
+        }
+
+        onNetworkEndpointRemoved(callback) {
+            this.onNetworkEndpointRemovedCallbacks.push(callback);
+        }
+    }
+
+    angular.module( 'swarm-viz.services' )
+        .service( 'NetworkService', NetworkService );
+} )();

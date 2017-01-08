@@ -1,47 +1,22 @@
 ( () => {
 
     class ContainerController {
-        constructor( Settings, DataService, ContainerUtils ) {
-            this.Settings = Settings;
-            this.ContainerUtils = ContainerUtils;
+        constructor( Settings, ContainerUtils ) {
+            this.settings = Settings;
+            this.containerUtils = ContainerUtils;
             this.ignoreFilters = this.ignoreFilters;
-            this.container = DataService.getContainerById(this.containerId);
         }
 
         get displayContainer() {
-            return this.ignoreFilters || this.ContainerUtils.displayContainer( this.container );
+            return this.ignoreFilters || this.containerUtils.displayContainer( this.container );
         }
 
         get displayUptime() {
-            return this.ignoreFilters || this.Settings.displayUptime;
+            return this.ignoreFilters || this.settings.displayUptime;
         }
 
         get displayNetworks() {
-            return this.ignoreFilters || this.Settings.displayNetworks;
-        }
-
-        get state() {
-            return this.container.state;
-        }
-
-        get status() {
-            return this.container.status;
-        }
-
-        get image() {
-            return this.container.image;
-        }
-
-        get networks() {
-            return this.container.networks;
-        }
-
-        get name() {
-            return this.container.name;
-        }
-
-        get id() {
-            return this.container.id.substring( 0, 10 );
+            return this.ignoreFilters || this.settings.displayNetworks;
         }
     }
 

@@ -3,11 +3,11 @@
   <section ng-repeat="host in networks.hosts">
   	<h3 ng-bind="host.name"></h3>
 	<ul>
-		<li ng-repeat="network in host.networks track by $index">
+		<li ng-repeat="network in host.networks track by $index" ui-sref="network({id: network.id})" ui-sref-active="active">
 			<span>{{ network.name }}</span>
-			<a ui-sref="network({id: network.id})">
-				<i class="fa fa-eye" aria-hidden="true"></i>
-			</a>
+			<span>
+				<i class="fa fa-angle-right" aria-hidden="true"></i>
+			</span>
 		</li>
 	</ul>
   </section>

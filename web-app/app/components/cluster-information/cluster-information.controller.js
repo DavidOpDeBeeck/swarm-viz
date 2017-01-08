@@ -1,30 +1,44 @@
 ( () => {
 
     class ClusterInformationController {
-        constructor( DataService ) {
-            this.hosts = [];
-            this.containers = [];
-            DataService.onHostsRefresh((hosts,containers) => this.onHostsRefresh(hosts,containers));
+        constructor( ContainerService ) {
+            this.containers = new Set();
+            this.containerService = ContainerService;
+            this.init();
         }
 
-        onHostsRefresh(hosts, containers) {
-            this.hosts = hosts;
-            this.containers = containers;
+        init() {
+            this.containerService.onContainerAdded( container => this.addContainer(container));
+            this.containerService.onContainerRemoved( container => this.removeContainer(container));
+            this.containerService.getAllContainers().then( containers => this.addContainers(containers));
+        }
+
+        addContainer(container) {
+            this.containers.add(container);
+        }
+
+        removeContainer(container) {
+            this.containers.delete(container);
+        }
+
+        addContainers(containers) {
+            containers.forEach( container => this.addContainer(container));
         }
 
         get totalHosts() {
-            return this.hosts.length;
+            let onlyUnique = (value, index, self) => self.indexOf(value) === index;
+            return [...this.containers].map(c => c.host).filter(onlyUnique).length;
         }
 
         get totalContainers() {
-            return this.containers.length;
+            return this.containers.size;
         }
 
         get exitedContainers() {
-            return this.containers.filter( c => c.state === 'exited' ).length
+            return [...this.containers].filter( c => c.state === 'exited' ).length
         }
         get runningContainers() {
-            return this.containers.filter( c => c.state === 'running' ).length
+            return [...this.containers].filter( c => c.state === 'running' ).length
         }
     }
 

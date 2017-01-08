@@ -3,11 +3,11 @@
         constructor() {
             this.restrict = 'E';
             this.scope = {
-                'hostName': '='
+                'name': '@'
             };
             this.replace = true;
             this.bindToController = true;
-            this.controllerAs = 'host'
+            this.controllerAs = 'hostCtrl'
             this.controller = 'HostController';
             this.templateUrl = '/assets/html/host.html';
         }
