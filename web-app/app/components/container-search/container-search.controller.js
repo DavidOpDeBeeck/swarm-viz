@@ -27,14 +27,18 @@
         }
 
         search() {
-            this.results = Object.values(this.containers).filter( c => {
-                return ( this.query && ( c.name.toLowerCase()
-                    .indexOf( this.query.toLowerCase() ) > -1 ||
-                    c.image.toLowerCase()
-                    .indexOf( this.query.toLowerCase() ) > -1 ||
-                    c.id.toLowerCase()
-                    .indexOf( this.query.toLowerCase() ) > -1 ) );
-            } );
+            if (!this.query) return;
+
+            let query = this.query.toLowerCase();
+            let containers = Object.keys(this.containers).map(key => this.containers[key]);
+
+            let searchFilter = (text, query) => text.indexOf(query) > -1; 
+
+            this.results = containers
+                        .filter( container => 
+                               searchFilter(container.id, query)
+                            || searchFilter(container.name, query)
+                            || searchFilter(container.image, query));
         }
     }
 

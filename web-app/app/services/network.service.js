@@ -3,8 +3,11 @@
         constructor( Socket, $resource ) {
             this.resource = $resource('/api/networks/:id', {id: '@id'});
 
+            this.onEventCallbacks = [];
+
             this.onNetworkAddedCallbacks = [];
             this.onNetworkRemovedCallbacks = [];
+
             this.onNetworkEndpointAddedCallbacks = [];
             this.onNetworkEndpointRemovedCallbacks = [];
 
@@ -20,7 +23,6 @@
         }
 
         onNetworkEvent(event) {
-            console.log(event);
             if (event.name === "NetworkAdded")
                 this.onNetworkAddedCallbacks.forEach(callback => callback(event.payload));
             else if (event.name === "NetworkRemoved")
@@ -29,6 +31,11 @@
                 this.onNetworkEndpointAddedCallbacks.forEach(callback => callback(event.payload));
             else if (event.name === "NetworkEndpointRemoved")
                 this.onNetworkEndpointRemovedCallbacks.forEach(callback => callback(event.payload));
+            this.onEventCallbacks.forEach(callback => callback(event));
+        }
+        
+        onEvent(callback) {
+            this.onEventCallbacks.push(callback);
         }
 
         onNetworkAdded(callback) {

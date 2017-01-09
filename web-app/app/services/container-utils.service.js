@@ -1,17 +1,24 @@
 ( () => {
     class ContainerUtils {
         constructor( Settings ) {
-            this.Settings = Settings;
+            this.settings = Settings;
         }
 
         displayContainer( container ) {
-            if ( !this.Settings.displaySwarmContainers && container.image === 'swarm' )
+            let displaySwarmContainers = this.settings.displaySwarmContainers;
+            let displayExitedContainers = this.settings.displayExitedContainers;
+            let isSwarmContainer = container => container.image === 'swarm';
+            let isExitedContainer = container => container.state === 'exited';
+
+            if (!displaySwarmContainers && isSwarmContainer(container)) 
                 return false;
-            return this.Settings.displayExitedContainers ? true : container.state !== 'exited';
+            if (!displayExitedContainers && isExitedContainer(container)) 
+                return false;
+            return true;
         }
 
-        displayHost( host ) {
-            return this.Settings.displayEmptyHosts ? true : Object.keys(host.containers.filter(c => this.displayContainer( c ))).length > 0;
+        displayHost( containers ) {
+            return this.settings.displayEmptyHosts ? true : containers.filter( container => this.displayContainer(container)).length > 0;
         }
     }
 

@@ -1,16 +1,16 @@
 ( () => {
     class SidebarController {
         constructor( Settings ) {
-            this.Settings = Settings;
+            this.settings = Settings;
             this.collapsed = (this.dir === 'left') ? Settings.displayLeftSidebar : Settings.displayRightSidebar;
         }
 
         toggleCollapse() {
             this.collapsed = !this.collapsed;
             if (this.dir === 'left')
-                this.Settings.displayLeftSidebar = this.collapsed;
+                this.settings.displayLeftSidebar = this.collapsed;
             else
-                this.Settings.displayRightSidebar = this.collapsed;
+                this.settings.displayRightSidebar = this.collapsed;
         }
 
         get showLeftArrow() {

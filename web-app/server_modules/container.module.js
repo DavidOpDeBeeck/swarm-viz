@@ -78,10 +78,12 @@ let ContainerModule = ( { app, eventBus , dockerClient, timer } ) => {
 	};
 
 	let handleContainersResponse = ( dockerContainers = [] ) => {
+		if (!dockerContainers) return;
+
 		let containers = dockerContainers.map(convertContainer).sort(compareById);
 
-	    if (!isResponseDifferentThanPreviousResponse(containers))
-	    	return;
+	    if (!isResponseDifferentThanPreviousResponse(containers)) return;
+	    
 		previousResponse = containers;
 		
 	    containers.forEach( container => {
@@ -130,13 +132,13 @@ let ContainerModule = ( { app, eventBus , dockerClient, timer } ) => {
 
         return {
             id: dockerContainer.Id,
-            host: containerHost,
-            name: containerName,
-            image: dockerContainer.Image.split( ":" )[ 0 ],
+            host: containerHost.toLowerCase(),
+            name: containerName.toLowerCase(),
+            image: dockerContainer.Image.split( ":" )[ 0 ].toLowerCase(),
             state: dockerContainer.State,
             status: dockerContainer.Status,
             created: dockerContainer.Created,
-            networks: Object.keys( dockerContainer.NetworkSettings.Networks ).map( network => { return { 'name': network } })
+            networks: Object.keys( dockerContainer.NetworkSettings.Networks ).map( network => { return { 'name': network.toLowerCase() } })
         };
 	}
 

@@ -17,10 +17,11 @@
   <body ng-app="swarm-viz">
     <layout-header></layout-header>
     <main>
-      <sidebar dir="left">
+      <sidebar dir="left" no-controls="true">
         <cluster-information></cluster-information>
         <network-overview></network-overview>
         <settings></settings>
+        <latest-events></latest-events>
       </sidebar>
       <section class="content">
         <div class="container" ui-view></div>

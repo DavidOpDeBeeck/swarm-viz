@@ -89,8 +89,8 @@ let NetworkModule = ( { app, eventBus , dockerClient, timer } ) => {
 
 	    let networks = dockerNetworks.map(convertNetwork).sort(compareById);
 
-	    if (!isResponseDifferentThanPreviousResponse(networks)) 
-	    	return;
+	    if (!isResponseDifferentThanPreviousResponse(networks)) return;
+	    
 	    previousResponse = networks;
 
 	    networks.forEach( network => {
@@ -139,7 +139,7 @@ let NetworkModule = ( { app, eventBus , dockerClient, timer } ) => {
 	        endpoints.push({
 	        	id: networkContainers[ id ].EndpointID,
 	        	container: {
-	        		name: networkContainers[ id ].Name
+	        		name: networkContainers[ id ].Name.toLowerCase()
 	        	}
 	        });
 	    });
@@ -148,8 +148,8 @@ let NetworkModule = ( { app, eventBus , dockerClient, timer } ) => {
 
 	    return {
 	        id: dockerNetwork.Id,
-	        host: hostAndName.host,
-	        name: hostAndName.name,
+	        host: hostAndName.host.toLowerCase(),
+	        name: hostAndName.name.toLowerCase(),
 	        endpoints: endpoints.sort(compareById)
 	    };
 	}

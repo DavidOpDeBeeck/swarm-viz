@@ -4,6 +4,8 @@
             this.containerResource = $resource('/api/containers/:id', {id: '@id'});
             this.hostResource = $resource('/api/hosts/:name/containers', {name: '@name'});
 
+            this.onEventCallbacks = [];
+
             this.onContainerAddedCallbacks = [];
             this.onContainerRemovedCallbacks = [];
             this.onContainerUpdatedCallbacks = [];
@@ -28,9 +30,7 @@
         }
 
         onContainerEvent(event) {
-            console.log(event);
-            let container = event.payload;
-            let host = container.host;
+            let container = event.payload, host = container.host;
             if (event.name === "ContainerAdded"){
                 this.onContainerAddedCallbacks.forEach(callback => callback(container));
                 if (this.onHostContainerAddedCallbacks[host])
@@ -44,6 +44,11 @@
                 if (this.onHostContainerUpdatedCallbacks[host])
                     this.onHostContainerUpdatedCallbacks[host].forEach(callback => callback(container));
             }
+            this.onEventCallbacks.forEach(callback => callback(event));
+        }
+
+        onEvent(callback) {
+            this.onEventCallbacks.push(callback);
         }
 
         onContainerAdded(callback) {

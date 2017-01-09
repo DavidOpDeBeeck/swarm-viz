@@ -11,10 +11,12 @@
         }
 
         networkEvent(event) {
+            console.log(event);
             this.onNetworkEventCallbacks.forEach(callback => callback(event));
         }
 
         containerEvent(event) {
+            console.log(event);
             this.onContainerEventCallbacks.forEach(callback => callback(event));
         }
 

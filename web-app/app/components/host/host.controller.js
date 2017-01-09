@@ -32,11 +32,11 @@
         }
 
         get displayHost() {
-            return true;//this.ContainerUtils.displayHost(this.host);
+            return this.containerUtils.displayHost(this.containers);
         }
 
         get containers() {
-            return Object.values(this._containers);
+            return Object.keys(this._containers).map(key => this._containers[key]);
         }
     }
 

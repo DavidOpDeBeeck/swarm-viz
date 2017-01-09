@@ -87,23 +87,26 @@ let timer = {
 }
 
 //---------------------------
-// Start Network module
+// Modules
 //---------------------------
+let modules = [];
 
-networkModule.init({
-    app: app,
-    eventBus: eventBus,
-    dockerClient: dockerClient,
-    timer: timer
-}).start();
+modules.push(
+    networkModule.init({
+        app: app,
+        eventBus: eventBus,
+        dockerClient: dockerClient,
+        timer: timer
+    })
+);
 
-//---------------------------
-// Start Container module
-//---------------------------
+modules.push(
+    containerModule.init({
+        app: app,
+        eventBus: eventBus,
+        dockerClient: dockerClient,
+        timer: timer
+    })
+);
 
-containerModule.init({
-    app: app,
-    eventBus: eventBus,
-    dockerClient: dockerClient,
-    timer: timer
-}).start();
+modules.forEach((module,index) => setTimeout( module.start, index * pollingRate / 2));

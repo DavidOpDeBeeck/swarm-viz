@@ -31,12 +31,18 @@ class ViewerController {
         this.removeNetworkEndpointEdge(network, endpoint);
     }
 
+    getNetworkId( network ) {
+        return network.host + "/" + network.name;
+    }
+
     addNetworkNode(network) {
-        if (this.nodes.get(network.name)) 
+        let networkId = this.getNetworkId(network);
+
+        if (this.nodes.get(networkId)) 
             return;
 
         this.nodes.add({
-            id: network.name,
+            id: networkId,
             label: network.host + "/" + network.name,
             mass: 5,
             shape: 'box',
@@ -48,7 +54,7 @@ class ViewerController {
     }
 
     removeNetworkNode(network) {
-        this.nodes.remove( network.name );
+        this.nodes.remove(this.getNetworkId(network));
     }
 
     addContainerNode(container) {
@@ -75,7 +81,7 @@ class ViewerController {
 
         this.edges.add({
             id: endpoint.id,
-            from: network.name,
+            from: this.getNetworkId(network),
             to: endpoint.container.name,
             color: '#5bc0de'
         });
