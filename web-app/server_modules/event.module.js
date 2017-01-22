@@ -37,9 +37,12 @@ class EventListener {
 			hijack: true,
 			stdin: true
 		}, (err, stream) => {
-			stream.on('data', event => {
-				this.handleEvent(JSON.parse(event));
-			});
+			if (err) console.log(err);
+			if (stream) {
+				stream.on('data', event => {
+					this.handleEvent(JSON.parse(event));
+				});
+			}
 		});
 	}
 
