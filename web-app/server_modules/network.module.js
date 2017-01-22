@@ -58,7 +58,7 @@ class NetworkModule extends StateModule {
 		let endpoints = networkContainerIds.map(id => {
 			let containerName = networkContainers[id].Name.toLowerCase();
 			return {
-				id: dockerNetwork.Id + containerName,
+				id: dockerNetwork.Id + id,
 				container: {
 					id: id,
 					name: containerName
