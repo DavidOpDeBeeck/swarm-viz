@@ -1,7 +1,7 @@
-( () => {
+(() => {
     class SettingsController {
 
-        constructor( Settings ) {
+        constructor(Settings) {
             this.Settings = Settings;
             this.displayUptime = Settings.displayUptime;
             this.displayNetworks = Settings.displayNetworks;
@@ -31,6 +31,6 @@
         }
     }
 
-    angular.module( 'swarm-viz.controllers' )
-        .controller( 'SettingsController', SettingsController );
-} )();
+    angular.module('swarm-viz.controllers')
+        .controller('SettingsController', SettingsController);
+})();

@@ -1,3 +1,3 @@
-( () => {
-    angular.module( 'swarm-viz.services', ['ngResource'] );
-} )();
+(() => {
+	angular.module('swarm-viz.services', ['ngResource']);
+})();

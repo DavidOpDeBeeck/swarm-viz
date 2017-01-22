@@ -1,8 +1,12 @@
-( () => {
+(() => {
     class ContainerService {
-        constructor( Socket, $resource ) {
-            this.containerResource = $resource('/api/containers/:id', {id: '@id'});
-            this.hostResource = $resource('/api/hosts/:name/containers', {name: '@name'});
+        constructor(Socket, $resource) {
+            this.containerResource = $resource('/api/containers/:id', {
+                id: '@id'
+            });
+            this.hostResource = $resource('/api/hosts/:name/containers', {
+                name: '@name'
+            });
 
             this.onEventCallbacks = [];
 
@@ -12,7 +16,6 @@
 
             this.onHostContainerAddedCallbacks = {};
             this.onHostContainerUpdatedCallbacks = {};
-            this.onHostContainerRemovedCallbacks = {};
 
             Socket.onContainerEvent(event => this.onContainerEvent(event));
         }
@@ -22,24 +25,28 @@
         }
 
         getContainerById(id) {
-            return this.containerResource.get({id: id}).$promise;
+            return this.containerResource.get({
+                id: id
+            }).$promise;
         }
 
         getHostContainers(hostName) {
-            return this.hostResource.query({name: hostName}).$promise;
+            return this.hostResource.query({
+                name: hostName
+            }).$promise;
         }
 
         onContainerEvent(event) {
-            let container = event.payload, host = container.host;
-            if (event.name === "ContainerAdded"){
+            let container = event.payload;
+            if (event.name === "ContainerAdded") {
+                let host = container.host;
                 this.onContainerAddedCallbacks.forEach(callback => callback(container));
                 if (this.onHostContainerAddedCallbacks[host])
                     this.onHostContainerAddedCallbacks[host].forEach(callback => callback(container));
-            } else if (event.name === "ContainerRemoved"){
+            } else if (event.name === "ContainerRemoved") {
                 this.onContainerRemovedCallbacks.forEach(callback => callback(container));
-                if (this.onHostContainerRemovedCallbacks[host])
-                    this.onHostContainerRemovedCallbacks[host].forEach(callback => callback(container));
-            } else if (event.name === "ContainerUpdated"){
+            } else if (event.name === "ContainerUpdated") {
+                let host = container.host;
                 this.onContainerUpdatedCallbacks.forEach(callback => callback(container));
                 if (this.onHostContainerUpdatedCallbacks[host])
                     this.onHostContainerUpdatedCallbacks[host].forEach(callback => callback(container));
@@ -74,14 +81,8 @@
                 this.onHostContainerUpdatedCallbacks[host] = [];
             this.onHostContainerUpdatedCallbacks[host].push(callback);
         }
-
-        onHostContainerRemoved(host, callback) {
-            if (!this.onHostContainerRemovedCallbacks[host])
-                this.onHostContainerRemovedCallbacks[host] = [];
-            this.onHostContainerRemovedCallbacks[host].push(callback);
-        }
     }
 
-    angular.module( 'swarm-viz.services' )
-        .service( 'ContainerService', ContainerService );
-} )();
+    angular.module('swarm-viz.services')
+        .service('ContainerService', ContainerService);
+})();

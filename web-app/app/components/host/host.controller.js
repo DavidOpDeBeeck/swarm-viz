@@ -1,7 +1,7 @@
-( () => {
+(() => {
     class HostController {
 
-        constructor( ContainerUtils , ContainerService ) {
+        constructor(ContainerUtils, ContainerService) {
             this.containerUtils = ContainerUtils;
             this.containerService = ContainerService;
             this._containers = {};
@@ -11,8 +11,8 @@
         init() {
             this.containerService.onHostContainerAdded(this.name, container => this.addContainer(container));
             this.containerService.onHostContainerUpdated(this.name, container => this.updateContainer(container));
-            this.containerService.onHostContainerRemoved(this.name, container => this.removeContainer(container));
-            this.containerService.getHostContainers(this.name).then( containers => this.addContainers(containers));
+            this.containerService.onContainerRemoved(container => this.removeContainer(container));
+            this.containerService.getHostContainers(this.name).then(containers => this.addContainers(containers));
         }
 
         addContainer(container) {
@@ -28,7 +28,7 @@
         }
 
         addContainers(containers) {
-            containers.forEach( container => this.addContainer(container));
+            containers.forEach(container => this.addContainer(container));
         }
 
         get displayHost() {
@@ -40,6 +40,6 @@
         }
     }
 
-    angular.module( 'swarm-viz.controllers' )
-        .controller( 'HostController', HostController );
-} )();
+    angular.module('swarm-viz.controllers')
+        .controller('HostController', HostController);
+})();

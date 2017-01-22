@@ -1,4 +1,4 @@
-( () => {
+(() => {
     class SettingsDirective {
         constructor() {
             this.templateUrl = '/assets/html/settings.html';
@@ -9,6 +9,6 @@
         }
     }
 
-    angular.module( 'swarm-viz.directives' )
-        .directive( 'settings', () => new SettingsDirective() );
-} )();
+    angular.module('swarm-viz.directives')
+        .directive('settings', () => new SettingsDirective());
+})();

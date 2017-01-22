@@ -1,4 +1,4 @@
-( () => {
+(() => {
     class ClusterInformation {
         constructor() {
             this.templateUrl = '/assets/html/cluster-information.html';
@@ -9,6 +9,6 @@
         }
     }
 
-    angular.module( 'swarm-viz.directives' )
-        .directive( 'clusterInformation', () => new ClusterInformation() );
-} )();
+    angular.module('swarm-viz.directives')
+        .directive('clusterInformation', () => new ClusterInformation());
+})();

@@ -1,4 +1,4 @@
-( () => {
+(() => {
     class NetworkOverview {
         constructor() {
             this.templateUrl = '/assets/html/network-overview.html';
@@ -9,6 +9,6 @@
         }
     }
 
-    angular.module( 'swarm-viz.directives' )
-        .directive( 'networkOverview', () => new NetworkOverview() );
-} )();
+    angular.module('swarm-viz.directives')
+        .directive('networkOverview', () => new NetworkOverview());
+})();

@@ -13,9 +13,10 @@ const io = require('socket.io')( http );
 const docker = require('dockerode');
 const fs = require('fs');
 
-const eventBus = require('./server_modules/event.module').init(app, io);
-const networkModule = require('./server_modules/network.module');
-const containerModule = require('./server_modules/container.module');
+const EventBus = require('./server_modules/eventbus.module');
+const EventListener = require('./server_modules/event.module');
+const NetworkModule = require('./server_modules/network.module');
+const ContainerModule = require('./server_modules/container.module');
 
 //---------------------------
 // Default Config
@@ -29,12 +30,10 @@ const pollingRate = 6000;
 //---------------------------
 
 let createConnection = ({host, port, certPath, tls = false}) => {
-    if (tls)
-        return securedConnection(host, port, certPath);
-    return unsecuredConnection(host, port)
+    return tls ? secured(host, port, certPath) : unsecured(host, port);
 }
 
-let securedConnection = (host, port, certPath) => {
+let secured = (host, port, certPath) => {
     return {
         protocol: 'https',
         host: host,
@@ -45,7 +44,7 @@ let securedConnection = (host, port, certPath) => {
     };
 }
 
-let unsecuredConnection = (host, port) => {
+let unsecured = (host, port) => {
     return {
         protocol: 'http',
         host: host,
@@ -77,36 +76,43 @@ app.use(express.static( 'static' ));
 http.listen(port, () => console.log('listening on *:3000'));
 
 //---------------------------
-// Timer
-//---------------------------
-
-let timer = {
-    next() {
-        return pollingRate;
-    }
-}
-
-//---------------------------
 // Modules
 //---------------------------
-let modules = [];
 
-modules.push(
-    networkModule.init({
-        app: app,
-        eventBus: eventBus,
-        dockerClient: dockerClient,
-        timer: timer
-    })
-);
+let eventBus = new EventBus(io);
 
-modules.push(
-    containerModule.init({
-        app: app,
-        eventBus: eventBus,
-        dockerClient: dockerClient,
-        timer: timer
-    })
-);
+let networkModule = new NetworkModule({
+    app: app,
+    dockerClient: dockerClient,
+});
 
-modules.forEach((module,index) => setTimeout( module.start, index * pollingRate / 2));
+let containerModule = new ContainerModule({
+    app: app,
+    dockerClient: dockerClient,
+});
+
+let modules = [networkModule, containerModule];
+
+let eventListener = new EventListener({
+    eventBus: eventBus,
+    dockerClient: dockerClient,
+    containerModule: containerModule,
+    networkModule: networkModule,
+    pollingRate: pollingRate
+});
+
+modules.forEach(module => module.setup());
+modules.forEach(module => module.refresh());
+
+eventListener.setup();
+
+listen(eventListener);
+
+function listen(listener) {
+    try {
+        listener.listen();
+    } catch(e) {
+        console.log(e);
+        listen(listener);
+    }
+}

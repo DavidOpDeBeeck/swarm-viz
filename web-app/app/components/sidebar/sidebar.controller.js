@@ -1,6 +1,6 @@
-( () => {
+(() => {
     class SidebarController {
-        constructor( Settings ) {
+        constructor(Settings) {
             this.settings = Settings;
             this.collapsed = (this.dir === 'left') ? Settings.displayLeftSidebar : Settings.displayRightSidebar;
         }
@@ -22,6 +22,6 @@
         }
     }
 
-    angular.module( 'swarm-viz.controllers' )
-        .controller( 'SidebarController', SidebarController );
-} )();
+    angular.module('swarm-viz.controllers')
+        .controller('SidebarController', SidebarController);
+})();

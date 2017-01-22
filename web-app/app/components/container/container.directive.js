@@ -1,4 +1,4 @@
-( () => {
+(() => {
     class ContainerDirective {
         constructor() {
             this.templateUrl = '/assets/html/container.html';
@@ -14,6 +14,6 @@
         }
     }
 
-    angular.module( 'swarm-viz.directives' )
-        .directive( 'container', () => new ContainerDirective() );
-} )();
+    angular.module('swarm-viz.directives')
+        .directive('container', () => new ContainerDirective());
+})();

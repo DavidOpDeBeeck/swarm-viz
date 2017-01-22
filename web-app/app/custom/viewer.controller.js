@@ -2,7 +2,7 @@ class ViewerController {
 
     constructor(name) {
         this.name = name;
-        
+
         this.nodes = new vis.DataSet();
         this.edges = new vis.DataSet();
 
@@ -14,80 +14,89 @@ class ViewerController {
 
     addNetwork(network) {
         this.addNetworkNode(network);
-        network.endpoints.forEach( endpoint => this.addEndpoint(network, endpoint));
+        network.endpoints.forEach(endpoint => this.addEndpoint(network, endpoint));
     }
 
     removeNetwork(network) {
         this.removeNetworkNode(network);
     }
 
-    addEndpoint (network, endpoint) {
-        this.addContainerNode(endpoint.container)
+    addEndpoint(network, endpoint) {
+        this.addContainerNode(endpoint.container);
         this.addNetworkEndpointEdge(network, endpoint);
     }
 
-    removeEndpoint (network, endpoint) {
-        this.removeContainerNode(endpoint.container)
+    removeContainer(container) {
+        this.removeContainerNode(container);
+    }
+
+    removeEndpoint(network, endpoint) {
         this.removeNetworkEndpointEdge(network, endpoint);
     }
 
-    getNetworkId( network ) {
+    getNetworkName(network) {
         return network.host + "/" + network.name;
     }
 
     addNetworkNode(network) {
-        let networkId = this.getNetworkId(network);
-
-        if (this.nodes.get(networkId)) 
+        if (this.nodes.get(network.id))
             return;
 
         this.nodes.add({
-            id: networkId,
-            label: network.host + "/" + network.name,
+            id: network.id,
+            label: this.getNetworkName(network),
             mass: 5,
             shape: 'box',
             color: '#337ab7',
-            font: { color: '#ffffff' },
-            scaling: { label: { enabled: true } },
+            font: {
+                color: '#ffffff'
+            },
+            scaling: {
+                label: {
+                    enabled: true
+                }
+            },
             value: 20
         });
     }
 
     removeNetworkNode(network) {
-        this.nodes.remove(this.getNetworkId(network));
+        this.nodes.remove(network.id);
     }
 
     addContainerNode(container) {
-        if (this.nodes.get(container.name)) 
+        if (this.nodes.get(container.id))
             return;
 
         this.nodes.add({
-            id: container.name,
+            id: container.id,
             label: container.name,
             mass: 3,
             shape: 'box',
             color: '#5bc0de',
-            font: { color: '#ffffff' }
+            font: {
+                color: '#ffffff'
+            }
         });
     }
 
     removeContainerNode(container) {
-        this.nodes.remove( container.name );
+        this.nodes.remove(container.id);
     }
 
     addNetworkEndpointEdge(network, endpoint) {
-        if (this.edges.get(endpoint.id)) 
+        if (this.edges.get(endpoint.id))
             return;
 
         this.edges.add({
             id: endpoint.id,
-            from: this.getNetworkId(network),
-            to: endpoint.container.name,
+            from: network.id,
+            to: endpoint.container.id,
             color: '#5bc0de'
         });
     }
 
     removeNetworkEndpointEdge(network, endpoint) {
-        this.edges.remove( endpoint.id );
+        this.edges.remove(endpoint.id);
     }
 }

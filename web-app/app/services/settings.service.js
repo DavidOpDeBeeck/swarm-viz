@@ -1,49 +1,49 @@
-( () => {
+(() => {
     class Settings {
-        constructor( localStorage ) {
+        constructor(localStorage) {
             this.localStorage = localStorage;
-            this._displayUptime = localStorage.getBool( 'displayUptime' );
-            this._displayNetworks = localStorage.getBool( 'displayNetworks' );
-            this._displayExitedContainers = localStorage.getBool( 'displayExitedContainers' );
-            this._displaySwarmContainers = localStorage.getBool( 'displaySwarmContainers' );
-            this._displayEmptyHosts = localStorage.getBool( 'displayEmptyHosts' );
-            this._displayLeftSidebar = localStorage.getBool( 'displayLeftSidebar' );
-            this._displayRightSidebar = localStorage.getBool( 'displayRightSidebar' );
+            this._displayUptime = localStorage.getBool('displayUptime');
+            this._displayNetworks = localStorage.getBool('displayNetworks');
+            this._displayExitedContainers = localStorage.getBool('displayExitedContainers');
+            this._displaySwarmContainers = localStorage.getBool('displaySwarmContainers');
+            this._displayEmptyHosts = localStorage.getBool('displayEmptyHosts');
+            this._displayLeftSidebar = localStorage.getBool('displayLeftSidebar');
+            this._displayRightSidebar = localStorage.getBool('displayRightSidebar');
         }
 
-        set displayUptime( value ) {
+        set displayUptime(value) {
             this._displayUptime = value;
-            this.localStorage.set( 'displayUptime', value );
+            this.localStorage.set('displayUptime', value);
         }
 
-        set displayNetworks( value ) {
+        set displayNetworks(value) {
             this._displayNetworks = value;
-            this.localStorage.set( 'displayNetworks', value );
+            this.localStorage.set('displayNetworks', value);
         }
 
-        set displayExitedContainers( value ) {
+        set displayExitedContainers(value) {
             this._displayExitedContainers = value;
-            this.localStorage.set( 'displayExitedContainers', value );
+            this.localStorage.set('displayExitedContainers', value);
         }
 
-        set displaySwarmContainers( value ) {
+        set displaySwarmContainers(value) {
             this._displaySwarmContainers = value;
-            this.localStorage.set( 'displaySwarmContainers', value );
+            this.localStorage.set('displaySwarmContainers', value);
         }
 
-        set displayEmptyHosts( value ) {
+        set displayEmptyHosts(value) {
             this._displayEmptyHosts = value;
-            this.localStorage.set( 'displayEmptyHosts', value );
+            this.localStorage.set('displayEmptyHosts', value);
         }
 
-        set displayLeftSidebar( value ) {
+        set displayLeftSidebar(value) {
             this._displayLeftSidebar = value;
-            this.localStorage.set( 'displayLeftSidebar', value );
+            this.localStorage.set('displayLeftSidebar', value);
         }
 
-        set displayRightSidebar( value ) {
+        set displayRightSidebar(value) {
             this._displayRightSidebar = value;
-            this.localStorage.set( 'displayRightSidebar', value );
+            this.localStorage.set('displayRightSidebar', value);
         }
 
         get displayUptime() {
@@ -75,6 +75,6 @@
         }
     }
 
-    angular.module( 'swarm-viz.services' )
-        .service( 'Settings', Settings );
-} )();
+    angular.module('swarm-viz.services')
+        .service('Settings', Settings);
+})();

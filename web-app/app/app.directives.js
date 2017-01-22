@@ -1,3 +1,3 @@
-( () => {
-    angular.module( 'swarm-viz.directives', [] );
-} )();
+(() => {
+	angular.module('swarm-viz.directives', []);
+})();

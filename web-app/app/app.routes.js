@@ -1,6 +1,6 @@
-( () => {
-    angular.module( 'swarm-viz.routes', [ 'ui.router' ] )
-        .config( ($stateProvider, $urlRouterProvider) => {
+(() => {
+    angular.module('swarm-viz.routes', ['ui.router'])
+        .config(($stateProvider, $urlRouterProvider) => {
             $stateProvider.state('overview', {
                 url: "/overview",
                 templateUrl: '/assets/html/overview.html',
@@ -14,11 +14,11 @@
                 templateUrl: '/assets/html/network-viewer.html',
                 controller: 'NetworkViewerController as viewer',
                 resolve: {
-                     network: ($stateParams, NetworkService) => {
-                         return NetworkService.getNetworkById($stateParams.id);
-                     }
-                 }
+                    network: ($stateParams, NetworkService) => {
+                        return NetworkService.getNetworkById($stateParams.id);
+                    }
+                }
             });
             $urlRouterProvider.otherwise("/overview");
         });
-} )();
+})();

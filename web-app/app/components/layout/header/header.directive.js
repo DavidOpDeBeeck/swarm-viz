@@ -1,4 +1,4 @@
-( () => {
+(() => {
     class HeaderDirective {
         constructor() {
             this.templateUrl = '/assets/html/header.html';
@@ -8,6 +8,6 @@
         }
     }
 
-    angular.module( 'swarm-viz.directives' )
-        .directive( 'layoutHeader', () => new HeaderDirective() );
-} )();
+    angular.module('swarm-viz.directives')
+        .directive('layoutHeader', () => new HeaderDirective());
+})();

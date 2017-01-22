@@ -1,4 +1,4 @@
-( () => {
+(() => {
     class ContainerSearch {
         constructor() {
             this.templateUrl = '/assets/html/container-search.html';
@@ -9,6 +9,6 @@
         }
     }
 
-    angular.module( 'swarm-viz.directives' )
-        .directive( 'containerSearch', () => new ContainerSearch() );
-} )();
+    angular.module('swarm-viz.directives')
+        .directive('containerSearch', () => new ContainerSearch());
+})();

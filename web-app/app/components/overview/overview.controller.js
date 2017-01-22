@@ -1,17 +1,17 @@
-( () => {
+(() => {
     'use strict'
 
     class OverviewController {
-        constructor( ContainerService ) {
+        constructor(ContainerService) {
             this.containers = new Set();
             this.containerService = ContainerService;
             this.init();
         }
 
         init() {
-            this.containerService.onContainerAdded( container => this.addContainer(container));
-            this.containerService.onContainerRemoved( container => this.removeContainer(container));
-            this.containerService.getAllContainers().then( containers => this.addContainers(containers));
+            this.containerService.onContainerAdded(container => this.addContainer(container));
+            this.containerService.onContainerRemoved(container => this.removeContainer(container));
+            this.containerService.getAllContainers().then(containers => this.addContainers(containers));
         }
 
         addContainer(container) {
@@ -23,7 +23,7 @@
         }
 
         addContainers(containers) {
-            containers.forEach( container => this.addContainer(container));
+            containers.forEach(container => this.addContainer(container));
         }
 
         get hosts() {
@@ -32,6 +32,6 @@
         }
     }
 
-    angular.module( 'swarm-viz.controllers' )
-        .controller( 'OverviewController', OverviewController );
-} )();;
+    angular.module('swarm-viz.controllers')
+        .controller('OverviewController', OverviewController);
+})();;

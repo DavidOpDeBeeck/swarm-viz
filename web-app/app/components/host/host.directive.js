@@ -1,4 +1,4 @@
-( () => {
+(() => {
     class HostDirective {
         constructor() {
             this.restrict = 'E';
@@ -13,6 +13,6 @@
         }
     }
 
-    angular.module( 'swarm-viz.directives' )
-        .directive( 'host', () => new HostDirective() );
-} )();
+    angular.module('swarm-viz.directives')
+        .directive('host', () => new HostDirective());
+})();

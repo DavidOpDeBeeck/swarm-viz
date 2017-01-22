@@ -1,6 +1,6 @@
-( () => {
+(() => {
     class SocketService {
-        constructor( socketFactory ) {
+        constructor(socketFactory) {
             let socket = socketFactory();
 
             socket.on('networks', event => this.networkEvent(event));
@@ -29,6 +29,6 @@
         }
     }
 
-    angular.module( 'swarm-viz.services' )
-        .service( 'Socket', SocketService );
-} )();
+    angular.module('swarm-viz.services')
+        .service('Socket', SocketService);
+})();

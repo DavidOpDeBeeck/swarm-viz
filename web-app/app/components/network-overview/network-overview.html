@@ -1,7 +1,5 @@
-<section class="network-overview">
-  <h2>Networks</h2>
-  <section ng-repeat="host in networks.hosts">
-  	<h3 ng-bind="host.name"></h3>
+<section class="network-overview" ng-repeat="host in networks.hosts | orderObjectBy:'name'">
+  	<h2 ng-bind="host.name"></h2>
 	<ul>
 		<li ng-repeat="network in host.networks track by $index" ui-sref="network({id: network.id})" ui-sref-active="active">
 			<span>{{ network.name }}</span>
@@ -10,5 +8,4 @@
 			</span>
 		</li>
 	</ul>
-  </section>
 </section>

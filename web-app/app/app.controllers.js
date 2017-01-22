@@ -1,3 +1,3 @@
-( () => {
-    angular.module( 'swarm-viz.controllers', [] );
-} )();
+(() => {
+	angular.module('swarm-viz.controllers', []);
+})();

@@ -1,48 +1,49 @@
-( () => {
+(() => {
 
     class ClusterInformationController {
-        constructor( ContainerService ) {
-            this.containers = new Set();
+        constructor(ContainerService) {
+            this.containers = {};
             this.containerService = ContainerService;
             this.init();
         }
 
         init() {
-            this.containerService.onContainerAdded( container => this.addContainer(container));
-            this.containerService.onContainerRemoved( container => this.removeContainer(container));
-            this.containerService.getAllContainers().then( containers => this.addContainers(containers));
+            this.containerService.onContainerAdded(container => this.addContainer(container));
+            this.containerService.onContainerUpdated(container => this.addContainer(container));
+            this.containerService.onContainerRemoved(container => this.removeContainer(container));
+            this.containerService.getAllContainers().then(containers => this.addContainers(containers));
         }
 
         addContainer(container) {
-            this.containers.add(container);
+            this.containers[container.id] = container;
         }
 
         removeContainer(container) {
-            this.containers.delete(container);
+            delete this.containers[container.id];
         }
 
         addContainers(containers) {
-            containers.forEach( container => this.addContainer(container));
+            containers.forEach(container => this.addContainer(container));
         }
 
         get totalHosts() {
             let onlyUnique = (value, index, self) => self.indexOf(value) === index;
-            return [...this.containers].map(c => c.host).filter(onlyUnique).length;
+            return Object.values(this.containers).map(c => c.host).filter(onlyUnique).length;
         }
 
         get totalContainers() {
-            return this.containers.size;
+            return Object.values(this.containers).length;
         }
 
         get exitedContainers() {
-            return [...this.containers].filter( c => c.state === 'exited' ).length
+            return Object.values(this.containers).filter(c => c.state === 'exited').length
         }
         get runningContainers() {
-            return [...this.containers].filter( c => c.state === 'running' ).length
+            return Object.values(this.containers).filter(c => c.state === 'running').length
         }
     }
 
-    angular.module( 'swarm-viz.controllers' )
-        .controller( 'ClusterInformationController', ClusterInformationController );
+    angular.module('swarm-viz.controllers')
+        .controller('ClusterInformationController', ClusterInformationController);
 
-} )();
+})();

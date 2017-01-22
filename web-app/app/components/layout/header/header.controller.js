@@ -1,4 +1,4 @@
-( () => {
+(() => {
     class HeaderController {
         constructor($window, $scope) {
             this.brand = {
@@ -6,7 +6,13 @@
                 secondary: "Viz"
             };
             this.nav = {
-                items: [{state: 'overview', text: 'Overview'}, {state: 'swarm', text: 'Swarm'}],
+                items: [{
+                    state: 'overview',
+                    text: 'Overview'
+                }, {
+                    state: 'swarm',
+                    text: 'Swarm'
+                }],
                 visible: false,
                 toggle: this.toggle
             };
@@ -17,6 +23,6 @@
         }
     }
 
-    angular.module( 'swarm-viz.controllers' )
-        .controller( 'HeaderController', HeaderController );
-} )();
+    angular.module('swarm-viz.controllers')
+        .controller('HeaderController', HeaderController);
+})();

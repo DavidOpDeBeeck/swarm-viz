@@ -1,14 +1,14 @@
-( () => {
+(() => {
 
     class ContainerController {
-        constructor( Settings, ContainerUtils ) {
+        constructor(Settings, ContainerUtils) {
             this.settings = Settings;
             this.containerUtils = ContainerUtils;
             this.ignoreFilters = this.ignoreFilters;
         }
 
         get displayContainer() {
-            return this.ignoreFilters || this.containerUtils.displayContainer( this.container );
+            return this.ignoreFilters || this.containerUtils.displayContainer(this.container);
         }
 
         get displayUptime() {
@@ -20,7 +20,7 @@
         }
     }
 
-    angular.module( 'swarm-viz.controllers' )
-        .controller( 'ContainerController', ContainerController );
+    angular.module('swarm-viz.controllers')
+        .controller('ContainerController', ContainerController);
 
-} )();
+})();

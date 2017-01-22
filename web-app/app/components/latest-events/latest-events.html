@@ -1,5 +1,5 @@
 <section class="latest-events">
-  <h2>Latest Events</h2>
+  <h2>Latest Events ({{ latestEventsCtrl.total }})</h2>
   <ul>
     <li ng-repeat="event in latestEventsCtrl.events track by $index">
     	<span>{{ event }}</span>

@@ -1,4 +1,4 @@
-( () => {
+(() => {
     class LatestEventsDirective {
         constructor() {
             this.restrict = 'E';
@@ -9,6 +9,6 @@
         }
     }
 
-    angular.module( 'swarm-viz.directives' )
-        .directive( 'latestEvents', () => new LatestEventsDirective() );
-} )();
+    angular.module('swarm-viz.directives')
+        .directive('latestEvents', () => new LatestEventsDirective());
+})();

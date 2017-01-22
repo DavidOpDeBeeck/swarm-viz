@@ -1,7 +1,9 @@
-( () => {
+(() => {
     class NetworkService {
-        constructor( Socket, $resource ) {
-            this.resource = $resource('/api/networks/:id', {id: '@id'});
+        constructor(Socket, $resource) {
+            this.resource = $resource('/api/networks/:id', {
+                id: '@id'
+            });
 
             this.onEventCallbacks = [];
 
@@ -19,7 +21,9 @@
         }
 
         getNetworkById(id) {
-            return this.resource.get({id: id}).$promise;
+            return this.resource.get({
+                id: id
+            }).$promise;
         }
 
         onNetworkEvent(event) {
@@ -33,7 +37,7 @@
                 this.onNetworkEndpointRemovedCallbacks.forEach(callback => callback(event.payload));
             this.onEventCallbacks.forEach(callback => callback(event));
         }
-        
+
         onEvent(callback) {
             this.onEventCallbacks.push(callback);
         }
@@ -55,6 +59,6 @@
         }
     }
 
-    angular.module( 'swarm-viz.services' )
-        .service( 'NetworkService', NetworkService );
-} )();
+    angular.module('swarm-viz.services')
+        .service('NetworkService', NetworkService);
+})();
