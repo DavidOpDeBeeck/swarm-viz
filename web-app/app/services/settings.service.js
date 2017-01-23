@@ -1,6 +1,7 @@
 (() => {
     class Settings {
         constructor(localStorage) {
+            this.defaults(localStorage);
             this.localStorage = localStorage;
             this._displayUptime = localStorage.getBool('displayUptime');
             this._displayNetworks = localStorage.getBool('displayNetworks');
@@ -9,6 +10,11 @@
             this._displayEmptyHosts = localStorage.getBool('displayEmptyHosts');
             this._displayLeftSidebar = localStorage.getBool('displayLeftSidebar');
             this._displayRightSidebar = localStorage.getBool('displayRightSidebar');
+        }
+
+        defaults(localStorage) {
+            localStorage.setIfNotExists('displayUptime', true);
+            localStorage.setIfNotExists('displaySwarmContainers', true);
         }
 
         set displayUptime(value) {

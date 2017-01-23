@@ -1,48 +1,65 @@
 .container 
-    > .container-info
+    > .container-body
         opacity: .99
         padding: 10px 10px 5px 10px
         background-color: #ffffff
         box-shadow: 1px 1px 1px #D9D9D9
 
-        > h1
-            font-size: 0.9rem
-            word-break: break-all
+        > .container-info
+            display: flex
+            flex-direction: row
 
-        > .id
-            float: right
+            > h1
+                flex: 1
+                text-align: left
+                font-size: 0.9rem
+                word-break: break-all
 
-        > .id, > .name
-            display: block
-            font-size: 0.6rem
-            text-transform: none
-            padding: 10px 0 5px 0
+            > .label
+                flex: none
+                text-align: right
+                color: #ffffff
+                font-size: 0.45rem
+                font-weight: 700
+                padding: 3px
+                margin-left: 5px
+                border-color: #404040
+                background-color: #474747
+                box-shadow: 1px 1px 1px #404040
 
-        > .label
-            float: right
-            color: #ffffff
-            font-size: 0.45rem
-            font-weight: 700
-            padding: 3px
-            margin-left: 5px
-            border-color: #404040
-            background-color: #474747
-            box-shadow: 1px 1px 1px #404040
+                &.running
+                    border-color: #4BAD4B
+                    background-color: #5cb85c
+                    box-shadow: 1px 1px 1px #4BAD4B
 
-            &.running
-                border-color: #4BAD4B
-                background-color: #5cb85c
-                box-shadow: 1px 1px 1px #4BAD4B
+                &.created
+                    border-color: #2D6DA3
+                    background-color: #337ab7
+                    box-shadow: 1px 1px 1px #2D6DA3
 
-            &.created
-                border-color: #2D6DA3
-                background-color: #337ab7
-                box-shadow: 1px 1px 1px #2D6DA3
+                &.exited
+                    border-color: #D33A35
+                    background-color: #d9534f
+                    box-shadow: 1px 1px 1px #D33A35
 
-            &.exited
-                border-color: #D33A35
-                background-color: #d9534f
-                box-shadow: 1px 1px 1px #D33A35
+        > .container-identity
+            display: flex
+            flex-direction: row
+
+            > span
+                display: block
+                font-size: 0.6rem
+                text-transform: none
+                padding: 10px 0 5px 0
+
+            > .name
+                flex: 1
+                text-align: left
+
+            > .id
+                flex: none
+                text-align: right
+
 
     > .container-networks
         border-bottom: 1px solid #D9D9D9

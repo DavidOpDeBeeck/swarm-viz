@@ -17,7 +17,7 @@
         }
 
         exists(key) {
-            return this.get(key) !== undefined;
+            return !(this.get(key) === undefined || this.get(key) === null);
         }
 
         setIfNotExists(key, value) {
