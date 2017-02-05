@@ -1,0 +1,19 @@
+<header class="navbar">
+  <section class="navbar-brand">
+    <a href="#/" class="primary">{{ header.brand.primary }}</a>
+    <a href="#/" class="secondary">{{ header.brand.secondary }}</a>
+  </section>
+  <section class="navbar-nav">
+    <section class="navbar-mobile" ng-click="header.nav.toggle()">
+      <span>
+        <i class="fa fa-caret-up" aria-hidden="true" ng-show="header.nav.visible"></i>
+        <i class="fa fa-caret-down" aria-hidden="true" ng-show="!header.nav.visible"></i> Menu
+      </span>
+    </section>
+    <ul class="navbar-items" ng-show="header.nav.visible">
+      <li ng-repeat="item in header.nav.items" ui-sref-active="active">
+        <a ui-sref="{{ item.state }}">{{ item.text }}</a>
+      </li>
+    </ul>
+  </section>
+</header>

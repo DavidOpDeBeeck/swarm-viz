@@ -1,0 +1,9 @@
+<section class="cluster-information">
+  <h2>Cluster Information</h2>
+  <ul>
+    <li><span>Total hosts</span><span>{{ cluster.getTotalHosts() }}</span></li>
+    <li><span>Total containers</span><span>{{ cluster.getTotalContainers() }}</span></li>
+    <li><span>Running containers</span><span>{{ cluster.getRunningContainers() }}</span></li>
+    <li><span>Exited containers</span><span>{{ cluster.getExitedContainers() }}</span></li>
+  </ul>
+</section>

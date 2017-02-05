@@ -1,0 +1,24 @@
+<section class="container-search">
+  <h2>Container Search</h2>
+  <section class="search">
+    <input type="text" ng-model="search.query" ng-change="search.search()" placeholder="Search by id, name or image"/>
+  </section>
+  <section class="search-options">
+    <select ng-model="search.filterOrder">
+      <option value="asc">ASC</option>
+      <option value="desc">DESC</option>
+    </select>
+    <select ng-model="search.filterType">
+      <option value="name">name</option>
+      <option value="image">image</option>
+      <option value="created">created</option>
+      <option value="uptime">uptime</option>
+      <option value="status">status</option>
+    </select>
+  </section>
+  <section class="search-results" ng-nicescroll>
+    <section class="search-result" ng-repeat="container in search.results | orderBy: search.getFilter()">
+      <sv-container container="container" ignore-settings="true"></sv-container>
+    </section>
+  </section>
+</section>

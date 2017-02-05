@@ -1,25 +1,29 @@
-FROM node:6.2.0
+FROM node:7.1.0
 
-# Grunt
+# install gulp-cli
 
-RUN npm install -g grunt-cli
+RUN npm install -g gulp-cli
 
-# Copy files to app directory
+# create 'app' folder
 
 RUN mkdir /app
-COPY web-app /app
+
+# copy to 'app' folder
+
+COPY /app/ /app/
+
+# set work directory
+
 WORKDIR /app
 
-# Install npm dependencies
+# install dependencies and build app
 
-RUN npm install grunt
-RUN npm install
+RUN npm install && gulp build
 
-# Execute grunt task
-
-RUN grunt dependencies -v
-RUN grunt release -v
+# expose port '3000'
 
 EXPOSE 3000
 
-ENTRYPOINT [ "node", "server" ]
+# set entrypoint to run the server
+
+ENTRYPOINT [ "npm", "start" ]

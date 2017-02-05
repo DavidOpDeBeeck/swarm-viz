@@ -1,0 +1,9 @@
+<section class="viewer-info">
+  <h1>{{ viewer.name }} network</h1>
+  <small>Click on a node to see more information</small>
+</section>
+<section class="viewer-detail">
+  <sv-container container="viewer.container" ignore-settings="true" ng-if="viewer.container"></sv-container>
+  <sv-network network="viewer.network" ng-if="viewer.network"></sv-network>
+</section>
+<ng-viz ng-model="viewer.network_data" options="viewer.network_options" on-click="viewer.onClick"></ng-viz>

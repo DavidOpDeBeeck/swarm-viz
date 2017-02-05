@@ -1,0 +1,9 @@
+<section class="network">
+  <section class="network-information">
+    <h2>{{ view.network.name }}</h2>
+  </section>
+  <section class="network-identification">
+    <span class="network-host">{{ view.network.host }}</span>
+    <span class="network-id">{{ view.network.id | limitTo:20 }}</span>
+  </section>
+</section>

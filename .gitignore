@@ -1,6 +1,2 @@
-web-app/libs
-web-app/node_modules
-!web-app/static/assets
-web-app/static/assets/*
-!web-app/static/assets/img
-
+app/public
+app/node_modules

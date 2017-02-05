@@ -1,0 +1,102 @@
+.navbar
+    display: flex
+    flex-direction: row
+    align-items: center
+    flex: none
+    z-index: 4
+
+    width: 100%
+    padding: 15px 0
+
+    background-color: #337ab7
+    box-shadow: 1px 1px 1px #2d6a9f
+    border-bottom: 1px solid #275d8b
+
+    > .navbar-brand
+        flex: none
+        text-align: left
+        margin-left: 1rem
+
+        > a
+            color: #FFFFFF
+            font-size: 1.5rem
+            text-transform: uppercase
+
+            &.primary
+                font-weight: 800
+
+            &.secondary
+                font-weight: 200
+
+
+    > .navbar-nav
+        display: flex
+        flex-direction: row-reverse
+        flex-wrap: wrap
+        flex: 1
+
+        > .navbar-mobile
+            display: none
+            flex: none
+            cursor: pointer
+
+            color: #FFFFFF
+            font-size: 0.8rem
+            font-weight: 700
+            text-transform: uppercase
+
+            margin: 0 1rem 0 0
+            padding: 0.35rem 0.35rem
+
+            background-color: #337ab7
+            box-shadow: 1px 1px 1px #2d6a9f
+            border-bottom: 1px solid #275d8b
+
+            > span 
+              -webkit-touch-callout: none
+                -webkit-user-select: none
+                 -khtml-user-select: none
+                   -moz-user-select: none
+                    -ms-user-select: none
+                        user-select: none
+
+            @media screen and (max-width: 680px)
+                display: block
+
+        > .navbar-items
+            display: flex
+            flex-direction: row
+            flex: none
+
+            @media screen and (min-width: 680px)
+                &.ng-hide
+                    display: flex !important
+
+            > li
+                flex: none
+                margin: 0 0.25rem
+
+                &.active
+                    > a
+                        color: #FFFFFF
+
+                @media screen and (max-width: 680px)
+                    margin: 0.25rem 0
+
+                > a
+                    color: #DDDDDD
+                    font-size: 0.8rem
+                    font-weight: 700
+                    text-transform: uppercase
+                    margin: 0 5px
+
+            @media screen and (max-width: 680px)
+                position: absolute
+                flex-direction: column
+
+                padding: 0.25rem 0.35rem
+                margin: 2rem 0 0 -1rem
+
+                background-color: #337ab7
+                box-shadow: 1px 1px 1px #2d6a9f
+                border-bottom: 1px solid #275d8b

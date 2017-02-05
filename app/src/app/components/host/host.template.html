@@ -1,0 +1,11 @@
+<section class="host" ng-show="host.displayHost()">
+  <section class="host-name">
+    <i class="fa fa-server fa-fw" aria-hidden="true"></i>
+    <h1>{{ host.name }}</h1>
+  </section>
+  <section class="host-containers" ng-nicescroll>
+    <section ng-repeat="container in host.containers | orderBy: ['-created']">
+      <sv-container container="container"></sv-container>
+    </section>
+  </section>
+</section>

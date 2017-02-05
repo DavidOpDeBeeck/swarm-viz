@@ -1,0 +1,14 @@
+<section class="container" ng-show="view.displayContainer">
+  <section class="container-information">
+    <h2>{{ view.container.image }}</h2>
+    <span class="label" ng-show="view.displayUptime">{{ view.container.status }}</span>
+    <span class="label {{view.container.state}}">{{ view.container.state }}</span>
+  </section>
+  <section class="container-identification">
+    <span class="container-name">{{ view.container.name }}</span>
+    <span class="container-id">{{ view.container.id | limitTo:20 }}</span>
+  </section>
+  <section class="container-networks" ng-show="view.displayNetworks">
+    <span class="container-network" ng-repeat="network in view.container.networks">{{ network.name }}</span>
+  </section>
+</section>

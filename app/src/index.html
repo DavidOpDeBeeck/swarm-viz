@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Swarm VIZ</title>
+
+    <meta charset="UTF-8"/>
+    <meta name="author" content="David Op de Beeck"/>
+    <meta name="keywords" content="Docker, Swarm, Swarm-VIZ">
+    <meta name="description" content="A web application that visualizes a Docker Swarm cluster.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <link rel="icon" href="/assets/img/favicon.png" />
+
+    <link rel="stylesheet" href="/assets/css/libs.css"/>
+    <link rel="stylesheet" href="/assets/css/app.css"/>
+  </head>
+  <body ng-app="swarm-viz">
+    <sv-header></sv-header>
+    <main>
+      <sv-sidebar dir="left">
+          <sv-cluster-information></sv-cluster-information>
+          <sv-network-list></sv-network-list>
+          <sv-settings></sv-settings>
+      </sv-sidebar>
+      <sv-content>
+        <section class="wrapper" ui-view></section>
+      </sv-content>
+      <sv-sidebar dir="right">
+          <sv-container-search></sv-container-search>
+      </sv-sidebar>
+    </main>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/assets/js/libs.js"></script>
+    <script src="/assets/js/app.js"></script>
+  </body>
+</html>
