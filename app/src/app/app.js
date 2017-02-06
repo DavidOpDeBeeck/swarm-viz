@@ -2,8 +2,8 @@ import Angular from 'angular';
 import AngularIO from 'angular-socket-io';
 import AngularNiceScroll from 'angular/angular-nicescroll/angular-nicescroll.module';
 import AngularViz from 'angular/angular-viz/angular-viz.module';
-import UIRouter from 'angular-ui-router';
-import AppRoutes from 'app.routes';
+import AngularOrderObjectBy from 'angular/angular-order-object-by/angular-order-object-by.module';
+import AngularRouter from 'angular-ui-router';
 
 import ServicesModule from './services/services.module';
 
@@ -22,7 +22,8 @@ const module = Angular.module('swarm-viz', [
 	'btford.socket-io',
 	AngularNiceScroll,
 	AngularViz,
-	UIRouter,
+	AngularRouter,
+	AngularOrderObjectBy,
 	ServicesModule,
 	LayoutModule,
 	DashboardModule,
@@ -36,4 +37,6 @@ const module = Angular.module('swarm-viz', [
 	HostModule
 ]);
 
-module.config(AppRoutes);
+module.config(['$urlRouterProvider', $urlRouterProvider => {
+    $urlRouterProvider.otherwise("/dashboard");
+}]);

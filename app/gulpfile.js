@@ -45,7 +45,7 @@ function copyMergeJS() {
 
 function copyMergeCSS() {
     return gulp
-        .src(SRC_ASSETS_FOLDER + '/css/*.*')
+        .src([SRC_ASSETS_FOLDER + '/css/reset.css', SRC_ASSETS_FOLDER + '/css/*.*'])
         .pipe(concat('libs.css'))
         .pipe(gulp.dest(PUBLIC_ASSETS_FOLDER + '/css/'));
 }

@@ -1,7 +1,7 @@
-<section class="network-list" ng-repeat="host in networks.hosts | orderObjectBy:'name'">
+<section class="network-list" ng-repeat="host in networks.hosts | ngOrderObjectBy:'name'">
   	<h2 ng-bind="host.name"></h2>
 	<ul>
-		<li ng-repeat="network in host.networks track by network.id" ui-sref="viewer.network({networkId: network.id})" ui-sref-active="active">
+		<li ng-repeat="network in host.networks | orderBy: 'name'" ui-sref="viewer.network({networkId: network.id})" ui-sref-active="active">
 			<span>{{ network.name }}</span>
 			<span>
 				<i class="fa fa-angle-right" aria-hidden="true"></i>
