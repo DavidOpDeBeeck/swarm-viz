@@ -54,7 +54,3 @@ If you get this error try to execute the following command on your Docker Swarm 
 ``` bash
 iptables -A INPUT -i docker0 -p tcp -m tcp --dport 3376 -j ACCEPT
 ```
-
-## Demo
-
-[https://www.swarm-viz.com:3000](https://www.swarm-viz.com:3000)
