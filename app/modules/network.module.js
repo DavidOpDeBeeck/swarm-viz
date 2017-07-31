@@ -31,20 +31,24 @@ class NetworkModule extends StateModule {
 	}
 
 	refresh(callback) {
-		super.refresh(containers => {
-			let state = this.handleResponse(containers);
+		super.refresh(networks => {
+			let state = this.handleResponse(networks);
 			if (callback) callback(state);
 		});
 	}
 
 	handleResponse(dockerNetworks = []) {
 		if (!dockerNetworks) return;
-		this.state = dockerNetworks.map(this.convert);
+		this.state = dockerNetworks.map(this.convert)
+			.filter(network => network !== undefined);
 		return this.state;
 	}
 
 	convert(dockerNetwork) {
 		let networkContainers = dockerNetwork.Containers;
+
+		if (!networkContainers) return undefined; // this is 'ingress' network (has no endpoints)
+
 		let networkContainerIds = Object.keys(networkContainers)
 			.filter(id => id.indexOf('ep-') == -1)
 			.filter(id => networkContainers[id].Name.indexOf('gateway_') == -1);
