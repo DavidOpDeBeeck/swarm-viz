@@ -37,18 +37,28 @@ class ContainerModule extends StateModule {
 
 	refresh(callback) {
 		super.refresh(containers => {
-			let state = this.handleResponse(containers);
-			if (callback) callback(state);
+			this.convertToState(containers, state => {
+				this.state = state;
+				if (callback) callback(state);
+			});
 		});
 	}
 
-	handleResponse(dockerContainers) {
+	convertToState(dockerContainers, callback) {
 		if (!dockerContainers) return;
-		this.state = dockerContainers.map(this.convert);
-		return this.state;
+		
+		(() => {
+			let containers = [];
+			dockerContainers.map(container => this.convert(container, container => {
+				containers.push(container);
+				if (containers.length == dockerContainers.length) {
+					callback(containers);
+				}
+			}));
+		})();
 	}
 
-	convert(dockerContainer) {
+	convert(dockerContainer, callback) {
 		let dockerContainerName = dockerContainer.Names;
 
 		if (dockerContainerName.length < 0)
@@ -59,23 +69,42 @@ class ContainerModule extends StateModule {
 		if (hostAndContainerName.length < 2)
 			return;
 
-		let containerHost = hostAndContainerName[1];
-		let containerName = hostAndContainerName[2];
+		let containerHost, containerName;
 
-		return {
-			id: dockerContainer.Id,
-			host: containerHost.toLowerCase(),
-			name: containerName.toLowerCase(),
-			image: dockerContainer.Image.split(":")[0].toLowerCase(),
-			state: dockerContainer.State,
-			status: dockerContainer.Status,
-			created: dockerContainer.Created,
-			networks: Object.keys(dockerContainer.NetworkSettings.Networks).map(network => {
-				return {
-					'name': network.toLowerCase()
-				}
-			})
-		};
+		if (hostAndContainerName.length == 2) {
+			containerHost = "localhost";
+			containerName = hostAndContainerName[1];
+		} else {
+			containerHost = hostAndContainerName[1];
+			containerName = hostAndContainerName[2];
+		}
+
+		let container = this.dockerClient.getContainer(dockerContainer.Id);
+
+		container.stats({
+			stream: false
+		}, (err, stats) => {
+			let invalidMemory = Object.keys(stats.memory_stats) == 0;
+			callback({
+				id: dockerContainer.Id,
+				host: containerHost.toLowerCase(),
+				name: containerName.toLowerCase(),
+				image: dockerContainer.Image.split(":")[0].toLowerCase(),
+				state: dockerContainer.State,
+				status: dockerContainer.Status,
+				created: dockerContainer.Created,
+				memory: {
+					usage: invalidMemory ? -1 : stats.memory_stats.usage,
+					max_usage: invalidMemory ? -1 : stats.memory_stats.max_usage,
+					limit: invalidMemory ? -1 : stats.memory_stats.limit
+				},
+				networks: Object.keys(dockerContainer.NetworkSettings.Networks).map(network => {
+					return {
+						'name': network.toLowerCase()
+					}
+				})
+			});
+		});
 	}
 }
 

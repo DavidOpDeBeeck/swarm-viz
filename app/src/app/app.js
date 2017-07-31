@@ -3,6 +3,7 @@ import AngularIO from 'angular-socket-io';
 import AngularNiceScroll from 'angular/angular-nicescroll/angular-nicescroll.module';
 import AngularViz from 'angular/angular-viz/angular-viz.module';
 import AngularOrderObjectBy from 'angular/angular-order-object-by/angular-order-object-by.module';
+import AngularByteConversion from 'angular/angular-byte-conversion/angular-byte-conversion.module';
 import AngularRouter from 'angular-ui-router';
 
 import ServicesModule from './services/services.module';
@@ -24,6 +25,7 @@ const module = Angular.module('swarm-viz', [
 	AngularViz,
 	AngularRouter,
 	AngularOrderObjectBy,
+	AngularByteConversion,
 	ServicesModule,
 	LayoutModule,
 	DashboardModule,

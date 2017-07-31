@@ -10,6 +10,7 @@ class Container {
         created,
         state,
         status,
+        memory,
         networks
     }) {
         this.id = id;
@@ -20,6 +21,7 @@ class Container {
         this.created = created;
         this.state = state;
         this.status = status;
+        this.memory = memory;
         this.networks = networks;
     }
 
@@ -50,6 +52,7 @@ class Container {
             created: container.created,
             state: container.state,
             status: container.status,
+            memory: container.memory,
             networks: container.networks.map(network => Network.fromJSON(network))
         });
     }

@@ -8,6 +8,11 @@
     <span class="container-name">{{ view.container.name }}</span>
     <span class="container-id">{{ view.container.id | limitTo:20 }}</span>
   </section>
+  <section class="container-statistics">
+    <span class="container-memory-usage">
+      {{ view.container.memory.usage | ngByteConversion }} / {{ view.container.memory.limit | ngByteConversion }}
+    </span>
+  </section>
   <section class="container-networks" ng-show="view.displayNetworks">
     <span class="container-network" ng-repeat="network in view.container.networks">{{ network.name }}</span>
   </section>
